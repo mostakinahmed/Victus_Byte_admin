@@ -63,6 +63,9 @@ const OrderList = () => {
     );
   }
 
+  console.log(data);
+  
+
   //handle click order
   const handleClickOrder = (order) => {
     setShowDetails(order);
@@ -402,7 +405,7 @@ const OrderList = () => {
                 {showDetails.items.map((item, inx) => (
                   <div className="lg:flex w-full flex-col lg:flex-row p-4 rounded space-x-4 ">
                     <img
-                      src={data[inx].images}
+                      src={data[inx]?.images[0]}
                       alt="Product"
                       className="w-20 h-20 object-cover rounded"
                     />

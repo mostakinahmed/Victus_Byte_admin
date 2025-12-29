@@ -8,6 +8,24 @@ import { FaSpinner, FaCheckCircle, FaRegCopy } from "react-icons/fa";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
+import {
+  FiPhone,
+  FiUser,
+  FiMapPin,
+  FiMail,
+  FiPackage,
+  FiPlus,
+  FiTrash2,
+  FiTag,
+  FiHash,
+  FiTruck,
+  FiPercent,
+  FiCreditCard,
+  FiActivity,
+  FiSave,
+  FiXCircle,
+  FiArrowRight,
+} from "react-icons/fi";
 
 // Mock DB data
 const mockCustomers = [
@@ -254,335 +272,610 @@ const AdminSaleFull = () => {
         className="space-y-2 min-h-screen bg-white shadow rounded p-2"
       >
         {/* 🧾 Order Info */}
-        <div className="space-y-2 rounded">
-          <h3 className="font-semibold rounded text-gray-700 p-2 bg-gray-200">
-            Order Info
-          </h3>
-          <div className="flex gap-4 flex-wrap">
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">Order ID</label>
-              <input
-                type="text"
-                value={order.order_id}
-                readOnly
-                className="border px-2 py-1 rounded w-64 bg-gray-100"
-              />
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+          {/* Header Section */}
+          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-5 bg-indigo-600 rounded-full"></div>
+              <h3 className="font-bold text-slate-800 text-base uppercase tracking-wider">
+                Order Information
+              </h3>
             </div>
+          </div>
 
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">
-                Order Date & Time
-              </label>
-              <input
-                type="text"
-                value={order.order_date}
-                readOnly
-                className="border px-2 py-1 rounded w-64 bg-gray-100"
-              />
-            </div>
+          {/* Form Content */}
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Order ID - Read Only */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  Order ID
+                </label>
+                <div className="relative group">
+                  <input
+                    type="text"
+                    value={order.order_id}
+                    readOnly
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-600 font-mono text-sm px-4 py-2.5 rounded-lg cursor-not-allowed"
+                  />
+                  {/* Subtle "Locked" Icon could go here */}
+                </div>
+              </div>
 
-            <div className="flex flex-col w-32">
-              <label className="ml-2 text-gray-600 text-sm">Status</label>
-              <select
-                value={order.status}
-                onChange={(e) => setOrder({ ...order, status: e.target.value })}
-                className="border px-1 py-1 rounded"
-              >
-                <option value="Pending">Pending</option>
-                <option value="Confirmed">Confirmed</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
-              </select>
-            </div>
-            <div className="flex flex-col w-32">
-              <label className="ml-2 text-gray-600 text-sm">Mode</label>
-              <select
-                value={order.Mode}
-                onChange={(e) => setOrder({ ...order, Mode: e.target.value })}
-                className="border px-2 py-1 rounded"
-              >
-                <option value="Online">Online</option>
-                <option value="Offline">Offline</option>
-              </select>
+              {/* Date & Time - Read Only */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  Date & Placement
+                </label>
+                <input
+                  type="text"
+                  value={order.order_date}
+                  readOnly
+                  className="w-full bg-slate-50 border border-slate-200 text-slate-600 text-sm px-4 py-2.5 rounded-lg cursor-not-allowed"
+                />
+              </div>
+
+              {/* Status Selection */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  Order Status
+                </label>
+                <div className="relative">
+                  <select
+                    value={order.status}
+                    onChange={(e) =>
+                      setOrder({ ...order, status: e.target.value })
+                    }
+                    className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-sm px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none cursor-pointer"
+                  >
+                    <option value="Pending">🕒 Pending</option>
+                    <option value="Confirmed">✅ Confirmed</option>
+                    <option value="Shipped">📦 Shipped</option>
+                    <option value="Delivered">🎉 Delivered</option>
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mode Selection */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  Channel / Mode
+                </label>
+                <div className="relative">
+                  <select
+                    value={order.Mode}
+                    onChange={(e) =>
+                      setOrder({ ...order, Mode: e.target.value })
+                    }
+                    className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-sm px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none cursor-pointer"
+                  >
+                    <option value="Online">🌐 Online Store</option>
+                    <option value="Offline">🏢 POS / Offline</option>
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        {/* Customer Info Section */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mt-8 transition-all hover:shadow-md">
+          {/* Section Header */}
+          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
+              <h3 className="font-bold text-slate-800 text-base uppercase tracking-wider">
+                Customer Details
+              </h3>
+            </div>
+            <span className="text-[10px] bg-blue-100 text-blue-700 font-black px-2 py-0.5 rounded-md uppercase">
+              Shipping Recipient
+            </span>
+          </div>
 
-        {/* 👨‍👩‍👧 Customer Info */}
-        <div className="space-y-2 mt-8">
-          <h3 className="font-semibold text-gray-700 p-2 bg-gray-200">
-            Customer Info
-          </h3>
-          <div className="flex gap-4 flex-wrap">
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">Phone Number</label>
-              <input
-                type="text"
-                placeholder="+8801XXXXXXXXX"
-                value={order.shipping_address.phone}
-                onChange={(e) => handleCustomerPhone(e.target.value)}
-                className="border px-2 py-1 rounded"
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">Full Name</label>
-              <input
-                type="text"
-                placeholder="Md. Mostakin Ahmed"
-                value={order.shipping_address.recipient_name}
-                onChange={(e) =>
-                  setOrder({
-                    ...order,
-                    shipping_address: {
-                      ...order.shipping_address,
-                      recipient_name: e.target.value,
-                    },
-                  })
-                }
-                className="border px-2 py-1 rounded"
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">Full Address</label>
-              <input
-                type="text"
-                placeholder="93, Indira Road, Dhaka"
-                value={order.shipping_address.address_line1}
-                onChange={(e) =>
-                  setOrder({
-                    ...order,
-                    shipping_address: {
-                      ...order.shipping_address,
-                      address_line1: e.target.value,
-                    },
-                  })
-                }
-                className="border px-2 py-1 rounded"
-              />
-            </div>
+          {/* Form Content */}
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Phone Number */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <div className="relative group">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <FiPhone size={16} />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="01XXXXXXXXX"
+                    value={order.shipping_address.phone}
+                    onChange={(e) => handleCustomerPhone(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
+                    required
+                  />
+                </div>
+              </div>
 
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">Email</label>
-              <input
-                type="email"
-                placeholder="mostakin@victusbyte.com"
-                value={order.shipping_address.email}
-                onChange={(e) =>
-                  setOrder({
-                    ...order,
-                    shipping_address: {
-                      ...order.shipping_address,
-                      email: e.target.value,
-                    },
-                  })
-                }
-                className="border px-2 py-1 rounded"
-              />
+              {/* Full Name */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  Recipient Name <span className="text-red-500">*</span>
+                </label>
+                <div className="relative group">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <FiUser size={16} />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="e.g. Rahim Uddin"
+                    value={order.shipping_address.recipient_name}
+                    onChange={(e) =>
+                      setOrder({
+                        ...order,
+                        shipping_address: {
+                          ...order.shipping_address,
+                          recipient_name: e.target.value,
+                        },
+                      })
+                    }
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Full Address */}
+              <div className="space-y-1.5 lg:col-span-1">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  Shipping Address
+                </label>
+                <div className="relative group">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <FiMapPin size={16} />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="House, Road, Area..."
+                    value={order.shipping_address.address_line1}
+                    onChange={(e) =>
+                      setOrder({
+                        ...order,
+                        shipping_address: {
+                          ...order.shipping_address,
+                          address_line1: e.target.value,
+                        },
+                      })
+                    }
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Email Address */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  Email Address
+                </label>
+                <div className="relative group">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">
+                    <FiMail size={16} />
+                  </div>
+                  <input
+                    type="email"
+                    placeholder="customer@example.com"
+                    value={order.shipping_address.email}
+                    onChange={(e) =>
+                      setOrder({
+                        ...order,
+                        shipping_address: {
+                          ...order.shipping_address,
+                          email: e.target.value,
+                        },
+                      })
+                    }
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
         {/* 📦 Product List */}
-        <div className="space-y-2 mt-8">
-          <h3 className="font-semibold text-gray-700 p-2 bg-gray-200">
-            Products
-          </h3>
-          {order.items.map((item, idx) => (
-            <div
-              key={idx}
-              className="flex gap-2 flex-wrap items-center border-b border-gray-200 pb-2"
+        {/* 📦 Product List Section */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mt-8">
+          {/* Header */}
+          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
+              <h3 className="font-bold text-slate-800 text-base uppercase tracking-wider">
+                Line Items
+              </h3>
+            </div>
+            <span className="text-xs font-medium text-slate-500 bg-slate-200 px-2 py-1 rounded">
+              {order.items.length} {order.items.length === 1 ? "Item" : "Items"}
+            </span>
+          </div>
+
+          <div className="p-4 md:p-6 space-y-4">
+            {order.items.map((item, idx) => (
+              <div
+                key={idx}
+                className="relative group grid grid-cols-1 lg:grid-cols-12 gap-4 items-start p-4 rounded-xl border border-slate-100 bg-slate-50/30 hover:bg-slate-50 hover:border-slate-200 transition-all"
+              >
+                {/* Product ID & Name */}
+                <div className="lg:col-span-4 space-y-3">
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                      <FiHash /> Product ID
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="SKU-XXXX"
+                      required
+                      value={item.product_id}
+                      onChange={(e) =>
+                        handleItemChange(idx, "product_id", e.target.value)
+                      }
+                      className="w-full px-3 py-2 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                      <FiPackage /> Product Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Full product title..."
+                      value={item.product_name}
+                      onChange={(e) =>
+                        handleItemChange(idx, "product_name", e.target.value)
+                      }
+                      className="w-full px-3 py-2 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-medium"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Price & Quantity */}
+                <div className="lg:col-span-3 grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Unit Price
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">
+                        $
+                      </span>
+                      <input
+                        type="number"
+                        value={item.product_price}
+                        onChange={(e) =>
+                          handleItemChange(idx, "product_price", e.target.value)
+                        }
+                        className="w-full pl-7 pr-3 py-2 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all font-semibold"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Qty
+                    </label>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleItemChange(idx, "quantity", e.target.value)
+                      }
+                      className="w-full px-3 py-2 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-center"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Comments/Variants */}
+                <div className="lg:col-span-4 space-y-1.5">
+                  <label className="flex items-center gap-1.5 text-[10px] font-black text-emerald-600 uppercase tracking-widest ml-1">
+                    <FiTag /> Specifications / Variations
+                  </label>
+                  <textarea
+                    rows="3"
+                    placeholder="Color: Black, Size: XL, Origin: USA..."
+                    required
+                    value={item.product_comments}
+                    onChange={(e) =>
+                      handleItemChange(idx, "product_comments", e.target.value)
+                    }
+                    className="w-full px-3 py-2 bg-emerald-50/30 border border-emerald-100 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all italic"
+                  />
+                </div>
+
+                {/* Remove Button */}
+                <div className="lg:col-span-1 flex lg:justify-center items-center pt-6">
+                  {order.items.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeItem(idx)}
+                      className="p-2.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                      title="Remove Item"
+                    >
+                      <FiTrash2 size={20} />
+                    </button>
+                  )}
+                </div>
+
+                {/* Line Total Badge (Optional but Industry Standard) */}
+                <div className="absolute top-2 right-2 hidden group-hover:block transition-all">
+                  <span className="text-[10px] font-bold bg-white border border-slate-200 text-slate-500 px-2 py-0.5 rounded shadow-sm">
+                    Line Total: $
+                    {(item.product_price * item.quantity).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            ))}
+
+            {/* Add Item Button */}
+            <button
+              type="button"
+              onClick={addItem}
+              className="w-full py-4 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center gap-2 text-slate-500 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all font-bold text-sm uppercase tracking-widest"
             >
-              <div className="flex flex-col w-full lg:w-auto">
-                <label className="ml-2 text-gray-600 text-sm">Product ID</label>
-                <input
-                  type="text"
-                  placeholder="P00000X"
-                  required
-                  value={item.product_id}
-                  onChange={(e) =>
-                    handleItemChange(idx, "product_id", e.target.value)
-                  }
-                  className="border px-2 py-1 rounded lg:w-28 w-full"
-                />
-              </div>
-              <div className="lg:ml-2 flex flex-col lg:w-auto w-full">
-                <label className="ml-2 text-gray-600 text-sm">
-                  Product Name
+              <FiPlus size={18} /> Add New Line Item
+            </button>
+          </div>
+        </div>
+        {/* 💳 Payment & Shipping Summary Section */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mt-8">
+          {/* Header */}
+          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-6 bg-amber-500 rounded-full"></div>
+              <h3 className="font-bold text-slate-800 text-base uppercase tracking-wider">
+                Logistics & Settlement
+              </h3>
+            </div>
+          </div>
+
+          <div className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* Shipping Cost */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  <FiTruck className="text-amber-500" /> Shipping Cost
                 </label>
-                <input
-                  type="text"
-                  placeholder="samsung s24 ultra"
-                  value={item.product_name}
-                  onChange={(e) =>
-                    handleItemChange(idx, "product_name", e.target.value)
-                  }
-                  className="border px-2 py-1 rounded flex-1 lg:w-[30rem]"
-                  required
-                />
-              </div>
-
-              <div className="lg:ml-2 flex gap-4">
-                <div className="flex flex-col">
-                  <label className="text-gray-600 text-sm">Price</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">
+                    ৳
+                  </span>
                   <input
                     type="number"
-                    placeholder="Price"
-                    value={item.product_price}
-                    onChange={(e) =>
-                      handleItemChange(idx, "product_price", e.target.value)
-                    }
-                    className="border px-2 py-1 rounded w-30"
+                    placeholder="0"
                     required
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label className="text-gray-600 text-sm">Qty</label>
-                  <input
-                    type="number"
-                    placeholder="Qty"
-                    value={item.quantity}
-                    onChange={(e) =>
-                      handleItemChange(idx, "quantity", e.target.value)
-                    }
-                    className="border px-2 py-1 rounded w-30"
-                    required
+                    value={order.shipping_cost}
+                    onChange={handleShippingChange}
+                    className="w-full pl-8 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all outline-none font-semibold"
                   />
                 </div>
               </div>
 
-              {/* comments */}
-              <div className="lg:ml-2 flex flex-col lg:w-auto w-full">
-                <label className="ml-2 text-green-600 font-bold text-md">
-                  Comments - Primary Info
+              {/* Discount */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  <FiPercent className="text-rose-500" /> Discount
                 </label>
-                <input
-                  type="text"
-                  placeholder="8/128 GB , black, USA"
-                  required
-                  value={item.product_comments}
-                  onChange={(e) =>
-                    handleItemChange(idx, "product_comments", e.target.value)
-                  }
-                  className="border px-2 py-1 rounded flex-1 lg:w-[30rem]"
-                />
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">
+                    ৳
+                  </span>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    required
+                    value={order.discount}
+                    onChange={handleDiscountChange}
+                    className="w-full pl-8 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all outline-none font-semibold text-rose-600"
+                  />
+                </div>
               </div>
 
-              {order.items.length > 1 && (
+              {/* Payment Method */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  <FiCreditCard className="text-indigo-500" /> Payment Method
+                </label>
+                <div className="relative">
+                  <select
+                    value={order.payment.method}
+                    onChange={(e) =>
+                      setOrder({
+                        ...order,
+                        payment: { ...order.payment, method: e.target.value },
+                      })
+                    }
+                    className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-sm pl-4 pr-10 py-2.5 rounded-lg focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none cursor-pointer font-medium"
+                  >
+                    <option value="COD">💵 Cash on Delivery (COD)</option>
+                    <option value="cash">💰 Cash</option>
+                    <option value="card">💳 Card Payment</option>
+                    <option value="bkash">📱 bKash</option>
+                    <option value="nagad">📱 Nagad</option>
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Status */}
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
+                  <FiActivity className="text-slate-500" /> Payment Status
+                </label>
+                <div className="relative">
+                  <select
+                    value={order.payment.status}
+                    onChange={(e) =>
+                      setOrder({
+                        ...order,
+                        payment: { ...order.payment, status: e.target.value },
+                      })
+                    }
+                    className={`w-full appearance-none border text-sm pl-4 pr-10 py-2.5 rounded-lg focus:ring-4 transition-all outline-none cursor-pointer font-bold uppercase tracking-wide
+              ${
+                order.payment.status === "Completed"
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-700 focus:ring-emerald-500/10 focus:border-emerald-500"
+                  : "bg-amber-50 border-amber-200 text-amber-700 focus:ring-amber-500/10 focus:border-amber-500"
+              }`}
+                  >
+                    <option value="Pending">🟠 Unpaid / Pending</option>
+                    <option value="Completed">🟢 Paid / Completed</option>
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 💰 Totals & Actions Section */}
+        <div className="mt-10 mb-20">
+          <div className="bg-slate-900 rounded-2xl p-6 md:p-8 shadow-xl">
+            <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6">
+              {/* Detailed Financial Breakdown */}
+              <div className="flex flex-wrap gap-6 md:gap-12">
+                <div className="space-y-1">
+                  <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                    Subtotal
+                  </p>
+                  <p className="text-white text-xl font-medium">
+                    ৳
+                    {order.subtotal.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                    })}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                    Adjustments
+                  </p>
+                  <p className="text-slate-300 text-xl font-medium">
+                    {Number(order.shipping_cost || 0) > 0 && (
+                      <span className="text-emerald-400">
+                        +{order.shipping_cost}
+                      </span>
+                    )}
+                    {Number(order.discount || 0) > 0 && (
+                      <span className="text-rose-400 ml-2">
+                        -{order.discount}
+                      </span>
+                    )}
+                    {!order.shipping_cost && !order.discount && "0.00"}
+                  </p>
+                </div>
+
+                <div className="space-y-1 border-l border-slate-700 pl-6 md:pl-12">
+                  <p className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                    Grand Total
+                  </p>
+                  <p className="text-indigo-400 text-4xl font-black tracking-tight">
+                    ৳
+                    {order.total_amount.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                    })}
+                  </p>
+                </div>
+              </div>
+
+              {/* 🧾 Action Buttons */}
+              <div className="flex items-center gap-3 w-full md:w-auto">
                 <button
                   type="button"
-                  onClick={() => removeItem(idx)}
-                  className="bg-red-500 text-white p-1 rounded mt-5"
+                  onClick={() => navigate(-1)}
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-bold transition-all border border-transparent hover:border-slate-700"
                 >
-                  <Minus className="h-4 w-4" />
+                  <FiXCircle size={18} />
+                  <span>Discard</span>
                 </button>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addItem}
-            className="flex items-center gap-1 text-blue-600 font-medium mt-2"
-          >
-            <Plus className="h-4 w-4" /> Add Product
-          </button>
-        </div>
 
-        {/* 💳 Payment & Shipping */}
-        <div className="space-y-2 mt-8">
-          <h3 className="font-semibold text-gray-700 p-2 bg-gray-200">
-            Payment & Shipping
-          </h3>
-          <div className="flex gap-4 flex-wrap">
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">
-                Shipping Cost
-              </label>
-              <input
-                type="number"
-                placeholder="0"
-                required
-                value={order.shipping_cost}
-                onChange={handleShippingChange}
-                className="border px-2 py-1 rounded w-32"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">Discount</label>
-              <input
-                type="number"
-                placeholder="0"
-                required
-                value={order.discount}
-                onChange={handleDiscountChange}
-                className="border px-2 py-1 rounded w-32"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">
-                Payment Method
-              </label>
-              <select
-                value={order.payment.method}
-                onChange={(e) =>
-                  setOrder({
-                    ...order,
-                    payment: { ...order.payment, method: e.target.value },
-                  })
-                }
-                className="border px-2 py-1 rounded w-32"
-              >
-                <option value="COD">COD</option>
-                <option value="cash">Cash</option>
-                <option value="card">Card</option>
-                <option value="bkash">bKash</option>
-                <option value="nagad">Nagad</option>
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label className="ml-2 text-gray-600 text-sm">
-                Payment Status
-              </label>
-              <select
-                value={order.payment.status}
-                onChange={(e) =>
-                  setOrder({
-                    ...order,
-                    payment: { ...order.payment, status: e.target.value },
-                  })
-                }
-                className="border px-2 py-1 rounded w-32"
-              >
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
-              </select>
+                <button
+                  type="submit"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-10 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] group"
+                >
+                  <FiSave size={18} />
+                  <span>SAVE ORDER</span>
+                  <FiArrowRight
+                    size={18}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* 💰 Totals */}
-        <div className="flex justify-between rounded mt-8 font-semibold text-lg py-2 px-2 bg-gray-200">
-          <span>Subtotal: ${order.subtotal.toFixed(2)}</span>
-          <span>Total: ${order.total_amount.toFixed(2)}</span>
-        </div>
-
-        {/* 🧾 Buttons */}
-        <div className="mt-2">
-          <button
-            type="submit"
-            className="px-6 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold"
-          >
-            Save Order
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="px-6 bg-red-600 ml-4 hover:bg-red-700 text-white py-2 rounded font-semibold"
-          >
-            Cancel
-          </button>
+          {/* Footer Note */}
+          <p className="text-center text-slate-400 text-[10px] mt-6 uppercase tracking-[0.3em] font-medium">
+            Review all line items before finalizing the transaction
+          </p>
         </div>
       </form>
     </div>
