@@ -27,7 +27,7 @@ export default function Navbar({ pageTitle }) {
       <div className="flex items-center gap-5">
         {/* Notification Icon */}
         <a
-          href="https://victusbyte.vercel.app/home"
+          href="https://victusbyte.top"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 rounded-2xl"
