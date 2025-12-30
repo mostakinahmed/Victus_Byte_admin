@@ -4,6 +4,7 @@ import CategoryList from "../components/Category/CategoryList";
 import { DataContext } from "../Context Api/ApiContext";
 import AddCategory from "../components/Category/AddCategory";
 import { TopCategory } from "@/components/Category/TopCategory";
+import { FiList, FiPlusSquare, FiAward, FiSettings } from "react-icons/fi";
 
 export default function Category() {
   const { categoryData, productData, loading } = useContext(DataContext);
@@ -12,81 +13,66 @@ export default function Category() {
   return (
     <div>
       <Navbar pageTitle="Category Management" />
-      <div className="bg-white shadow-lg  p-3 w-full mx-auto">
-        {/* Buttons */}
-        <div className="hidden lg:flex w-full justify-center  lg:mb-0 mb-2">
-          <button
-            onClick={() => setActiveTab("catList")}
-            className={`lg:px-20 w-1/2 lg:w-auto   text-md ${
-              activeTab === "catList"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Category List
-          </button>
-          <button
-            onClick={() => setActiveTab("addCat")}
-            className={`lg:px-20 w-1/2 lg:w-auto  lg:py-2 py-1  font-medium ${
-              activeTab === "addCat"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Add Category
-          </button>
 
-          <button
-            onClick={() => setActiveTab("topCategory")}
-            className={`lg:px-20 w-1/2 lg:w-auto  lg:py-2 py-1  font-medium ${
-              activeTab === "topCategory"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Top Category
-          </button>
-        </div>
-        {/* Buttons for mobile */}
-        <div className="lg:hidden flex w-full justify-center  lg:mb-0 mb-2">
-          <button
-            onClick={() => setActiveTab("catList")}
-            className={`w-1/3 lg:w-auto   text-md ${
-              activeTab === "catList"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-             List All
-          </button>
-          <button
-            onClick={() => setActiveTab("addCat")}
-            className={` w-1/3  lg:py-2 py-1  font-medium ${
-              activeTab === "addCat"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Add New
-          </button>
+      {/* 📑 Professional Category Control Panel */}
+      <div className="bg-white border border-slate-200  overflow-hidden w-full mx-auto animate-in fade-in duration-500">
+        {/* Modern Segmented Control Header */}
+        <div className="p-4 bg-slate-50/50 ">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Tab Navigation */}
+            <div className="flex bg-slate-200/60 p-1 rounded-2xl w-full lg:w-fit">
+              {[
+                {
+                  id: "catList",
+                  label: "Catalog List",
+                  mobileLabel: "All",
+                  icon: <FiList />,
+                },
+                {
+                  id: "addCat",
+                  label: "Add New Category",
+                  mobileLabel: "Create",
+                  icon: <FiPlusSquare />,
+                },
+                {
+                  id: "topCategory",
+                  label: "Featured Categories",
+                  mobileLabel: "Top",
+                  icon: <FiAward />,
+                },
+              ].map((tab) => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex flex-1 lg:flex-none items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                      isActive
+                        ? "bg-white text-indigo-600 shadow-sm shadow-slate-200"
+                        : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/40"
+                    }`}
+                  >
+                    <span className="text-lg lg:text-base">{tab.icon}</span>
+                    <span className="hidden lg:inline">{tab.label}</span>
+                    <span className="lg:hidden">{tab.mobileLabel}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-          <button
-            onClick={() => setActiveTab("topCategory")}
-            className={`lg:px-20 w-1/3 lg:w-auto  lg:py-2 py-1  font-medium ${
-              activeTab === "topCategory"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Top Cat
-          </button>
+          </div>
         </div>
-        {/* Conditional Content */}
-        <div className=" min-h-screen">
-          {activeTab === "catList" && <CategoryList data={categoryData} />}
-          {activeTab === "addCat" && <AddCategory />}
-          {activeTab === "topCategory" && <TopCategory />}
+
+        {/* Main Content Area */}
+        <div className="p-4  min-h-[70vh] bg-white">
+          <div className="animate-in slide-in-from-bottom-2 duration-500">
+            {activeTab === "catList" && <CategoryList data={categoryData} />}
+            {activeTab === "addCat" && <AddCategory />}
+            {activeTab === "topCategory" && <TopCategory />}
+          </div>
         </div>
+
+     
       </div>
     </div>
   );

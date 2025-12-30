@@ -16,7 +16,7 @@ const CategoryList = ({ data = [] }) => {
   }, [searchTerm, data]);
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white  border border-slate-200 shadow-sm overflow-hidden">
       {/* --- Minimalist Header --- */}
       <div className="px-5 py-3 border-b border-slate-100 bg-white flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -142,9 +142,7 @@ const CategoryList = ({ data = [] }) => {
             Live Sync
           </div>
         </div>
-        <p className="text-[9px] font-bold text-slate-400 uppercase italic">
-          v2.0 System Architecture
-        </p>
+     
       </div>
     </div>
   );
