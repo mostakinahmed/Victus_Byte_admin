@@ -1,6 +1,20 @@
 import { DataContext } from "@/Context Api/ApiContext";
 import React, { useContext, useEffect, useState } from "react";
-import { FiSearch, FiList, FiBox } from "react-icons/fi"; // Feather search icon
+import {
+  FiSearch,
+  FiList,
+  FiBox,
+  FiPackage,
+  FiZap,
+  FiEdit3,
+  FiHash,
+  FiCheckCircle,
+  FiMinusCircle,
+  FiActivity,
+  FiPlusCircle,
+  FiFileText,
+  FiXCircle,
+} from "react-icons/fi"; // Feather search icon
 import { FaSpinner, FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 
@@ -118,344 +132,505 @@ export default function CheckAndUpdateStock() {
 
   return (
     <div className="md:flex border-t min-h-screen mt-3">
-      {/* Left Panel */}
-      <div className=" border-r md:w-1/2 bg-white rounded ">
-        <h2 className="relative text-xl p-1 bg-blue-100 font-semibold mb-3 flex items-center">
-          <FiSearch className="mr-2 text-gray-600" />
-          Search Product
-        </h2>
-
-        <div className="flex items-center gap-2 md:mb-4 mb-3 mr-2">
-          <input
-            type="text"
-            placeholder="Enter Product-ID or SKU-ID"
-            value={searchId}
-            onChange={(e) => setSearchId(e.target.value)}
-            className="border border-gray-400 rounded p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onClick={handleSearch}
-            className="bg-blue-600 text-white lg:w-[128px] w-[147px] py-2 rounded hover:bg-blue-700 transition"
-          >
-            Search
-          </button>
+      {/* Left Panel: Professional Inventory Lookup */}
+      <div className="border-r border-slate-200 md:w-1/2 bg-white rounded-xl overflow-hidden shadow-sm flex flex-col">
+        {/* Header Section */}
+        <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
+            <h2 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+              Inventory Lookup
+            </h2>
+          </div>
         </div>
 
-        {selectedProduct ? (
-          <div className="md:mt-8 mr-2">
-            <div className=" flex justify-between bg-gray-200">
-              <h3 className="text-lg mt-2  font-semibold px-2">
-                Product Details
-              </h3>
-              <button
-                onClick={() => {
-                  setToggle(false);
-                }}
-                className=" justify- px-2 lg:w-[110px] py-2 rounded text-white font-semibold bg-yellow-400 hover:bg-yellow-500"
-              >
-                Add Stock
-              </button>
+        <div className="p-5">
+          {/* Search Interaction Group */}
+          <div className="flex items-end gap-3 mb-6">
+            <div className="flex-1 space-y-1.5">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                Catalog Search
+              </label>
+              <div className="relative group">
+                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+                <input
+                  type="text"
+                  placeholder="Enter Product-ID or SKU-ID..."
+                  value={searchId}
+                  onChange={(e) => setSearchId(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                />
+              </div>
             </div>
+            <button
+              onClick={handleSearch}
+              className="bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-600 transition-all active:scale-95 shadow-lg shadow-slate-200 flex items-center gap-2"
+            >
+              <FiZap size={14} /> Search
+            </button>
+          </div>
 
-            {/* info div */}
-            <div class="bg-white w-full overflow-hidden">
-              <div className="w-full flex gap-4 bg-white p-2 rounded">
-                {/* Product Image */}
-                <div className="w-1/3 flex justify-center">
-                  <img
-                    src={selectedProduct.images}
-                    alt={selectedProduct.name}
-                    className="w-40 h-40 p-2 object-cover rounded border"
-                  />
-                </div>
+          {selectedProduct ? (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              {/* Product Details Header & Action */}
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest border-l-4 border-indigo-500 pl-3">
+                  Product Profile
+                </h3>
+                <button
+                  onClick={() => setToggle(false)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-indigo-600 font-black text-[10px] uppercase tracking-widest bg-indigo-50 hover:bg-indigo-600 hover:text-white transition-all border border-indigo-100"
+                >
+                  <FiEdit3 /> Add Stock
+                </button>
+              </div>
 
-                {/* Product Info */}
-                <div className="w-2/3 space-y-1">
-                  <h2 className="text-xl font-bold text-gray-900">
-                    {selectedProduct.name}
-                  </h2>
+              {/* Info Container */}
+              <div className="space-y-6">
+                <div className="flex gap-6 items-start">
+                  {/* High-End Image Frame */}
+                  <div className="relative shrink-0">
+                    <img
+                      src={selectedProduct.images[0]}
+                      alt={selectedProduct.name}
+                      className="w-36 h-36 object-contain rounded-2xl border-2 border-slate-50 bg-white shadow-sm p-2"
+                    />
+                    <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-white text-[9px] font-black px-2 py-1 rounded shadow-lg border-2 border-white uppercase">
+                      Original
+                    </div>
+                  </div>
 
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium text-gray-800">
-                      Product ID:
-                    </span>{" "}
-                    {selectedProduct.pID}
-                  </p>
+                  {/* Core Specs */}
+                  <div className="flex-1 space-y-3 pt-1">
+                    <h2 className="text-xl font-black text-slate-900 leading-tight">
+                      {selectedProduct.name}
+                    </h2>
 
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium text-gray-800">Brand:</span>{" "}
-                    {selectedProduct.brandName}
-                  </p>
+                    <div className="grid grid-cols-1 gap-2">
+                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                        <FiHash className="text-slate-300" />
+                        <span className="text-slate-400 font-medium">UID:</span>
+                        <span className="font-mono text-slate-800">
+                          {selectedProduct.pID}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                        <FiPackage className="text-slate-300" />
+                        <span className="text-slate-400 font-medium">
+                          Category:
+                        </span>
+                        <span className="text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
+                          {selectedProduct.category}
+                        </span>
+                      </div>
+                    </div>
 
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium text-gray-800">Category:</span>{" "}
-                    {selectedProduct.category}
-                  </p>
-
-                  {/* Divider bar */}
-                  <div className="w-full h-1 bg-blue-500 rounded mt-2">
-                    <div class="flex justify-between items-center pt-2">
-                      <div>
-                        <p class="text-sm text-gray-500">Price</p>
-                        <p class="text-lg font-semibold text-green-600">
-                          {selectedProduct.price.selling}
+                    {/* Financial Metrics Cards */}
+                    <div className="flex gap-3 pt-3">
+                      <div className="flex-1 p-3 bg-slate-900 rounded-2xl shadow-md">
+                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">
+                          Selling Price
+                        </p>
+                        <p className="text-lg font-black text-white">
+                          ৳{selectedProduct.price.selling}
                         </p>
                       </div>
-                      <div>
-                        <p class="text-sm text-gray-500">Stock</p>
-                        <p class="text-lg font-semibold text-blue-600">50</p>
+                      <div className="flex-1 p-3 bg-indigo-50 rounded-2xl border border-indigo-100">
+                        <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-1">
+                          Live Stock
+                        </p>
+                        <p className="text-lg font-black text-indigo-700">
+                          50{" "}
+                          <span className="text-[10px] font-medium opacity-60">
+                            Units
+                          </span>
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="px-6 mt-1 mb-2 md:mb-0 space-y-1">
-                <div class="mt-5 border-t border-gray-100">
-                  <p class=" text-gray-500 mb-1">Specifications:</p>
-                  <ul class="list-disc list-inside text-gray-700 text-sm space-y-1">
-                    <li>Example: 8GB RAM</li>
-                    <li>Example: 128GB Storage</li>
-                    <li>Example: 5000mAh Battery</li>
+                {/* Technical Specifications Section */}
+                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="flex items-center gap-2 mb-3">
+                    <FiActivity className="text-slate-400" />
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                      Hardware Configuration
+                    </p>
+                  </div>
+                  <ul className="grid grid-cols-2 gap-3">
+                    {["8GB RAM", "128GB Storage", "5000mAh Battery"].map(
+                      (spec, i) => (
+                        <li
+                          key={i}
+                          className="text-xs font-bold text-slate-700 flex items-center gap-2"
+                        >
+                          <div className="w-1 h-1 bg-indigo-400 rounded-full" />{" "}
+                          {spec}
+                        </li>
+                      )
+                    )}
                   </ul>
                 </div>
 
-                <div class="pt-3 border-t border-gray-100 text-xs text-gray-400">
-                  <p>
-                    Created:{" "}
-                    <span class="text-gray-600">2025-10-05 02:58:12</span>
-                  </p>
-                  <p>
-                    Updated:{" "}
-                    <span class="text-gray-600">2025-10-07 14:26:11</span>
-                  </p>
+                {/* System Metadata */}
+                <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+                  <div className="flex gap-4">
+                    <div className="text-[9px] font-bold text-slate-400 uppercase">
+                      Created{" "}
+                      <span className="text-slate-600 ml-1">2025-10-05</span>
+                    </div>
+                    <div className="text-[9px] font-bold text-slate-400 uppercase">
+                      Last Update{" "}
+                      <span className="text-slate-600 ml-1">2025-10-07</span>
+                    </div>
+                  </div>
+                  <div className="text-[9px] font-black text-emerald-500 uppercase flex items-center gap-1">
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />{" "}
+                    Data Sync Active
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="mt-4 p-3 mr-2 h-50 flex justify-center items-center text-2xl bg-yellow-100 text-yellow-800 border border-yellow-300 rounded">
-            ⚠️ Product Info
-          </div>
-        )}
+          ) : (
+            /* Empty Selection State */
+            <div className="mt-4 p-12 flex flex-col items-center justify-center bg-slate-50 border border-slate-200 rounded-2xl border-dashed">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-slate-200 shadow-sm mb-4">
+                <FiPackage size={32} />
+              </div>
+              <p className="text-sm font-black text-slate-400 uppercase tracking-widest">
+                Product Info Required
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1">
+                Search via Product ID to populate details
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Middle Panel */}
-      <div className="md:w-1/2 mt-2 md:mt-0 border-r bg-white rounded">
-        <h2 className="flex items-center text-xl p-1 bg-blue-100 font-semibold mb-3">
-          <FiList className="mr-2 text-gray-600" size={24} />
-          SKU List
-        </h2>
+      {/* 📊 Middle Panel: Professional SKU Ledger */}
+      <div className="md:w-1/2 mt-2 md:mt-0 border-r border-slate-200 bg-white rounded-xl overflow-hidden shadow-sm flex flex-col h-full">
+        {/* Section Header */}
+        <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
+            <h2 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+              Inventory Assets (SKUs)
+            </h2>
+          </div>
+        </div>
 
+        {/* 📈 Stat Bar: Modern Flat Look */}
         {currentStock && (
-          <div className="grid grid-cols-3 gap-3 mb-3 md:px-2 mr-2 md:mr-0 ">
-            <div className="bg-blue-50 p-1 rounded text-center">
-              <h4 className="text-gray-500 text-sm">Total Stock</h4>
-              <p className="text-2xl font-bold text-blue-600"> {totalStock}</p>
-            </div>
-            <div className="bg-green-50 p-1 rounded text-center">
-              <h4 className="text-gray-500 text-sm">Available Stock</h4>
-              <p className="text-2xl font-bold text-green-600">
-                {" "}
-                {availableStock}
-              </p>
-            </div>
-            <div className="bg-red-50 p-1 rounded text-center">
-              <h4 className="text-gray-500 text-sm">Sold Item</h4>
-              <p className="text-2xl font-bold text-red-600">
-                {" "}
-                {totalStock - availableStock}
-              </p>
+          <div className="px-5 pt-5 pb-2">
+            <div className="grid grid-cols-3 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+              <div className="p-4 text-center border-r border-slate-100">
+                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                  Total
+                </h4>
+                <p className="text-xl font-black text-slate-900">
+                  {totalStock}
+                </p>
+              </div>
+              <div className="p-4 text-center border-r border-slate-100 bg-emerald-50/30">
+                <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">
+                  Available
+                </h4>
+                <p className="text-xl font-black text-emerald-600">
+                  {availableStock}
+                </p>
+              </div>
+              <div className="p-4 text-center bg-rose-50/30">
+                <h4 className="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-1">
+                  Out
+                </h4>
+                <p className="text-xl font-black text-rose-500">
+                  {totalStock - availableStock}
+                </p>
+              </div>
             </div>
           </div>
         )}
 
-        <div className="md:mr-2 mr-2 ml-2">
-          <div className="h-[600px] overflow-y-auto rounded">
-            <table className="w-full min-w-auto">
-              <thead className="bg-gray-200 sticky top-0 z-10">
-                <tr className="flex justify-between">
-                  <th className="py-2 px-4">SKU-ID</th>
-                  <th className="py-2 px-4">Available</th>
-                </tr>
-              </thead>
-              {!currentStock && (
-                <div className="mt-4 p-3 h-50 flex justify-center items-center text-2xl bg-yellow-100 text-yellow-800 border border-yellow-300 rounded">
-                  ⚠️ SKU List
-                </div>
-              )}
-              <tbody>
-                {Object.values(currentStock)
-                  .reverse()
-                  .map((sku) => (
-                    <tr
-                      key={sku.skuID}
-                      className={`cursor-pointer border-b hover:bg-blue-100 transition flex justify-between ${
-                        currentSKU?.skuID === sku.skuID ? "bg-blue-100" : " "
-                      }`}
-                      onClick={() => {
-                        handleSelectSKU(sku.skuID);
-                        setToggle(true);
-                      }}
-                    >
-                      <td className="py-1 px-4 text-blue-600 font-medium">
-                        {sku.skuID}
-                      </td>
-                      <td
-                        className={`py-2 px-4 mr-6 font-semibold text-xs ${
-                          sku.status ? "text-green-600" : "text-red-600"
-                        }`}
-                      >
-                        {sku.status ? "YES" : "SOLD"}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+        {/* 📋 SKU List Table */}
+        <div className="flex-1 p-5">
+          {!currentStock ? (
+            <div className="h-40 flex flex-col items-center justify-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-slate-400">
+              <FiActivity className="mb-2 opacity-50" size={24} />
+              <p className="text-[10px] font-black uppercase tracking-widest">
+                Awaiting Catalog Selection
+              </p>
+            </div>
+          ) : (
+            <div className="h-[600px] overflow-y-auto rounded-xl border border-slate-100 custom-scrollbar">
+              <table className="w-full border-collapse">
+                <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
+                  <tr>
+                    <th className="py-3 px-4 text-left text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                      SKU Reference
+                    </th>
+                    <th className="py-3 px-4 text-right text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                      Availability
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {Object.values(currentStock)
+                    .reverse()
+                    .map((sku) => {
+                      const isSelected = currentSKU?.skuID === sku.skuID;
+                      return (
+                        <tr
+                          key={sku.skuID}
+                          className={`group cursor-pointer transition-all duration-200 ${
+                            isSelected ? "bg-indigo-50" : "hover:bg-slate-50"
+                          }`}
+                          onClick={() => {
+                            handleSelectSKU(sku.skuID);
+                            setToggle(true);
+                          }}
+                        >
+                          <td className="py-3 px-4 flex items-center gap-3">
+                            {isSelected && (
+                              <div className="w-1 h-4 bg-indigo-600 rounded-full" />
+                            )}
+                            <span
+                              className={`text-sm font-mono font-bold tracking-tighter ${
+                                isSelected
+                                  ? "text-indigo-600"
+                                  : "text-slate-600"
+                              }`}
+                            >
+                              {sku.skuID}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-right">
+                            <span
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border shadow-sm ${
+                                sku.status
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                  : "bg-rose-50 text-rose-700 border-rose-100"
+                              }`}
+                            >
+                              {sku.status ? (
+                                <FiCheckCircle />
+                              ) : (
+                                <FiMinusCircle />
+                              )}
+                              {sku.status ? "In Stock" : "Sold Out"}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Right Panel */}
-      <div className="md:w-1/2 bg-white rounded">
-        {toggle ? (
-          <>
-            <h2 className="flex items-center text-xl p-1 mt-3 md:mt-0 bg-blue-100 font-semibold mb-3">
-              <FiBox className="mr-2 text-gray-600" size={24} />
-              Stock Overview
+
+      {/* 🛠️ Right Panel: Stock Overview & Control */}
+      <div className="md:w-1/2 bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 flex flex-col h-full">
+        {/* Dynamic Section Header */}
+        <div
+          className={`px-5 py-4 border-b transition-colors duration-300 ${
+            toggle
+              ? "bg-slate-50/50 border-slate-100"
+              : "bg-indigo-50/30 border-indigo-100"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <div
+              className={`w-1.5 h-6 rounded-full ${
+                toggle ? "bg-slate-400" : "bg-indigo-600"
+              }`}
+            ></div>
+            <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
+              {toggle ? "Inventory Profile" : "Asset Intake"}
             </h2>
+          </div>
+        </div>
 
-            <div class=" md:ml-2 md:mt-5 bg-white">
-              <h3 class="text-lg text-center underline font-semibold text-gray-800 mb-5">
-                SKU Information
-              </h3>
+        <div className="flex-1 overflow-y-auto">
+          {toggle ? (
+            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <FiFileText className="text-slate-400" />
+                  <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
+                    SKU Ledger Details
+                  </h3>
+                </div>
 
-              {currentSKU ? (
-                <div class="space-y-2 px-6 py-5">
-                  <div class="flex justify-between border-b">
-                    <span class="text-gray-600 font-medium">SKU ID :</span>
-                    <span class="text-gray-600 mr-1">{currentSKU.skuID}</span>
+                {currentSKU ? (
+                  <div className="space-y-6">
+                    {/* Detailed Data Rows */}
+                    <div className="space-y-4">
+                      {[
+                        {
+                          label: "Asset ID",
+                          value: currentSKU.skuID,
+                          mono: true,
+                        },
+                        {
+                          label: "Current Status",
+                          value: currentSKU.status
+                            ? "In Stock / Active"
+                            : "Sold / Inactive",
+                          status: currentSKU.status,
+                        },
+                        {
+                          label: "Linked Order (OID)",
+                          value: currentSKU.OID || "Unlinked / NULL",
+                          highlight: !!currentSKU.OID,
+                        },
+                      ].map((row, i) => (
+                        <div
+                          key={i}
+                          className="flex justify-between items-baseline group"
+                        >
+                          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-tight">
+                            {row.label}
+                          </span>
+                          <div className="flex-1 border-b border-dotted border-slate-200 mx-2 h-1 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                          <span
+                            className={`text-sm font-bold ${
+                              row.mono
+                                ? "font-mono text-indigo-600"
+                                : row.status === true
+                                ? "text-emerald-600"
+                                : row.status === false
+                                ? "text-rose-500"
+                                : row.highlight
+                                ? "text-indigo-600"
+                                : "text-slate-400"
+                            }`}
+                          >
+                            {row.value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Enhanced Comment Box */}
+                    <div className="mt-8">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
+                        Administrative Notes
+                      </p>
+                      <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                        <p className="text-xs font-medium text-slate-600 leading-relaxed italic">
+                          "
+                          {currentSKU.comment ||
+                            "No historical comments recorded for this asset."}
+                          "
+                        </p>
+                      </div>
+                    </div>
                   </div>
-
-                  <div class="flex justify-between border-b">
-                    <span class="text-gray-600 font-medium">Status :</span>
-
-                    {currentSKU.status ? (
-                      <span class="text-green-600 font-semibold mr-1">
-                        True
-                      </span>
-                    ) : (
-                      <span class="text-red-600 font-semibold mr-1">False</span>
-                    )}
-                  </div>
-
-                  <div class="flex justify-between border-b">
-                    <span class="text-gray-600 font-medium">OID :</span>
-
-                    {currentSKU.OID ? (
-                      <span class="text-green-600 font-semibold mr-1">
-                        {currentSKU.OID}
-                      </span>
-                    ) : (
-                      <span class="text-red-600 text-sm font-semibold mr-1">
-                        NULL
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="border border-gray-200  p-1 bg-gray-200">
-                    <span className="text-gray-700 text-lg mb-1">Comment:</span>
-                    <p className="text-gray-700 text-sm leading-relaxed">
-                      {currentSKU.comment || "No comment available."}
+                ) : (
+                  <div className="mt-10 flex flex-col items-center justify-center p-12 bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
+                    <FiActivity size={32} className="text-slate-300 mb-2" />
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
+                      Select an SKU to view profile
                     </p>
                   </div>
-                </div>
-              ) : (
-                <div className="p-3 h-50 flex justify-center items-center text-2xl bg-yellow-100 text-yellow-800 border border-yellow-300 rounded">
-                  ⚠️ SKU Info
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </>
-        ) : (
-          <>
-            <h2 className="flex items-center text-xl p-1 mt-3 md:mt-0 bg-blue-100 font-semibold mb-3">
-              <FiBox className="mr-2 text-gray-600" size={24} />
-              Update Stock
-            </h2>
-            <div className="mt-3 ml-2 bg-blue-50 border border-blue-200 rounded p-4 relative overflow-hidden">
-              {/* ✅ Loader overlay */}
+          ) : (
+            /* ➕ Add Stock Form */
+            <div className="relative p-6 animate-in fade-in slide-in-from-right-4 duration-300">
+              {/* Modern Loader Overlay */}
               {success && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm z-20">
-                  <div className="bg-white md:p-4 md:w-[220px] rounded-lg shadow-md border flex flex-col items-center animate-fadeIn">
-                    <FaSpinner className="text-green-500 text-4xl mb-3 animate-spin" />
-                    <p className="text-gray-700 font-semibold mb-3">
-                      Stock Adding!
+                <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-md z-30 transition-all duration-500">
+                  <div className="bg-white p-8 rounded-3xl shadow-2xl shadow-indigo-200 border border-slate-100 flex flex-col items-center">
+                    <div className="relative">
+                      <FaSpinner className="text-indigo-600 text-5xl animate-spin mb-4" />
+                      <FiPlusCircle className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-indigo-400 text-xl" />
+                    </div>
+                    <p className="text-slate-800 font-black text-sm uppercase tracking-widest">
+                      Processing...
+                    </p>
+                    <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase">
+                      Updating Master Catalog
                     </p>
                   </div>
                 </div>
               )}
 
-              {/* ✅ Blur this content when loading */}
               <div
-                className={`${success ? "blur-sm pointer-events-none" : ""}`}
+                className={`space-y-6 ${
+                  success ? "blur-sm opacity-50 pointer-events-none" : ""
+                }`}
               >
-                <h2 className="text-lg text-center font-semibold text-blue-700 mb-3">
-                  + Add New Stock
-                </h2>
+                <div className="flex items-center gap-2 mb-2">
+                  <FiPlusCircle className="text-indigo-500" />
+                  <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
+                    Intake New Asset
+                  </h3>
+                </div>
 
-                <form onSubmit={addStock}>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        SKU - ID
+                <form onSubmit={addStock} className="space-y-5">
+                  <div className="space-y-4">
+                    {/* SKU Input */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                        Asset Reference (SKU-ID)
                       </label>
                       <input
                         type="text"
                         name="skuID"
                         value={formData.skuID}
                         onChange={handleFormDataChange}
-                        placeholder="Enter SKU ID"
+                        placeholder="e.g. SN-90231-X"
                         required
-                        className="w-full border border-gray-400 rounded px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-mono"
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Comment - primary info
+                    {/* Comment Input */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                        Technical Specifications / Notes
                       </label>
                       <textarea
-                        placeholder="Enter comment"
-                        rows={5}
+                        placeholder="Describe variant, condition, or source..."
+                        rows={6}
                         name="comment"
                         value={formData.comment}
                         onChange={handleFormDataChange}
                         required
-                        className="w-full border border-gray-400 rounded px-3 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-600 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all leading-relaxed"
                       ></textarea>
                     </div>
+                  </div>
 
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => setToggle(true)}
-                        className="flex items-center gap-2 bg-red-600 text-white px-5 py-2 rounded font-medium hover:bg-red-700 transition"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded font-medium hover:bg-blue-700 transition"
-                      >
-                        Submit
-                      </button>
-                    </div>
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      type="button"
+                      onClick={() => setToggle(true)}
+                      className="flex-1 flex items-center justify-center gap-2 bg-white text-rose-500 border border-rose-100 px-5 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-rose-50 transition-all active:scale-95"
+                    >
+                      <FiXCircle size={14} /> Discard
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-[2] flex items-center justify-center gap-2 bg-indigo-600 text-white px-5 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95"
+                    >
+                      <FiCheckCircle size={14} /> Commit to Stock
+                    </button>
                   </div>
                 </form>
               </div>
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
