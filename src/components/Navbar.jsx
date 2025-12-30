@@ -1,4 +1,16 @@
-import { FiBell, FiUser } from "react-icons/fi";
+import React from "react";
+import {
+  FiBell,
+  FiUser,
+  FiX,
+  FiAtSign,
+  FiShield,
+  FiMail,
+  FiPhone,
+  FiCalendar,
+  FiLogOut,
+  FiCreditCard,
+} from "react-icons/fi";
 import { AuthContext } from "../Context Api/AuthContext";
 import { useContext, useState } from "react";
 import { img } from "framer-motion/client";
@@ -74,91 +86,125 @@ export default function Navbar({ pageTitle }) {
       </div>
 
       {/* Admin Popup */}
-      {showPopup && user && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          {/* Blurred white background */}
-          <div className="absolute inset-0 bg-white/40 backdrop-blur-md"></div>
 
-          {/* Popup content */}
-          <div className="relative bg-white rounded shadow-xl lg:w-96 w-85 max-w-full text-left z-10 overflow-hidden">
-            {/* Header */}
-            <div className="flex  items-center justify-between bg-gray-800 text-white p-4">
-              <h2 className="text-lg font-semibold">Admin Profile</h2>
+      {/* 👤 Industry Standard Admin Profile Modal */}
+      {showPopup && user && (
+        <div className="fixed inset-0 flex items-center justify-center z-[100] p-4">
+          {/* High-End Glass Overlay */}
+          <div
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={() => setShowPopup(false)}
+          ></div>
+
+          {/* Modal Content */}
+          <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
+            {/* Header: Indigo Gradient */}
+            <div className="bg-gradient-to-br from-indigo-600 to-violet-700 h-32 relative">
               <button
                 onClick={() => setShowPopup(false)}
-                className="text-white cursor-pointer font-bold text-3xl hover:text-green-500"
+                className="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-all"
               >
-                ✕
+                <FiX size={20} />
               </button>
             </div>
 
-            {/* Avatar */}
-            <div className="flex  justify-center -mt-12">
-              <img
-                src={
-                  user.images ||
-                  "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
-                }
-                alt={user.fullName}
-                className="w-26 h-26  rounded-full border-4 border-white shadow-md"
-              />
+            {/* Avatar Section */}
+            <div className="flex justify-center -mt-16 relative">
+              <div className="relative group">
+                <img
+                  src={
+                    user.images ||
+                    "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+                  }
+                  alt={user.fullName}
+                  className="w-32 h-32 rounded-3xl border-4 border-white shadow-xl object-cover bg-white"
+                />
+                <div
+                  className="absolute -bottom-2 -right-2 bg-emerald-500 border-4 border-white w-6 h-6 rounded-full shadow-lg"
+                  title="Active Session"
+                >
+                  <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-75"></span>
+                </div>
+              </div>
             </div>
 
             {/* Profile info */}
-            <div className="p-6">
-              <table className="w-full text-gray-700">
-                <tbody>
-                  <tr className="border-b py-2">
-                    <td className="font-medium py-2">Full Name</td>
-                    <td className="py-2">: {user.fullName}</td>
-                  </tr>
-                  <tr className="border-b py-2">
-                    <td className="font-medium py-2">Username</td>
-                    <td className="py-2">: @{user.userName}</td>
-                  </tr>
-                  <tr className="border-b py-2">
-                    <td className="font-medium py-2">ID</td>
-                    <td className="py-2">: {user.adminID}</td>
-                  </tr>
-                  <tr className="border-b py-2">
-                    <td className="font-medium py-2">Role</td>
-                    <td className="py-2 text-green-600 text-md font-bold">
-                      :{user.role ? " Admin" : "User"}
-                    </td>
-                  </tr>
-                  <tr className="border-b py-2">
-                    <td className="font-medium py-2">Email</td>
-                    <td className="py-2">: {user.email}</td>
-                  </tr>
-                  <tr className="border-b py-2">
-                    <td className="font-medium py-2">Phone</td>
-                    <td className="py-2">: {user.phone}</td>
-                  </tr>
+            <div className="px-8 pt-6 pb-8 text-center">
+              <h2 className="text-xl font-black text-slate-800 tracking-tight">
+                {user.fullName}
+              </h2>
+              <p className="text-sm font-bold text-indigo-600 mb-6 uppercase tracking-widest flex items-center justify-center gap-1.5">
+                <FiShield size={12} />{" "}
+                {user.role ? "System Administrator" : "Standard User"}
+              </p>
 
-                  <tr className="border-b py-2">
-                    <td className="font-medium py-2">Created At</td>
-                    <td className="py-2">
-                      {new Date(user.createdAt).toLocaleString()}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              {/* Info Grid */}
+              <div className="space-y-4 text-left">
+                {[
+                  {
+                    icon: <FiAtSign />,
+                    label: "Username",
+                    value: `@${user.userName}`,
+                  },
+                  {
+                    icon: <FiCreditCard />,
+                    label: "Admin ID",
+                    value: user.adminID,
+                    mono: true,
+                  },
+                  {
+                    icon: <FiMail />,
+                    label: "Email Address",
+                    value: user.email,
+                  },
+                  {
+                    icon: <FiPhone />,
+                    label: "Contact Phone",
+                    value: user.phone,
+                  },
+                  {
+                    icon: <FiCalendar />,
+                    label: "Joined Platform",
+                    value: new Date(user.createdAt).toLocaleDateString(
+                      "en-GB",
+                      { day: "2-digit", month: "short", year: "numeric" }
+                    ),
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 group">
+                    <div className="p-2 bg-slate-50 rounded-lg text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                      {React.cloneElement(item.icon, { size: 16 })}
+                    </div>
+                    <div className="flex-1 border-b border-slate-50 pb-1.5">
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                        {item.label}
+                      </p>
+                      <p
+                        className={`text-sm font-bold text-slate-700 ${
+                          item.mono ? "font-mono" : ""
+                        }`}
+                      >
+                        {item.value}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-              {/* Close Button */}
-              <div className="flex justify-center mt-6">
+              {/* Footer Actions */}
+              <div className="mt-10 pt-6 border-t border-slate-100 flex gap-3">
                 <button
-                  onClick={() => logout()}
-                  className="bg-red-500 text-white cursor-pointer text-lg px-6 py-1 rounded-sm hover:bg-red-600 transition-all"
-                >
-                  Logout
-                </button>
-
-                {/* <button
                   onClick={() => setShowPopup(false)}
-                  className="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition-all"
+                  className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-slate-500 text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
                 >
                   Close
-                </button> */}
+                </button>
+                <button
+                  onClick={() => logout()}
+                  className="flex-1 flex items-center justify-center gap-2 bg-rose-50 text-rose-600 border border-rose-100 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all shadow-lg shadow-rose-100 active:scale-95"
+                >
+                  <FiLogOut size={16} /> Logout
+                </button>
               </div>
             </div>
           </div>

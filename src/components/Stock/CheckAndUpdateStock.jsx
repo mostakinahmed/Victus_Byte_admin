@@ -133,7 +133,7 @@ export default function CheckAndUpdateStock() {
   return (
     <div className="md:flex border-t min-h-screen mt-3">
       {/* Left Panel: Professional Inventory Lookup */}
-      <div className="border-r border-slate-200 md:w-1/2 bg-white rounded-xl overflow-hidden shadow-sm flex flex-col">
+      <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-sm flex flex-col">
         {/* Header Section */}
         <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2">
@@ -311,7 +311,7 @@ export default function CheckAndUpdateStock() {
 
       {/* Middle Panel */}
       {/* 📊 Middle Panel: Professional SKU Ledger */}
-      <div className="md:w-1/2 mt-2 md:mt-0 border-r border-slate-200 bg-white rounded-xl overflow-hidden shadow-sm flex flex-col h-full">
+      <div className="md:w-1/2 mt-2 md:mt-0 border-r border-slate-200 bg-white  overflow-hidden shadow-sm flex flex-col h-full">
         {/* Section Header */}
         <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2">
@@ -435,7 +435,7 @@ export default function CheckAndUpdateStock() {
       {/* Right Panel */}
 
       {/* 🛠️ Right Panel: Stock Overview & Control */}
-      <div className="md:w-1/2 bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 flex flex-col h-full">
+      <div className="md:w-1/2 bg-white overflow-hidden shadow-sm border border-slate-200 flex flex-col h-full">
         {/* Dynamic Section Header */}
         <div
           className={`px-5 py-4 border-b transition-colors duration-300 ${
