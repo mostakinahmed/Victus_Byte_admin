@@ -438,7 +438,7 @@ export default function CheckAndUpdateStock() {
       <div className="md:w-1/2 bg-white overflow-hidden shadow-sm border border-slate-200 flex flex-col h-full">
         {/* Dynamic Section Header */}
         <div
-          className={`px-5 py-4 border-b transition-colors duration-300 ${
+          className={`px-5 py-4 border-b ${
             toggle
               ? "bg-slate-50/50 border-slate-100"
               : "bg-indigo-50/30 border-indigo-100"
@@ -458,7 +458,7 @@ export default function CheckAndUpdateStock() {
 
         <div className="flex-1 overflow-y-auto">
           {toggle ? (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+            <div className="">
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <FiFileText className="text-slate-400" />

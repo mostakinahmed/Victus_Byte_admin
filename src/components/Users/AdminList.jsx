@@ -3,6 +3,20 @@ import { DataContext } from "@/Context Api/ApiContext";
 import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import axios from "axios";
 import UpdateAdmin from "./UpdateAdmin.jsx";
+import {
+  FiUsers,
+  FiSearch,
+  FiEdit2,
+  FiTrash2,
+  FiShield,
+  FiActivity,
+  FiAtSign,
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiHash,
+  FiKey,
+} from "react-icons/fi";
 
 const AdminList = () => {
   const { adminData, updateApi } = useContext(DataContext);
@@ -49,112 +63,186 @@ const AdminList = () => {
   // };
 
   return (
-    <div className="bg-white rounded">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-500">
       {editAdmin ? (
-        // ✅ Render edit form for selected admin
         <UpdateAdmin user={editAdmin} back={() => setEditAdmin(null)} />
       ) : (
         <>
-          {/* 🔍 Search and Title */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2 gap-3">
-            <h2 className="text-xl font-semibold text-gray-700">Admin List</h2>
+          {/* --- Dashboard Toolbar --- */}
+          <div className="p-6 border-b border-slate-100 bg-white">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-slate-900 rounded-xl text-white shadow-lg shadow-slate-200">
+                  <FiShield size={20} />
+                </div>
+                <div>
+                  <h2 className="text-lg font-black text-slate-800 tracking-tight">
+                    Identity Registry
+                  </h2>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                    Master Personnel Directory
+                  </p>
+                </div>
+              </div>
 
-            <div className="relative w-full md:w-64">
-              <FaSearch className="absolute left-3 top-3 text-gray-400" />
-              <input
-                type="text"
-                placeholder="username || phone || ID"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400 focus:outline-none"
-              />
+              <div className="relative group w-full md:w-80">
+                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
+                <input
+                  type="text"
+                  placeholder="Search by any attribute..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
+                />
+              </div>
             </div>
           </div>
 
-          {/* 🧾 Admin Table */}
-          <div className="overflow-x-auto max-h-[80vh]">
-            <table className="w-full border border-gray-200 text-sm text-left whitespace-nowrap">
-              <thead className="bg-gray-200 text-gray-700 uppercase text-xs sticky top-0 z-10">
+          {/* --- Atomized Table --- */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse whitespace-nowrap">
+              <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th className="py-3 px-4 border-b">S/N</th>
-                  <th className="py-3 px-4 border-b">User ID</th>
-                  <th className="py-3 px-4 border-b">Full Name</th>
-                  <th className="py-3 px-4 border-b">Username</th>
-                  <th className="py-3 px-4 border-b">Email</th>
-                  <th className="py-3 px-4 border-b">Phone</th>
-                  <th className="py-3 px-4 border-b">Role</th>
-                  <th className="py-3 px-4 border-b">Status</th>
-                  <th className="py-3 px-4 border-b">Created</th>
-                  <th className="py-3 px-4 border-b">Last Login</th>
-                  <th className="py-3 px-4 border-b text-center">Action</th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    S/N
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    Admin ID
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    Full Name
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    Username
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    Email
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    Phone
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    Role
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                    Last Active
+                  </th>
+                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] text-center">
+                    Actions
+                  </th>
                 </tr>
               </thead>
 
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {filteredAdmins.length > 0 ? (
                   filteredAdmins.map((admin, index) => (
                     <tr
                       key={admin.adminID}
-                      className="hover:bg-gray-100 transition duration-150"
+                      className="group hover:bg-slate-50/50 transition-all"
                     >
-                      <td className="py-3 px-4 border-b">{index + 1}</td>
-                      <td className="py-3 px-4 border-b">{admin.adminID}</td>
-                      <td className="py-3 px-4 border-b">{admin.fullName}</td>
-                      <td className="py-3 px-4 border-b">{admin.userName}</td>
-                      <td className="py-3 px-4 border-b">{admin.email}</td>
-                      <td className="py-3 px-4 border-b">{admin.phone}</td>
-                      <td className="py-3 px-4 border-b">{admin.role}</td>
-
-                      <td
-                        className={`py-3 px-4 border-b font-medium ${
-                          admin.status ? "text-green-600" : "text-red-600"
-                        }`}
-                      >
-                        {admin.status ? "Active" : "Suspended"}
+                      {/* 1. S/N */}
+                      <td className="px-6 py-3 text-sm font-mono font-bold text-slate-400 uppercase">
+                        {(index + 1).toString().padStart(2, "0")}
                       </td>
 
-                      <td className="py-3 px-4 border-b">
-                        {formatDate(admin.createdAt)}
-                      </td>
-                      <td className="py-3 px-4 border-b">
-                        {formatDate(admin.lastLogin)}
+                      {/* 2. Admin ID (Separate) */}
+                      <td className="px-6 py-3">
+                        <span className="flex items-center gap-1.5 text-[12px] font-mono font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">
+                          <FiKey size={12} /> {admin.adminID}
+                        </span>
                       </td>
 
-                      <td className="py-1 px-4 border-b text-center space-x-3">
-                        <button
-                          onClick={() => setEditAdmin(admin)} // open update form
-                          className="text-yellow-500 hover:text-yellow-700 text-xl"
-                          title="Edit"
+                      {/* 3. Full Name (Separate) */}
+                      <td className="px-6 py-3">
+                        <span className="text-sm font-black text-slate-800 uppercase tracking-tight italic">
+                          {admin.fullName}
+                        </span>
+                      </td>
+
+                      {/* 4. Username (Separate) */}
+                      <td className="px-6 py-3 text-xs font-bold text-slate-500 lowercase">
+                        @{admin.userName}
+                      </td>
+
+                      {/* 5. Email (Separate) */}
+                      <td className="px-6 py-3 text-xs font-medium text-slate-600">
+                        {admin.email}
+                      </td>
+
+                      {/* 6. Phone (Separate) */}
+                      <td className="px-6 py-3 text-xs font-mono font-bold text-slate-500 tracking-tighter">
+                        {admin.phone}
+                      </td>
+
+                      {/* 7. Role (Separate) */}
+                      <td className="px-6 py-3">
+                        <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-indigo-600 tracking-widest bg-indigo-50/50 px-2 py-0.5 rounded border border-indigo-100">
+                          <FiShield size={10} /> {admin.role}
+                        </div>
+                      </td>
+
+                      {/* 8. Status (Separate) */}
+                      <td className="px-6 py-3">
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
+                            admin.status
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-100 shadow-sm shadow-emerald-100"
+                              : "bg-rose-50 text-rose-700 border-rose-100 shadow-sm shadow-rose-100"
+                          }`}
                         >
-                          <FaEdit />
-                        </button>
-                        <button
-                          // onClick={() => handleDelete(admin.adminID)}
-                          className="text-red-500 hover:text-red-700 text-xl"
-                          title="Delete"
-                        >
-                          <FaTrash />
-                        </button>
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              admin.status
+                                ? "bg-emerald-500 animate-pulse"
+                                : "bg-rose-500"
+                            }`}
+                          />
+                          {admin.status ? "Active" : "Suspended"}
+                        </span>
+                      </td>
+
+                      {/* 9. Last Active (Separate) */}
+                      <td className="px-6 py-3">
+                        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-500 uppercase">
+                          <FiActivity size={12} className="text-slate-300" />
+                          {formatDate(admin.lastLogin)}
+                        </div>
+                      </td>
+
+                      {/* 10. Actions */}
+                      <td className="px-6 py-3">
+                        <div className="flex justify-center items-center gap-1">
+                          <button
+                            onClick={() => setEditAdmin(admin)}
+                            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-xl shadow-sm border border-transparent hover:border-slate-100 transition-all"
+                          >
+                            <FiEdit2 size={14} />
+                          </button>
+                          <button className="p-2 text-slate-400 hover:text-rose-600 hover:bg-white rounded-xl shadow-sm border border-transparent hover:border-slate-100 transition-all">
+                            <FiTrash2 size={14} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td
-                      colSpan="11"
-                      className="text-center py-4 text-gray-500 italic"
-                    >
-                      No matching admins found
+                    <td colSpan="10" className="py-24 text-center">
+                      <div className="flex flex-col items-center gap-2">
+                        <FiUsers size={40} className="text-slate-100" />
+                        <p className="text-sm font-black text-slate-300 uppercase tracking-widest">
+                          No entries in the identity ledger
+                        </p>
+                      </div>
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
-
-          {loading && (
-            <div className="text-center mt-3 text-blue-600">Updating...</div>
-          )}
         </>
       )}
     </div>
