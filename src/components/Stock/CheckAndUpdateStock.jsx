@@ -138,7 +138,7 @@ export default function CheckAndUpdateStock() {
         <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
-            <h2 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+            <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
               Inventory Lookup
             </h2>
           </div>
@@ -148,7 +148,7 @@ export default function CheckAndUpdateStock() {
           {/* Search Interaction Group */}
           <div className="flex items-end gap-3 mb-6">
             <div className="flex-1 space-y-1.5">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
                 Catalog Search
               </label>
               <div className="relative group">
@@ -316,7 +316,7 @@ export default function CheckAndUpdateStock() {
         <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
-            <h2 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+            <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
               Inventory Assets (SKUs)
             </h2>
           </div>
@@ -376,7 +376,7 @@ export default function CheckAndUpdateStock() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-50">
+                <tbody className="divide-y divide-slate-200">
                   {Object.values(currentStock)
                     .reverse()
                     .map((sku) => {
@@ -435,7 +435,7 @@ export default function CheckAndUpdateStock() {
       {/* Right Panel */}
 
       {/* 🛠️ Right Panel: Stock Overview & Control */}
-      <div className="md:w-1/2 bg-white overflow-hidden shadow-sm border border-slate-200 flex flex-col h-full">
+      <div className="md:w-1/2 bg-white overflow-hidden shadow-sm border border-slate-200 flex flex-col h-">
         {/* Dynamic Section Header */}
         <div
           className={`px-5 py-4 border-b ${

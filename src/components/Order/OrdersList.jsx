@@ -496,12 +496,7 @@ const OrderList = () => {
                     <h2 className="text-xl font-black text-slate-900 font-mono tracking-tighter">
                       #{showDetails.order_id}
                     </h2>
-                    <button
-                      className="text-slate-400 hover:text-indigo-600 transition-colors"
-                      title="Copy ID"
-                    >
-                      <FiCopy size={14} />
-                    </button>
+                 
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
