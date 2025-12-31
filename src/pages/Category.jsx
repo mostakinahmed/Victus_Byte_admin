@@ -36,7 +36,7 @@ export default function Category() {
                 },
                 {
                   id: "topCategory",
-                  label: "Featured Categories",
+                  label: "Top Categories",
                   mobileLabel: "Top",
                   icon: <FiAward />,
                 },

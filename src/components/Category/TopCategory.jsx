@@ -173,18 +173,18 @@ export const TopCategory = () => {
             {/* Modal Search */}
             <div className="p-6">
               <div className="relative mb-4 group">
-                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
+                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                 <input
                   type="text"
                   placeholder="Search by name or reference ID..."
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-400"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
 
               {/* Search Results */}
-              <div className="max-h-72 overflow-y-auto rounded-xl border border-slate-100 custom-scrollbar">
+              <div className="h-72 overflow-y-auto rounded-xl border border-slate-100 custom-scrollbar">
                 {categoryData
                   .filter(
                     (p) =>
