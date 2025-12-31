@@ -128,11 +128,11 @@ export const StatusManagement = () => {
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
                 >
                   <option value="none">Select Campaign Category...</option>
-                  <option value="isFeatured">Featured Showcase</option>
+                  <option value="isFeatured">Featured Product</option>
                   <option value="isFlashSale">Flash Sale / Hot Deals</option>
                   <option value="discount">Price Reductions (Discount)</option>
-                  <option value="isBestSelling">Best Selling Velocity</option>
-                  <option value="isNewArrival">New Arrival Arrivals</option>
+                  <option value="isBestSelling">Best Selling Product</option>
+                  <option value="isNewArrival">New Arrival </option>
                 </select>
               </div>
             </div>
@@ -264,7 +264,7 @@ export const StatusManagement = () => {
         {/* --- 4. MODALS (Unified Styling) --- */}
         {(showModal || disModel) && (
           <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-            <div className="bg-white w-full max-w-md rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
               <div className="p-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
                 <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">
                   {selected === "discount"
@@ -282,7 +282,7 @@ export const StatusManagement = () => {
                 </button>
               </div>
 
-              <div className="p-6">
+              <div className="px-6 pb-5">
                 <div className="relative mb-6 group">
                   <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600" />
                   <input
@@ -290,11 +290,11 @@ export const StatusManagement = () => {
                     placeholder="Search by name or ID..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                   />
                 </div>
 
-                <div className="max-h-64 overflow-y-auto rounded-2xl border border-slate-100 divide-y divide-slate-50 custom-scrollbar">
+                <div className="h-64  overflow-y-auto rounded border border-slate-300 divide-y divide-slate-100 custom-scrollbar">
                   {productData
                     .filter(
                       (p) =>
@@ -307,7 +307,7 @@ export const StatusManagement = () => {
                     .map((item) => (
                       <div
                         key={item.pID}
-                        className="p-4 flex justify-between items-center hover:bg-indigo-50/30 transition-colors"
+                        className="px-4 py-2 flex  justify-between items-center hover:bg-indigo-50/30 transition-colors"
                       >
                         <div className="flex flex-col">
                           <span className="text-xs font-black text-slate-700 uppercase tracking-tight">
