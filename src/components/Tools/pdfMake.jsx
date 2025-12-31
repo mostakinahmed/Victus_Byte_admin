@@ -40,7 +40,12 @@ export const generateProductPDF = async (productData) => {
       },
       { text: "Cat_ID", bold: true, alignment: "left", margin: [0, 5, 0, 0] },
       { text: "Brand", bold: true, alignment: "left", margin: [0, 5, 0, 0] },
-      { text: "Stock_ID", bold: true, alignment: "center", margin: [0, 5, 0, 0] },
+      {
+        text: "Stock_ID",
+        bold: true,
+        alignment: "center",
+        margin: [0, 5, 0, 0],
+      },
       {
         text: "SKU List",
         bold: true,
@@ -107,7 +112,7 @@ export const generateProductPDF = async (productData) => {
         color: "#111827",
       },
       {
-        text: item.price?.toLocaleString() || 0,
+        text: item.price.selling?.toLocaleString() || 0,
         alignment: "center",
         margin: [0, 5, 0, 5],
         color: "#111827",
