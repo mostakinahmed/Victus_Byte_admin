@@ -117,7 +117,7 @@ export default function Products() {
       </div>
 
       {/* --- 2. DATA TABLE --- */}
-      <div className="mx- mt-4 bg-white pb-5 rounded border border-slate-200 shadow-sm overflow-hidden">
+      <div className="mx- mt-4 bg-white pb-5 rounded border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse whitespace-nowrap">
             <thead className="bg-slate-100 border-b border-slate-100">
