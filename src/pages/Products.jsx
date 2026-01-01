@@ -60,7 +60,7 @@ export default function Products() {
       <Navbar pageTitle="Product Management" />
 
       {/* --- 1. COMMAND BAR: FILTERS & SEARCH --- */}
-      <div className=" mt-6 bg-white rounded border border-slate-200  p-4">
+      <div className=" bg-white rounded border border-slate-200  p-4">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
           <div className="flex flex-1 w-full gap-3">
             {/* Category Selector */}

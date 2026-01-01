@@ -12,6 +12,8 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import { FiList, FiPlus, FiBarChart2 } from "react-icons/fi";
+
 import Navbar from "../components/Navbar";
 
 const dailyData = [
@@ -40,18 +42,29 @@ export default function Sales() {
     <div className=" space-y-2">
       <Navbar pageTitle="Sales Overview" />
       <div className="flex flex-col sm:flex-row mb-2">
-        <div className="flex">
+        {/* ✅ Optimized Sales Action Bar */}
+        <div className="flex items-center gap-3">
+          {/* Secondary Action: View Records */}
           <button
-            className="bg-blue-600 text-white px-7 py-2 rounded hover:bg-blue-800 transition sm:mt-0"
             onClick={() => Navigate(`/sales/all-sales`)}
+            className="flex items-center gap-2 px-6 py-2.5 bg-white border border-slate-200 rounded-xl text-[11px] font-black uppercase tracking-widest text-slate-600 hover:bg-slate-50 hover:text-indigo-600 hover:border-indigo-100 transition-all active:scale-95 group shadow-sm"
           >
+            <FiList
+              className="text-slate-400 group-hover:text-indigo-600 transition-colors"
+              size={16}
+            />
             All Sales
           </button>
+
+          {/* Primary Action: Transaction Entry */}
           <button
-            className="bg-green-600 ml-2 text-white px-4 py-2 rounded hover:bg-emerald-700 transition sm:mt-0"
             onClick={() => Navigate(`/sales/new`)}
+            className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 text-white rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95 group"
           >
-            + Create New Sale
+            <div className="p-1 bg-white/10 rounded-lg group-hover:bg-white/20 transition-colors">
+              <FiPlus size={14} />
+            </div>
+            Create New Sale
           </button>
         </div>
       </div>

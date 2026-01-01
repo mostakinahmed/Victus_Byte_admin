@@ -1,8 +1,15 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../../Context Api/AuthContext";
-import { FiLoader, FiEye, FiEyeOff } from "react-icons/fi";
+import {
+  FiLoader,
+  FiEye,
+  FiEyeOff,
+  FiLock,
+  FiMail,
+  FiShield,
+} from "react-icons/fi";
 
 export default function Login() {
   const { login, loading } = useContext(AuthContext);
@@ -24,166 +31,175 @@ export default function Login() {
 
     try {
       await login(formData.email, formData.password);
-      navigate("/"); // redirect after success
+      navigate("/");
     } catch (err) {
-      // Backend error handling
-      if (err.status) {
-        if (err.status === 403) {
-          setErrorInfo("suspended");
-        } else if (err.status === 404) {
-          setErrorInfo("❌ User not found.");
-        } else if (err.status === 401) {
-          setErrorInfo("⚠️ Invalid email or password.");
-        } else {
-          setErrorInfo("⚠️ Something went wrong. Please try again.");
-        }
-      } else {
-        setErrorInfo("⚠️ Network error. Please check your connection.");
-      }
+      if (err.status === 403) setErrorInfo("suspended");
+      else if (err.status === 404)
+        setErrorInfo("Access Denied: Identity not found.");
+      else if (err.status === 401)
+        setErrorInfo("Invalid Credentials: Check email or password.");
+      else setErrorInfo("System Error: Protocol failed. Try again.");
     } finally {
       setLoginLoading(false);
     }
   };
 
-  // Initial auth check loading
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-16 h-16 border-4 border-[#ff751f] border-t-transparent rounded-full animate-spin"></div>
-        <p className="mt-4 text-[#ff751f] text-lg font-semibold animate-pulse">
-          Loading...
-        </p>
-      </div>
-    );
-  }
-
-  // Login submission loading
-  if (loginLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-        <FiLoader className="text-6xl text-[#ff751f] animate-spin" />
-        <p className="mt-4 text-[#ff751f] text-lg font-semibold animate-pulse">
-          Logging in...
+      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50">
+        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+        <p className="mt-6 text-slate-400 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
+          Initializing System...
         </p>
       </div>
     );
   }
 
   return (
-    <div className="p-5 min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
       <motion.div
-        initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-full max-w-sm bg-white rounded-md shadow border border-gray-100 overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-[420px] bg-white rounded-[32px] shadow-2xl shadow-slate-200 border border-slate-200 overflow-hidden relative"
       >
-        <div className="bg-[#ff751f] text-center w-full">
-          <p className="text-white p-1 text-xl">Admin Panel</p>
-        </div>
-
-        {/* Logo */}
-        <div className="flex flex-col items-center justify-center py-2 pb-9">
-          <img
-            src="/logo final.png"
-            alt="Victus Byte Logo"
-            className="h-20 w-auto mb-2"
-          />
-        </div>
-
-        {/* Form */}
-        <motion.form
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="space-y-5 px-8 pb-8"
-        >
-          {/* Email Field */}
-          <div>
-            <label className="block text-gray-600 text-sm mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="admin@example.com"
-              required
-            />
-          </div>
-
-          {/* Password Field */}
-          <div>
-            <label className="block text-gray-600 text-sm mb-1">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
-                placeholder="••••••••"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-gray-500 hover:text-blue-600"
-              >
-                {showPassword ? <FiEyeOff /> : <FiEye />}
-              </button>
-            </div>
-          </div>
-
-          {/* Error Message */}
-          {errorInfo && errorInfo !== "suspended" && (
-            <motion.p
-              initial={{ opacity: 0, y: -5 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-red-500 text-md mt-2 text-center"
-            >
-              {errorInfo}
-            </motion.p>
-          )}
-
-          {/* Suspended Account */}
-          {errorInfo === "suspended" && (
+        {/* --- Loading Overlay --- */}
+        <AnimatePresence>
+          {loginLoading && (
             <motion.div
-              initial={{ opacity: 0, y: -5 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center mt-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-50 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center"
             >
-              <p className="text-red-600 text-md text-center mb-2">
-                Your account is suspended. <br /> Please contact Admin.
+              <FiLoader className="text-4xl text-indigo-600 animate-spin" />
+              <p className="mt-4 text-[10px] font-black text-indigo-600 uppercase tracking-widest">
+                Authenticating...
               </p>
             </motion.div>
           )}
+        </AnimatePresence>
 
-          {/* Login Button */}
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            disabled={loginLoading}
-            className={`w-full py-2 rounded font-medium shadow-md transition-all ${
-              loginLoading
-                ? "bg-[#ff751f] cursor-not-allowed"
-                : "bg-[#ff751f] hover:bg text-white"
-            }`}
-          >
-            {loginLoading ? "Logging in..." : "Login"}
-          </motion.button>
-        </motion.form>
+        {/* --- Secure Header --- */}
+        <div className="bg-slate-900 px-8 py-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-indigo-500 rounded-lg text-white shadow-lg shadow-indigo-500/20">
+              <FiShield size={20} />
+            </div>
+            <div>
+              <h1 className="text-lg font-black text-white tracking-tight uppercase">
+                Admin Gateway
+              </h1>
+              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none mt-1">
+                Authorized Access Only
+              </p>
+            </div>
+          </div>
+          <div className="w-4 h-4 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+        </div>
+
+        <div className="p-10">
+          {/* Logo Section */}
+          <div className="flex flex-col items-center -mt-5 mb-15">
+            <img
+              src="/logo final.png"
+              alt="Logo"
+              className="h-16 w-auto mix-blend-multiply grayscale contrast-125 opacity-80"
+            />
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email Input */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                Admin Email
+              </label>
+              <div className="relative group">
+                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="name@victusbyte.com"
+                  className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:text-slate-300"
+                />
+              </div>
+            </div>
+
+            {/* Password Input */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                Secure Password
+              </label>
+              <div className="relative group">
+                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  placeholder="••••••••"
+                  className="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-300 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:text-slate-300"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors"
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Error States */}
+            {errorInfo && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`p-3 rounded-xl border flex items-center gap-3 ${
+                  errorInfo === "suspended"
+                    ? "bg-amber-50 border-amber-100"
+                    : "bg-rose-50 border-rose-100"
+                }`}
+              >
+                <div
+                  className={`w-1.5 h-1.5 rounded-full ${
+                    errorInfo === "suspended" ? "bg-amber-500" : "bg-rose-500"
+                  }`}
+                />
+                <p
+                  className={`text-[11px] font-black uppercase tracking-tight ${
+                    errorInfo === "suspended"
+                      ? "text-amber-700"
+                      : "text-rose-600"
+                  }`}
+                >
+                  {errorInfo === "suspended"
+                    ? "Access Revoked: Account Suspended"
+                    : errorInfo}
+                </p>
+              </motion.div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loginLoading}
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-100 transition-all active:scale-[0.98] disabled:opacity-50"
+            >
+              Sign In to Terminal
+            </button>
+          </form>
+        </div>
 
         {/* Footer */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="text-center text-gray-400 text-sm mb-4"
-        >
-          © {new Date().getFullYear()} Victus Byte Admin Panel
-        </motion.p>
+        <div className="bg-slate-50 px-8 py-4 border-t border-slate-100 flex justify-center">
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+            Victus Byte Security Protocol © {new Date().getFullYear()}
+          </p>
+        </div>
       </motion.div>
     </div>
   );

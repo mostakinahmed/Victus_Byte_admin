@@ -23,7 +23,7 @@ export default function Users() {
       <Navbar pageTitle="Stock Management" />
 
       {/* 📦 Professional Stock Control Center */}
-      <div className="bg-white border border-slate-200 shadow-xl rounded-3xl overflow-hidden w-full mx-auto animate-in fade-in duration-500">
+      <div className="bg-white border border-slate-200 shadow rounded overflow-hidden w-full mx-auto animate-in fade-in duration-500">
         {/* Modern Segmented Control Header */}
         <div className="p-4 bg-slate-50 border-b border-slate-100">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
