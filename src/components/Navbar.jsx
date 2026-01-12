@@ -58,7 +58,7 @@ export default function Navbar({ pageTitle }) {
         </a>
 
         {/* Notifications */}
-        <button className="relative p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+        <button className=" hidden md:flex relative p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
           <FiBell size={20} />
           <span className="absolute top-2 right-2.5 inline-block w-2 h-2 bg-indigo-600 rounded-full border-2 border-white"></span>
         </button>

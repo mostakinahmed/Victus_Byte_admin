@@ -3,22 +3,24 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FiHome,
   FiBox,
+  FiGrid,
   FiArchive,
   FiShoppingCart,
+  FiTrendingUp,
+  FiUser,
   FiUsers,
   FiFileText,
-  FiTrendingUp,
-  FiGrid,
-  FiMenu,
-  FiX,
-  FiUser,
-  FiLayers
+  FiLayers,
+  FiChevronRight,
+  FiChevronLeft,
 } from "react-icons/fi";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
+
+  // This state now ONLY controls the mobile expansion
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
 
   const links = [
     { name: "Dashboard", path: "/", icon: <FiHome /> },
@@ -33,96 +35,123 @@ export default function Sidebar() {
   ];
 
   return (
-    <>
-      {/* --- 📱 MOBILE HEADER --- */}
-      <div className="lg:hidden bg-slate-900 text-white p-4 flex justify-between items-center border-b border-slate-800 sticky top-0 z-[60]">
-        <div className="flex items-center gap-2" onClick={() => navigate("/")}>
-          <img className="h-8 w-8 object-contain" src="/logo.png" alt="Logo" />
-          <span className="text-sm font-black uppercase tracking-tighter text-indigo-500">Victus Byte</span>
-        </div>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2 bg-slate-800 rounded-xl text-indigo-400 active:scale-95 transition-all"
-        >
-          {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-        </button>
-      </div>
-
-      {/* --- 🖥️ MAIN SIDEBAR --- */}
-      <div
-        className={`fixed lg:sticky top-0 left-0 h-screen w-64 bg-slate-900 text-white shadow-2xl flex flex-col transition-all duration-300 z-[100] border-r border-slate-800
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
+    <div
+      // Mobile: Width changes based on state (w-20 to w-64)
+      // Desktop: Width is always fixed (lg:w-64)
+      className={`fixed top-0 left-0 h-screen bg-slate-900 text-white shadow-2xl flex flex-col transition-all duration-300 z-[100] border-r border-slate-800 
+      ${isMobileExpanded ? "w-64" : "w-13"} lg:w-64 lg:sticky`}
+    >
+      {/* --- MOBILE TOGGLE BUTTON (Hidden on Desktop) --- */}
+      <button
+        onClick={() => setIsMobileExpanded(!isMobileExpanded)}
+        className="lg:hidden absolute -right-3 top-12 bg-indigo-600 text-white rounded-full p-1.5 border-2 border-slate-900 shadow-lg hover:bg-indigo-500 transition-all z-[110]"
       >
-        {/* Brand Identity Section */}
-        <div className="p-8 pb-4 flex flex-col items-center lg:items-start group cursor-pointer" onClick={() => navigate("/")}>
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-600 rounded-2xl shadow-xl shadow-indigo-500/20 group-hover:rotate-12 transition-transform duration-500">
-               <img className="h-8 w-8 object-contain brightness-0 invert" src="/logo.png" alt="Logo" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-black tracking-tighter uppercase leading-none">Victus Byte</span>
-              <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em] mt-1">Admin OS v2</span>
-            </div>
+        {isMobileExpanded ? (
+          <FiChevronLeft size={16} />
+        ) : (
+          <FiChevronRight size={16} />
+        )}
+      </button>
+
+      {/* --- BRAND IDENTITY --- */}
+      <div
+        className={`p-6 flex items-center transition-all duration-300 ${
+          isMobileExpanded
+            ? "px-6"
+            : "px-0 justify-center lg:justify-start lg:px-6"
+        }`}
+      >
+        <div
+          className="flex items-center gap-3 shrink-0"
+          onClick={() => navigate("/")}
+        >
+          <div className="p-1 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-600/30">
+            <FiLayers size={24} className="text-white" />
+          </div>
+          {/* Label hidden only on mobile-collapsed view */}
+          <div
+            className={`flex flex-col overflow-hidden transition-all duration-300 ${
+              isMobileExpanded
+                ? "w-32 opacity-100"
+                : "w-0 opacity-0 lg:w-32 lg:opacity-100"
+            }`}
+          >
+            <span className="text-sm font-black tracking-tighter uppercase whitespace-nowrap">
+              Victus Byte
+            </span>
+            <span className="text-[8px] font-black text-indigo-400/60 uppercase tracking-widest">
+              Admin OS
+            </span>
           </div>
         </div>
+      </div>
 
-        {/* Navigation Section */}
-        <nav className="flex-1 px-4 mt-8 space-y-1 overflow-y-auto custom-scrollbar">
-          <p className="px-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] mb-4">Core Registry</p>
-          
-          {links.map((link) => {
-            const isActive =
-              location.pathname === link.path ||
-              (link.path !== "/" && location.pathname.startsWith(link.path));
-            
-            return (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => setIsOpen(false)}
-                className={`group flex items-center justify-between p-3 rounded-2xl transition-all duration-300 relative ${
-                  isActive 
-                    ? "bg-indigo-600/10 text-white" 
-                    : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+      {/* --- NAVIGATION --- */}
+      <nav className="flex-1 px-3 mt-8 space-y-2 overflow-y-auto no-scrollbar">
+        {links.map((link) => {
+          const isActive = location.pathname === link.path;
+
+          return (
+            <Link
+              key={link.name}
+              to={link.path}
+              className={`group flex items-center p-3 rounded-xl transition-all duration-300 relative ${
+                isActive
+                  ? "bg-indigo-600 text-white shadow-lg"
+                  : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+              } ${
+                isMobileExpanded
+                  ? "justify-start"
+                  : "justify-center lg:justify-start"
+              }`}
+            >
+              <div className="flex items-center shrink-0">
+                <span
+                  className={`text-xl transition-transform duration-300 ${
+                    isActive ? "scale-110" : "group-hover:scale-110"
+                  }`}
+                >
+                  {link.icon}
+                </span>
+              </div>
+
+              {/* Text hidden only on mobile-collapsed view */}
+              <span
+                className={`ml-4 text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 overflow-hidden ${
+                  isMobileExpanded
+                    ? "w-32 opacity-100"
+                    : "w-0 opacity-0 lg:w-32 lg:opacity-100"
                 }`}
               >
-                <div className="flex items-center gap-3 z-10">
-                  <span className={`text-lg transition-colors duration-300 ${isActive ? "text-indigo-400" : "text-slate-500 group-hover:text-slate-300"}`}>
-                    {link.icon}
-                  </span>
-                  <span className={`text-xs font-black uppercase tracking-widest transition-all ${isActive ? "translate-x-1" : "group-hover:translate-x-1"}`}>
-                    {link.name}
-                  </span>
+                {link.name}
+              </span>
+
+              {/* Tooltip (Only visible on mobile-collapsed hover) */}
+              {!isMobileExpanded && (
+                <div className="lg:hidden absolute left-full ml-4 px-2 py-1 bg-indigo-600 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl">
+                  {link.name}
                 </div>
+              )}
+            </Link>
+          );
+        })}
+      </nav>
 
-                {/* Active Pill Indicator */}
-                {isActive && (
-                  <div className="absolute right-2 w-1.5 h-1.5 bg-indigo-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.8)] animate-pulse" />
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Sidebar Footer: System Status */}
-        <div className="p-6 border-t border-slate-800">
-          <div className="bg-slate-800/50 p-4 rounded-2xl border border-slate-800">
-             <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Master Node: Active</span>
-             </div>
-             <p className="text-[9px] text-slate-600 font-bold mt-1 ml-4 uppercase tracking-tighter">Syncing data 1.2s</p>
+      {/* --- FOOTER STATUS --- */}
+      <div
+        className={`p-4 border-t border-slate-800 transition-all duration-300 ${
+          isMobileExpanded ? "opacity-100" : "opacity-0 lg:opacity-100"
+        }`}
+      >
+        <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+              System Online
+            </span>
           </div>
         </div>
       </div>
-
-      {/* --- Overlay for mobile --- */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm lg:hidden z-[90] animate-in fade-in duration-300"
-          onClick={() => setIsOpen(false)}
-        ></div>
-      )}
-    </>
+    </div>
   );
 }
