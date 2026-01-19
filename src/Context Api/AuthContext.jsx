@@ -24,8 +24,8 @@ export const AuthProvider = ({ children }) => {
         }
 
         const res = await axios.post(
-          "https://fabribuzz.onrender.com/api/user/admin/check-auth",
-          { token }
+          "https://api.victusbyte.com/api/user/admin/check-auth",
+          { token },
         );
         setUser(res.data.user);
       } catch {
@@ -41,8 +41,8 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await axios.post(
-        "https://fabribuzz.onrender.com/api/user/admin/signin",
-        { email, password }
+        "https://api.victusbyte.com/api/user/admin/signin",
+        { email, password },
       );
 
       // Save token
@@ -51,8 +51,8 @@ export const AuthProvider = ({ children }) => {
       // Verify user after login
       const token = Cookies.get("token");
       const res2 = await axios.post(
-        "https://fabribuzz.onrender.com/api/user/admin/check-auth",
-        { token }
+        "https://api.victusbyte.com/api/user/admin/check-auth",
+        { token },
       );
 
       setUser(res2.data.user);
@@ -71,16 +71,16 @@ export const AuthProvider = ({ children }) => {
   const signup = async (data) => {
     try {
       const res = await axios.post(
-        "https://fabribuzz.onrender.com/api/user/signup",
-        data
+        "https://api.victusbyte.com/api/user/signup",
+        data,
       );
 
       Cookies.set("token", res.data.tokenLast);
 
       const token = Cookies.get("token");
       const res2 = await axios.post(
-        "https://fabribuzz.onrender.com/api/user/check-auth",
-        { token }
+        "https://api.victusbyte.com/api/user/check-auth",
+        { token },
       );
       setUser(res2.data.user);
       navigate("/profile");

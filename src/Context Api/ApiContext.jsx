@@ -19,11 +19,11 @@ export const ApiContext = ({ children }) => {
       setLoading(true);
       const [productRes, categoryRes, adminRes, stockRes, orderRes] =
         await Promise.all([
-          axios.get("https://fabribuzz.onrender.com/api/product"),
-          axios.get("https://fabribuzz.onrender.com/api/category"),
-          axios.get("https://fabribuzz.onrender.com/api/user/admin/list"),
-          axios.get("https://fabribuzz.onrender.com/api/stock"),
-          axios.get("https://fabribuzz.onrender.com/api/order"),
+          axios.get("https://api.victusbyte.com/api/product"),
+          axios.get("https://api.victusbyte.com/api/category"),
+          axios.get("https://api.victusbyte.com/api/user/admin/list"),
+          axios.get("https://api.victusbyte.com/api/stock"),
+          axios.get("https://api.victusbyte.com/api/order"),
         ]);
 
       setProductData(productRes.data);
@@ -38,7 +38,6 @@ export const ApiContext = ({ children }) => {
       setLoading(false);
     }
   };
-
 
   // ✅ Automatically fetch once when the component mounts
   useEffect(() => {
