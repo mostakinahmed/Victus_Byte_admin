@@ -37,7 +37,7 @@ export const TopCategory = () => {
 
       console.log(data);
 
-      await axios.patch("https://fabribuzz.onrender.com/api/category", {
+      await axios.patch("https://api.victusbyte.com/api/category", {
         data,
       });
 
@@ -190,7 +190,7 @@ export const TopCategory = () => {
                     (p) =>
                       (p.catName.toLowerCase().includes(search.toLowerCase()) ||
                         p.catID.toLowerCase().includes(search.toLowerCase())) &&
-                      p.topCategory === false
+                      p.topCategory === false,
                   )
                   .map((item) => (
                     <div
