@@ -102,7 +102,7 @@ export default function Products() {
           <div className="flex gap-3 w-full lg:w-auto">
             <button
               onClick={() => navigate("/products/status-management")}
-              className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
+              className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-slate-200 cursor-pointer border border-slate-200 rounded-xl text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
             >
               <FiGrid /> Status
             </button>

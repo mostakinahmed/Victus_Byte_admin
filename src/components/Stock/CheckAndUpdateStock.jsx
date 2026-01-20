@@ -135,7 +135,7 @@ export default function CheckAndUpdateStock() {
       {/* Left Panel: Professional Inventory Lookup */}
       <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-sm flex flex-col">
         {/* Header Section */}
-        <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
+        <div className="px-5 py-4 b border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
             <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">

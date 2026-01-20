@@ -61,7 +61,7 @@ export default function Login() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-[420px] bg-white rounded-[32px] shadow-2xl shadow-slate-200 border border-slate-200 overflow-hidden relative"
+        className="w-full max-w-[420px] bg-white  rounded shadow-2xl shadow-slate-200 border border-slate-200 overflow-hidden relative"
       >
         {/* --- Loading Overlay --- */}
         <AnimatePresence>
