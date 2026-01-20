@@ -152,7 +152,7 @@ export default function Sidebar() {
                 "noopener,noreferrer",
               )
             }
-            className="px-4  text-sm font-semibold cursor-pointer text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white hover:shadow-lg hover:-translate-y-0.5 transform transition-all duration-200 flex items-center gap-2"
+            className="px-4  text-sm font-semibold cursor-pointer text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white hover:shadow-lg flex items-center gap-2"
           >
             E-mail Service
           </button>{" "}
