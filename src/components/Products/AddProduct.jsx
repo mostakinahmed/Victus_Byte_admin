@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "../Navbar";
 import { DataContext } from "@/Context Api/ApiContext";
 import { useNavigate } from "react-router-dom";
@@ -9,83 +9,68 @@ const AddProduct = () => {
   const { updateApi, categoryData, loading } = useContext(DataContext);
   const navigate = useNavigate();
 
-  const [specification, setSpecification] = useState([]);
-  const [specValues, setSpecValues] = useState({});
+  // --- STATE FOR DYNAMIC SPECS ---
+  const [customSpecs, setCustomSpecs] = useState([
+    { groupName: "", fields: [{ key: "", value: "" }] },
+  ]);
+
   const [keywordInput, setKeywordInput] = useState("");
+  const [colorInput, setKeywordColorInput] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     brandName: "",
     price: { selling: "" },
-    stock: "",
     images: [""],
     description: "",
     category: "",
-    keywords: [], // Array for search tags
+    keywords: [],
+    colors: [],
   });
 
-  // Load specifications when category changes
-  useEffect(() => {
-    const selectedCat = formData.category;
-    const category = categoryData.find((cat) => cat.catID === selectedCat);
-
-    if (category) {
-      setSpecification(category.specifications);
-      const newSpecs = {};
-      category.specifications.forEach((spec) => {
-        newSpecs[spec] = [{ key: "", value: "" }];
-      });
-      setSpecValues(newSpecs);
-    } else {
-      setSpecification([]);
-      setSpecValues({});
-    }
-  }, [formData.category, categoryData]);
-
   // -------------------
-  // KEYWORD HANDLERS
+  // DYNAMIC SPEC HANDLERS
   // -------------------
-  const addKeyword = () => {
-    const val = keywordInput.trim();
-    if (val && !formData.keywords.includes(val)) {
-      setFormData((prev) => ({
-        ...prev,
-        keywords: [...prev.keywords, val],
-      }));
-      setKeywordInput("");
-    }
+  const addSpecGroup = () => {
+    setCustomSpecs([
+      ...customSpecs,
+      { groupName: "", fields: [{ key: "", value: "" }] },
+    ]);
   };
 
-  const handleKeywordKeyDown = (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      addKeyword();
-    }
+  const removeSpecGroup = (groupIndex) => {
+    setCustomSpecs(customSpecs.filter((_, i) => i !== groupIndex));
   };
 
-  const removeKeyword = (indexToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      keywords: prev.keywords.filter((_, index) => index !== indexToRemove),
-    }));
+  const updateGroupName = (groupIndex, name) => {
+    const updated = [...customSpecs];
+    updated[groupIndex].groupName = name;
+    setCustomSpecs(updated);
+  };
+
+  const addFieldRow = (groupIndex) => {
+    const updated = [...customSpecs];
+    updated[groupIndex].fields.push({ key: "", value: "" });
+    setCustomSpecs(updated);
+  };
+
+  const updateField = (groupIndex, fieldIndex, field, value) => {
+    const updated = [...customSpecs];
+    updated[groupIndex].fields[fieldIndex][field] = value;
+    setCustomSpecs(updated);
+  };
+
+  const removeFieldRow = (groupIndex, fieldIndex) => {
+    const updated = [...customSpecs];
+    updated[groupIndex].fields = updated[groupIndex].fields.filter(
+      (_, i) => i !== fieldIndex,
+    );
+    setCustomSpecs(updated);
   };
 
   // -------------------
-  // FORM HANDLERS
+  // IMAGE HANDLERS
   // -------------------
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handlePriceChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      price: { ...prev.price, [name]: Number(value) },
-    }));
-  };
-
   const updateImage = (index, value) => {
     const updated = [...formData.images];
     updated[index] = value;
@@ -101,28 +86,22 @@ const AddProduct = () => {
     setFormData((prev) => ({ ...prev, images: updated }));
   };
 
-  const handleSpecChange = (spec, index, field, value) => {
-    setSpecValues((prev) => {
-      const updated = { ...prev };
-      updated[spec][index][field] = value;
-      return updated;
-    });
+  // -------------------
+  // TAG HANDLERS (Keywords & Colors)
+  // -------------------
+  const addTag = (type, input, setInput) => {
+    const val = input.trim();
+    if (val && !formData[type].includes(val)) {
+      setFormData((prev) => ({ ...prev, [type]: [...prev[type], val] }));
+      setInput("");
+    }
   };
 
-  const addSpecRow = (spec) => {
-    setSpecValues((prev) => {
-      const updated = { ...prev };
-      updated[spec].push({ key: "", value: "" });
-      return updated;
-    });
-  };
-
-  const removeSpecRow = (spec, index) => {
-    setSpecValues((prev) => {
-      const updated = { ...prev };
-      updated[spec] = updated[spec].filter((_, i) => i !== index);
-      return updated;
-    });
+  const removeTag = (type, index) => {
+    setFormData((prev) => ({
+      ...prev,
+      [type]: prev[type].filter((_, i) => i !== index),
+    }));
   };
 
   // -------------------
@@ -131,18 +110,40 @@ const AddProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const cleanedSpecs = {};
-    Object.keys(specValues).forEach((spec) => {
-      const validRows = specValues[spec].filter(
-        (row) => row.key.trim() !== "" && row.value.trim() !== "",
+    // 1. Manual Validation for custom parts
+    if (formData.keywords.length === 0) {
+      return Swal.fire(
+        "Required",
+        "Please add at least one Search Keyword",
+        "warning",
       );
-      if (validRows.length) cleanedSpecs[spec] = validRows;
+    }
+
+    // 2. Format Specifications
+    const formattedSpecs = {};
+    customSpecs.forEach((group) => {
+      if (group.groupName.trim()) {
+        const validFields = group.fields.filter(
+          (f) => f.key.trim() && f.value.trim(),
+        );
+        if (validFields.length > 0) {
+          formattedSpecs[group.groupName] = validFields;
+        }
+      }
     });
+
+    if (Object.keys(formattedSpecs).length === 0) {
+      return Swal.fire(
+        "Required",
+        "Please add at least one Specification Section with Key/Value",
+        "warning",
+      );
+    }
 
     const finalData = {
       ...formData,
       images: formData.images.filter((img) => img.trim() !== ""),
-      specifications: cleanedSpecs,
+      specifications: formattedSpecs,
     };
 
     saveData(finalData);
@@ -151,41 +152,28 @@ const AddProduct = () => {
   const saveData = async (data) => {
     try {
       Swal.fire({
-        title: "Saving Product...",
-        text: "Uploading data and keywords",
+        title: "Saving...",
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading(),
       });
-
-      console.log(data);
-
-      const productRes = await axios.post(
+      const res = await axios.post(
         "https://api.victusbyte.com/api/product",
         data,
       );
-      const { pID, sID } = productRes.data;
       updateApi();
-
       await axios.post("https://api.victusbyte.com/api/stock/create-stock", {
-        pID,
-        sID,
+        pID: res.data.pID,
+        sID: res.data.sID,
       });
-
-      Swal.close();
       Swal.fire({
         icon: "success",
-        title: "Success!",
+        title: "Product Saved!",
         timer: 1500,
         showConfirmButton: false,
       });
       resetForm();
-    } catch (error) {
-      console.error(error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to save product.",
-      });
+    } catch (err) {
+      Swal.fire({ icon: "error", title: "Error Saving Product" });
     }
   };
 
@@ -194,52 +182,48 @@ const AddProduct = () => {
       name: "",
       brandName: "",
       price: { selling: "" },
-      stock: "",
       images: [""],
       description: "",
       category: "",
       keywords: [],
+      colors: [],
     });
-    setKeywordInput("");
+    setCustomSpecs([{ groupName: "", fields: [{ key: "", value: "" }] }]);
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <Navbar pageTitle="Add New Product" />
+    <div className="bg-gray-100 min-h-screen pb-10">
+      <Navbar pageTitle="Add Product (Dynamic)" />
 
-      <div className="mx-auto flex flex-col md:flex-row ">
-        <div className="relative w-full mx-auto bg-white shadow-2xl rounded overflow-hidden border border-gray-200">
+      <div className="mx-auto p-4 max-w-[1600px]">
+        <div className="relative w-full mx-auto bg-white shadow-2xl rounded-xl overflow-hidden border border-gray-200">
           <form onSubmit={handleSubmit}>
             <div className="lg:flex">
-              {/* LEFT SECTION: General Info */}
+              {/* LEFT: General Info & Attributes */}
               <div className="lg:w-[550px] border-r border-gray-100 p-6 space-y-6">
                 <h2 className="text-xl font-bold text-gray-800 border-b pb-2">
                   General Information
                 </h2>
 
                 <div className="space-y-4">
-                  <div>
-                    <label className="text-xs font-bold text-gray-500 uppercase">
-                      Product Details
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Product Name"
-                      className="mt-1 p-3 border rounded w-full focus:ring-2 focus:ring-blue-500 outline-none"
-                      required
-                    />
-                  </div>
-
                   <input
                     type="text"
-                    name="brandName"
-                    value={formData.brandName}
-                    onChange={handleChange}
+                    placeholder="Product Name"
+                    className="p-3 border rounded w-full outline-blue-500"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    required
+                  />
+                  <input
+                    type="text"
                     placeholder="Brand Name"
-                    className="p-3 border rounded w-full focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="p-3 border rounded w-full outline-blue-500"
+                    value={formData.brandName}
+                    onChange={(e) =>
+                      setFormData({ ...formData, brandName: e.target.value })
+                    }
                     required
                   />
 
@@ -249,18 +233,22 @@ const AddProduct = () => {
                     </label>
                     <input
                       type="number"
-                      name="selling"
                       value={formData.price.selling}
-                      onChange={handlePriceChange}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          price: { selling: Number(e.target.value) },
+                        })
+                      }
                       placeholder="0.00"
                       className="mt-1 p-2 border rounded w-full font-bold text-lg"
                       required
                     />
                   </div>
 
-                  {/* KEYWORD SECTION */}
+                  {/* KEYWORDS */}
                   <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <label className="text-xs font-bold text-gray-500 uppercase block mb-2">
+                    <label className="text-xs font-bold text-gray-500 uppercase block mb-2 tracking-wide">
                       Search Keywords (SEO)
                     </label>
                     <div className="flex gap-2">
@@ -268,30 +256,86 @@ const AddProduct = () => {
                         type="text"
                         value={keywordInput}
                         onChange={(e) => setKeywordInput(e.target.value)}
-                        onKeyDown={handleKeywordKeyDown}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" &&
+                          (e.preventDefault(),
+                          addTag("keywords", keywordInput, setKeywordInput))
+                        }
                         placeholder="e.g. powerbank"
                         className="flex-1 p-2 border rounded text-sm outline-blue-500"
                       />
                       <button
                         type="button"
-                        onClick={addKeyword}
+                        onClick={() =>
+                          addTag("keywords", keywordInput, setKeywordInput)
+                        }
                         className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold"
                       >
                         Add
                       </button>
                     </div>
-
                     <div className="flex flex-wrap gap-2 mt-3">
                       {formData.keywords.map((word, idx) => (
                         <span
                           key={idx}
-                          className="flex items-center gap-1 bg-white border border-blue-300 text-blue-700 px-2 py-1 rounded-md text-xs font-medium shadow-sm"
+                          className="bg-white border border-blue-200 text-blue-700 px-2 py-1 rounded text-xs font-medium flex items-center gap-1 shadow-sm"
                         >
-                          {word}
+                          {word}{" "}
                           <button
                             type="button"
-                            onClick={() => removeKeyword(idx)}
-                            className="text-red-400 hover:text-red-600 font-bold ml-1"
+                            onClick={() => removeTag("keywords", idx)}
+                            className="text-red-400 font-bold ml-1"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* COLORS */}
+                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <label className="text-xs font-bold text-slate-500 uppercase block mb-2 tracking-wide">
+                      Available Colors
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={colorInput}
+                        onChange={(e) => setKeywordColorInput(e.target.value)}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" &&
+                          (e.preventDefault(),
+                          addTag("colors", colorInput, setKeywordColorInput))
+                        }
+                        placeholder="e.g. Midnight Black"
+                        className="flex-1 p-2 border rounded text-sm outline-slate-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          addTag("colors", colorInput, setKeywordColorInput)
+                        }
+                        className="bg-slate-700 text-white px-4 py-2 rounded text-sm font-bold"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {formData.colors.map((color, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-white border border-slate-300 text-slate-700 px-2 py-1 rounded text-xs font-medium flex items-center gap-1 shadow-sm"
+                        >
+                          <span
+                            className="w-2 h-2 rounded-full border border-gray-200"
+                            style={{ backgroundColor: color.toLowerCase() }}
+                          ></span>
+                          {color}{" "}
+                          <button
+                            type="button"
+                            onClick={() => removeTag("colors", idx)}
+                            className="text-red-400 font-bold ml-1"
                           >
                             ×
                           </button>
@@ -302,7 +346,7 @@ const AddProduct = () => {
 
                   {/* IMAGES */}
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-500 uppercase">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">
                       Image Gallery (URLs)
                     </label>
                     {formData.images.map((img, idx) => (
@@ -312,7 +356,8 @@ const AddProduct = () => {
                           value={img}
                           onChange={(e) => updateImage(idx, e.target.value)}
                           placeholder="https://..."
-                          className="p-2 border rounded flex-1 text-sm"
+                          className="p-2 border rounded flex-1 text-sm outline-blue-500"
+                          required
                         />
                         {formData.images.length > 1 && (
                           <button
@@ -337,16 +382,21 @@ const AddProduct = () => {
                   <textarea
                     name="description"
                     value={formData.description}
-                    onChange={handleChange}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
                     placeholder="Short Description..."
-                    className="p-3 border rounded w-full h-24 text-sm"
+                    className="p-3 border rounded w-full h-24 text-sm outline-blue-500"
+                    required
                   />
 
                   <select
                     name="category"
                     value={formData.category}
-                    onChange={handleChange}
-                    className="p-3 border rounded w-full bg-slate-100 font-semibold text-gray-700 border-gray-300"
+                    onChange={(e) =>
+                      setFormData({ ...formData, category: e.target.value })
+                    }
+                    className="p-3 border rounded w-full bg-slate-100 font-semibold"
                     required
                   >
                     <option value="">-- Choose Category --</option>
@@ -360,91 +410,111 @@ const AddProduct = () => {
                 </div>
               </div>
 
-              {/* RIGHT SECTION: Specifications */}
+              {/* RIGHT: Dynamic Specifications */}
               <div className="flex-1 p-6 bg-gray-50">
-                <h2 className="text-xl font-bold text-gray-800 border-b pb-2 mb-4">
-                  Specifications
-                </h2>
-                {specification.length ? (
-                  <div className="space-y-6">
-                    {specification.map((spec, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-white p-4 rounded-lg shadow-sm border border-gray-200"
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold text-gray-800 border-b-2 border-blue-500 pb-1">
+                    Dynamic Specifications
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={addSpecGroup}
+                    className="bg-green-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-green-700 shadow-lg shadow-green-100"
+                  >
+                    + Add Section
+                  </button>
+                </div>
+
+                <div className="space-y-6">
+                  {customSpecs.map((group, gIdx) => (
+                    <div
+                      key={gIdx}
+                      className="bg-white border border-gray-200 rounded-xl p-5 relative shadow-sm"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => removeSpecGroup(gIdx)}
+                        className="absolute top-3 right-3 text-red-400 hover:text-red-600 text-sm font-bold bg-red-50 px-2 py-1 rounded"
                       >
-                        <div className="flex justify-between items-center mb-3">
-                          <label className="font-bold text-blue-700">
-                            {spec}
-                          </label>
-                          <button
-                            type="button"
-                            onClick={() => addSpecRow(spec)}
-                            className="text-[10px] bg-gray-800 text-white px-2 py-1 rounded uppercase tracking-wider font-bold"
-                          >
-                            Add Row
-                          </button>
-                        </div>
-                        {specValues[spec]?.map((row, i) => (
-                          <div key={i} className="flex gap-2 mb-2">
+                        Delete
+                      </button>
+
+                      <div className="mb-4 pr-16">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                          Section Title
+                        </label>
+                        <input
+                          type="text"
+                          value={group.groupName}
+                          onChange={(e) =>
+                            updateGroupName(gIdx, e.target.value)
+                          }
+                          placeholder="e.g. Battery & Power"
+                          className="w-full p-2 mt-1 border rounded-lg font-bold text-gray-700 focus:ring-1 focus:ring-blue-400 outline-none"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        {group.fields.map((field, fIdx) => (
+                          <div key={fIdx} className="flex gap-2">
                             <input
                               type="text"
-                              value={row.key}
+                              placeholder="Key (e.g. RAM)"
+                              value={field.key}
                               onChange={(e) =>
-                                handleSpecChange(spec, i, "key", e.target.value)
+                                updateField(gIdx, fIdx, "key", e.target.value)
                               }
-                              placeholder="Feature"
-                              className="p-2 border rounded flex-1 text-xs"
+                              className="flex-1 p-2 border rounded text-xs outline-blue-300"
+                              required
                             />
                             <input
                               type="text"
-                              value={row.value}
+                              placeholder="Value (e.g. 8GB)"
+                              value={field.value}
                               onChange={(e) =>
-                                handleSpecChange(
-                                  spec,
-                                  i,
-                                  "value",
-                                  e.target.value,
-                                )
+                                updateField(gIdx, fIdx, "value", e.target.value)
                               }
-                              placeholder="Value"
-                              className="p-2 border rounded flex-1 text-xs"
+                              className="flex-1 p-2 border rounded text-xs outline-blue-300"
+                              required
                             />
-                            {specValues[spec].length > 1 && (
+                            {group.fields.length > 1 && (
                               <button
                                 type="button"
-                                onClick={() => removeSpecRow(spec, i)}
-                                className="text-red-400 font-bold px-1"
+                                onClick={() => removeFieldRow(gIdx, fIdx)}
+                                className="text-red-400 font-bold px-1 text-lg"
                               >
                                 ×
                               </button>
                             )}
                           </div>
                         ))}
+                        <button
+                          type="button"
+                          onClick={() => addFieldRow(gIdx)}
+                          className="text-[11px] bg-blue-50 text-blue-600 px-3 py-1 rounded font-bold mt-2"
+                        >
+                          + Add Row
+                        </button>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-gray-400 border-2 border-dashed rounded-xl">
-                    <p className="font-medium italic">
-                      Please select a category to load specifications
-                    </p>
-                  </div>
-                )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* FORM FOOTER */}
+            {/* FORM FOOTER (Now Inside the Form) */}
             <div className="bg-gray-100 px-6 py-4 flex justify-end gap-4 border-t">
               <button
                 type="button"
                 onClick={() => navigate("/products")}
-                className="px-6 py-2 bg-white border border-gray-300 rounded-lg text-gray-600 font-semibold hover:bg-gray-50 transition-all"
+                className="px-8 py-2 bg-white border border-gray-300 rounded-lg text-gray-600 font-bold hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-10 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all"
+                className="px-12 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all transform active:scale-95"
               >
                 Publish Product
               </button>
