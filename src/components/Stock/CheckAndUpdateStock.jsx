@@ -111,7 +111,7 @@ export default function CheckAndUpdateStock() {
       };
 
       const res = await axios.post(
-        "https://fabribuzz.onrender.com/api/stock/add-stock",
+        "https://api.victusbyte.com/api/stock/add-stock",
         data
       );
       updateApi();

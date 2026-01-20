@@ -153,7 +153,7 @@ const AdminSaleFull = () => {
   useEffect(() => {
     const subtotal = order.items.reduce(
       (sum, i) => sum + i.product_price * i.quantity,
-      0
+      0,
     );
     const shipping = Number(order.shipping_cost || 0);
     const discount = Number(order.discount || 0);
@@ -196,8 +196,8 @@ const AdminSaleFull = () => {
 
     try {
       const res = await axios.post(
-        "https://fabribuzz.onrender.com/api/order/create-order",
-        order
+        "https://api.victusbyte.com/api/order/create-order",
+        order,
       );
 
       // Update success message
@@ -226,7 +226,7 @@ const AdminSaleFull = () => {
     } catch (error) {
       console.error(
         "Error saving order:",
-        error.response ? error.response.data : error.message
+        error.response ? error.response.data : error.message,
       );
     }
   };

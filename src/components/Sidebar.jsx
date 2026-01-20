@@ -137,6 +137,40 @@ export default function Sidebar() {
         })}
       </nav>
 
+      <div className="flex flex-col  gap-3 justify-between items-center ">
+        <div className="bg-green-200 w-full text-center py-1">
+          <h3 className="text-sm font-medium text-slate-900 uppercase tracking-wider">
+            Quick Actions
+          </h3>
+        </div>
+        <div className="flex gap-2 pb-2">
+          <button
+            onClick={() =>
+              window.open(
+                "https://meghna.hostseba.com:2003/sessHOp6XIU8MpLJJDzw/mail/?_task=logout&_token=TOSAGw57ReHVzHwuJMkRKRxIzGCjSAPa",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
+            className="px-4  text-sm font-semibold cursor-pointer text-blue-600 bg-blue-50 hover:bg-blue-600 hover:text-white hover:shadow-lg hover:-translate-y-0.5 transform transition-all duration-200 flex items-center gap-2"
+          >
+            E-mail Service
+          </button>{" "}
+          <button
+            onClick={() =>
+              window.open(
+                " https://image.victusbyte.com/",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
+            className="px-4 py-2 text-sm font-medium cursor-pointer text-blue-600 bg-blue-50  hover:bg-blue-600 hover:text-white transition-colors"
+          >
+            Image Upload
+          </button>
+        </div>
+      </div>
+
       {/* --- FOOTER STATUS --- */}
       <div
         className={`p-4 border-t border-slate-800 transition-all duration-300 ${

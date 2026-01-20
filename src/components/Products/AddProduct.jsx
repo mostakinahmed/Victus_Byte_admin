@@ -117,7 +117,7 @@ const AddProduct = () => {
     const cleanedSpecs = {};
     Object.keys(specValues).forEach((spec) => {
       const validRows = specValues[spec].filter(
-        (row) => row.key.trim() !== "" && row.value.trim() !== ""
+        (row) => row.key.trim() !== "" && row.value.trim() !== "",
       );
       if (validRows.length) cleanedSpecs[spec] = validRows;
     });
@@ -145,15 +145,15 @@ const AddProduct = () => {
       });
       // 1️⃣ Save product
       const productRes = await axios.post(
-        "https://fabribuzz.onrender.com/api/product",
-        data
+        "https://api.victusbyte.com/api/product",
+        data,
       );
 
       const { pID, sID } = productRes.data;
       updateApi(); // refresh context data
 
       axios
-        .post("https://fabribuzz.onrender.com/api/stock/create-stock", {
+        .post("https://api.victusbyte.com/api/stock/create-stock", {
           pID,
           sID,
         })
@@ -377,7 +377,7 @@ const AddProduct = () => {
                                   spec,
                                   i,
                                   "value",
-                                  e.target.value
+                                  e.target.value,
                                 )
                               }
                               placeholder="Value"

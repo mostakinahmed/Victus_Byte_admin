@@ -75,7 +75,7 @@ export const StatusManagement = () => {
         value,
       };
 
-      await axios.patch("https://fabribuzz.onrender.com/api/product", data);
+      await axios.patch("https://api.victusbyte.com/api/product", data);
 
       updateApi();
 
