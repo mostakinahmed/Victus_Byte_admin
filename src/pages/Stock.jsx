@@ -90,7 +90,7 @@ export default function Users() {
         </div>
 
         {/* Main Content Area */}
-        <div className="p-4 lg:p-8 min-h-[75vh] bg-white">
+        <div className=" mt-2 md:mt-0 lg:p-4 min-h-[75vh] bg-white">
           <div className="animate-in slide-in-from-bottom-3 duration-500">
             {activeTab === "checkStock" && (
               <div className="space-y-4">
@@ -107,15 +107,7 @@ export default function Users() {
           </div>
         </div>
 
-        {/* Footer Control Info */}
-        <div className="px-6 py-2.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-            Authorized Access Only
-          </p>
-          <div className="flex items-center gap-2 text-[10px] font-black text-indigo-600 uppercase tracking-tighter">
-            v3.4.1 Build
-          </div>
-        </div>
+      
       </div>
     </div>
   );

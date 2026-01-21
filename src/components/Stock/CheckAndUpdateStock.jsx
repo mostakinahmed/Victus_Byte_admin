@@ -50,7 +50,7 @@ export default function CheckAndUpdateStock() {
     // If not found by Product ID, try to find by SKU ID
     if (!foundProduct) {
       const foundStockItem = stockData.find((stock) =>
-        Object.values(stock.SKU).some((sku) => sku.skuID === searchId)
+        Object.values(stock.SKU).some((sku) => sku.skuID === searchId),
       );
 
       if (foundStockItem) {
@@ -60,7 +60,7 @@ export default function CheckAndUpdateStock() {
     } else {
       // Found by Product ID, get stock
       foundStock = stockData.find(
-        (stock) => stock.pID === foundProduct.pID
+        (stock) => stock.pID === foundProduct.pID,
       ).SKU;
     }
 
@@ -70,7 +70,7 @@ export default function CheckAndUpdateStock() {
 
       // Directly find the SKU from the stock we just got
       const selectSKU = Object.values(foundStock).find(
-        (s) => s.skuID === searchId
+        (s) => s.skuID === searchId,
       );
       setCurrentSKU(selectSKU || null);
     } else {
@@ -83,7 +83,7 @@ export default function CheckAndUpdateStock() {
   //Show SKU DATA - Search
   const handleSelectSKU = (skuID) => {
     const selectSKU = Object.values(currentStock).find(
-      (s) => s.skuID === skuID
+      (s) => s.skuID === skuID,
     );
     setCurrentSKU(selectSKU);
   };
@@ -112,7 +112,7 @@ export default function CheckAndUpdateStock() {
 
       const res = await axios.post(
         "https://api.victusbyte.com/api/stock/add-stock",
-        data
+        data,
       );
       updateApi();
       setFormData({ skuID: "", comment: "" });
@@ -127,7 +127,7 @@ export default function CheckAndUpdateStock() {
   //find total, available, sold
   const totalStock = Object.keys(currentStock).length;
   const availableStock = Object.values(currentStock).filter(
-    (item) => item.status === true
+    (item) => item.status === true,
   ).length;
 
   return (
@@ -135,7 +135,7 @@ export default function CheckAndUpdateStock() {
       {/* Left Panel: Professional Inventory Lookup */}
       <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-sm flex flex-col">
         {/* Header Section */}
-        <div className="px-5 py-4 b border-b border-slate-100 bg-slate-50/50">
+        <div className="md:px-5 px-2 py-4 b border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
             <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
@@ -174,12 +174,12 @@ export default function CheckAndUpdateStock() {
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
               {/* Product Details Header & Action */}
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest border-l-4 border-indigo-500 pl-3">
+                <h3 className="text-xs font-black line-clamp-1 text-slate-800 uppercase tracking-widest border-l-4 border-indigo-500 pl-3">
                   Product Profile
                 </h3>
                 <button
                   onClick={() => setToggle(false)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-indigo-600 font-black text-[10px] uppercase tracking-widest bg-indigo-50 hover:bg-indigo-600 hover:text-white transition-all border border-indigo-100"
+                  className="flex items-center gap-2 md:px-4 px-2 py-2 rounded-lg text-indigo-600 font-black text-[10px] uppercase tracking-widest bg-indigo-100 hover:bg-indigo-600 hover:text-white transition-all border border-indigo-100"
                 >
                   <FiEdit3 /> Add Stock
                 </button>
@@ -193,7 +193,7 @@ export default function CheckAndUpdateStock() {
                     <img
                       src={selectedProduct.images[0]}
                       alt={selectedProduct.name}
-                      className="w-36 h-36 object-contain rounded-2xl border-2 border-slate-50 bg-white shadow-sm p-2"
+                      className="w-30 h-30 object-contain rounded-2xl border-2 border-slate-50 bg-white shadow-sm p-2"
                     />
                     <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-white text-[9px] font-black px-2 py-1 rounded shadow-lg border-2 border-white uppercase">
                       Original
@@ -202,14 +202,14 @@ export default function CheckAndUpdateStock() {
 
                   {/* Core Specs */}
                   <div className="flex-1 space-y-3 pt-1">
-                    <h2 className="text-xl font-black text-slate-900 leading-tight">
+                    <h2 className="md:text-xl font-black text-slate-900 leading-tight">
                       {selectedProduct.name}
                     </h2>
 
                     <div className="grid grid-cols-1 gap-2">
                       <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
                         <FiHash className="text-slate-300" />
-                        <span className="text-slate-400 font-medium">UID:</span>
+                        <span className="text-slate-400 font-medium">PID:</span>
                         <span className="font-mono text-slate-800">
                           {selectedProduct.pID}
                         </span>
@@ -226,24 +226,13 @@ export default function CheckAndUpdateStock() {
                     </div>
 
                     {/* Financial Metrics Cards */}
-                    <div className="flex gap-3 pt-3">
-                      <div className="flex-1 p-3 bg-slate-900 rounded-2xl shadow-md">
-                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">
+                    <div className="flex flex-col gap-3 pt-3">
+                      <div className="flex-1 md:p-3 p-2 bg-slate-900 rounded-2xl shadow-md">
+                        <p className="text-[10px] line-clamp-1 font-black text-slate-400 uppercase tracking-widest mb-1">
                           Selling Price
                         </p>
                         <p className="text-lg font-black text-white">
-                          ৳{selectedProduct.price.selling}
-                        </p>
-                      </div>
-                      <div className="flex-1 p-3 bg-indigo-50 rounded-2xl border border-indigo-100">
-                        <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-1">
-                          Live Stock
-                        </p>
-                        <p className="text-lg font-black text-indigo-700">
-                          50{" "}
-                          <span className="text-[10px] font-medium opacity-60">
-                            Units
-                          </span>
+                          ৳ {selectedProduct.price.selling}
                         </p>
                       </div>
                     </div>
@@ -268,7 +257,7 @@ export default function CheckAndUpdateStock() {
                           <div className="w-1 h-1 bg-indigo-400 rounded-full" />{" "}
                           {spec}
                         </li>
-                      )
+                      ),
                     )}
                   </ul>
                 </div>
@@ -276,18 +265,14 @@ export default function CheckAndUpdateStock() {
                 {/* System Metadata */}
                 <div className="flex justify-between items-center pt-4 border-t border-slate-100">
                   <div className="flex gap-4">
-                    <div className="text-[9px] font-bold text-slate-400 uppercase">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase">
                       Created{" "}
                       <span className="text-slate-600 ml-1">2025-10-05</span>
                     </div>
-                    <div className="text-[9px] font-bold text-slate-400 uppercase">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase">
                       Last Update{" "}
                       <span className="text-slate-600 ml-1">2025-10-07</span>
                     </div>
-                  </div>
-                  <div className="text-[9px] font-black text-emerald-500 uppercase flex items-center gap-1">
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />{" "}
-                    Data Sync Active
                   </div>
                 </div>
               </div>
@@ -313,7 +298,7 @@ export default function CheckAndUpdateStock() {
       {/* 📊 Middle Panel: Professional SKU Ledger */}
       <div className="md:w-1/2 mt-2 md:mt-0 border-r border-slate-200 bg-white  overflow-hidden shadow-sm flex flex-col h-full">
         {/* Section Header */}
-        <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
+        <div className="md:px-5 px-2 py-4 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
             <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
@@ -324,9 +309,9 @@ export default function CheckAndUpdateStock() {
 
         {/* 📈 Stat Bar: Modern Flat Look */}
         {currentStock && (
-          <div className="px-5 pt-5 pb-2">
+          <div className="md:px-5 px-2 pt-5 pb-2">
             <div className="grid grid-cols-3 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-              <div className="p-4 text-center border-r border-slate-100">
+              <div className="md:p-4 p-2 text-center border-r border-slate-100">
                 <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
                   Total
                 </h4>
@@ -334,7 +319,7 @@ export default function CheckAndUpdateStock() {
                   {totalStock}
                 </p>
               </div>
-              <div className="p-4 text-center border-r border-slate-100 bg-emerald-50/30">
+              <div className="md:p-4 p-2 text-center border-r border-slate-100 bg-emerald-50/30">
                 <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">
                   Available
                 </h4>
@@ -342,7 +327,7 @@ export default function CheckAndUpdateStock() {
                   {availableStock}
                 </p>
               </div>
-              <div className="p-4 text-center bg-rose-50/30">
+              <div className="md:p-4 p-2 text-center bg-rose-50/30">
                 <h4 className="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-1">
                   Out
                 </h4>
@@ -433,12 +418,10 @@ export default function CheckAndUpdateStock() {
       </div>
 
       {/* Right Panel */}
-
-      {/* 🛠️ Right Panel: Stock Overview & Control */}
       <div className="md:w-1/2 bg-white overflow-hidden shadow-sm border border-slate-200 flex flex-col h-">
         {/* Dynamic Section Header */}
         <div
-          className={`px-5 py-4 border-b ${
+          className={`md:px-5 px-2 py-4 border-b ${
             toggle
               ? "bg-slate-50/50 border-slate-100"
               : "bg-indigo-50/30 border-indigo-100"
@@ -459,7 +442,7 @@ export default function CheckAndUpdateStock() {
         <div className="flex-1 overflow-y-auto">
           {toggle ? (
             <div className="">
-              <div className="p-6">
+              <div className="md:p-6 p-2">
                 <div className="flex items-center gap-2 mb-6">
                   <FiFileText className="text-slate-400" />
                   <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
@@ -503,12 +486,12 @@ export default function CheckAndUpdateStock() {
                               row.mono
                                 ? "font-mono text-indigo-600"
                                 : row.status === true
-                                ? "text-emerald-600"
-                                : row.status === false
-                                ? "text-rose-500"
-                                : row.highlight
-                                ? "text-indigo-600"
-                                : "text-slate-400"
+                                  ? "text-emerald-600"
+                                  : row.status === false
+                                    ? "text-rose-500"
+                                    : row.highlight
+                                      ? "text-indigo-600"
+                                      : "text-slate-400"
                             }`}
                           >
                             {row.value}
@@ -544,7 +527,7 @@ export default function CheckAndUpdateStock() {
             </div>
           ) : (
             /* ➕ Add Stock Form */
-            <div className="relative p-6 animate-in fade-in slide-in-from-right-4 duration-300">
+            <div className="relative md:p-6 p-2 animate-in fade-in slide-in-from-right-4 duration-300">
               {/* Modern Loader Overlay */}
               {success && (
                 <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-md z-30 transition-all duration-500">
@@ -587,9 +570,9 @@ export default function CheckAndUpdateStock() {
                         name="skuID"
                         value={formData.skuID}
                         onChange={handleFormDataChange}
-                        placeholder="e.g. SN-90231-X"
+                        placeholder="SN2026011501"
                         required
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-mono"
+                        className="w-full bg-slate-50 placeholder:text-slate-300 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-mono"
                       />
                     </div>
 
@@ -621,9 +604,9 @@ export default function CheckAndUpdateStock() {
                     </button>
                     <button
                       type="submit"
-                      className="flex-[2] flex items-center justify-center gap-2 bg-indigo-600 text-white px-5 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95"
+                      className="flex-[2] flex items-center justify-center gap-2 bg-indigo-600 text-white md:px-5 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95"
                     >
-                      <FiCheckCircle size={14} /> Commit to Stock
+                      <FiCheckCircle size={14} /> Add Stock
                     </button>
                   </div>
                 </form>

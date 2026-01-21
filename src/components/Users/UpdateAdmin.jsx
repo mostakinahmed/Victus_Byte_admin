@@ -108,7 +108,7 @@ export default function UpdateAdmin({ back, user }) {
   return (
     <div className="w-full min-h-screen lg:max-w-2xl mx-auto lg:mt-6 bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header: Identity Sync */}
-      <div className="bg-slate-50 border-b border-slate-100 p-6 flex items-center justify-between">
+      <div className="bg-slate-50 border-b border-slate-100 md:p-6 p-2 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
             onClick={back}
@@ -120,7 +120,7 @@ export default function UpdateAdmin({ back, user }) {
             <h2 className="text-xl font-black text-slate-800 tracking-tight">
               Modify Credentials
             </h2>
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            <p className="text-[10px] hidden md:block text-slate-400 font-bold uppercase tracking-widest">
               Update system access & profile info
             </p>
           </div>
@@ -132,7 +132,7 @@ export default function UpdateAdmin({ back, user }) {
         </div>
       </div>
 
-      <div className="p-8 relative">
+      <div className="md:p-8 p-2 relative">
         {/* 🚀 Advanced Loader Overlay */}
         {loading && (
           <div className="absolute inset-0 bg-white/60 backdrop-blur-md flex items-center justify-center z-50 transition-all duration-300">
@@ -370,13 +370,13 @@ export default function UpdateAdmin({ back, user }) {
               <button
                 onClick={back}
                 type="button"
-                className="flex-1 py-4 text-rose-500 font-black text-[11px] uppercase tracking-widest rounded-2xl border border-rose-100 hover:bg-rose-50 transition-all"
+                className="flex-1 py-4  text-rose-500 font-black text-[11px] uppercase tracking-widest rounded-2xl border border-rose-100 hover:bg-rose-50 transition-all"
               >
                 Abort Sync
               </button>
               <button
                 type="submit"
-                className="flex-[2] py-4 bg-slate-900 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95"
+                className="flex-[2] md:py-4 py-2 bg-slate-900 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95"
               >
                 Update Ledger
               </button>

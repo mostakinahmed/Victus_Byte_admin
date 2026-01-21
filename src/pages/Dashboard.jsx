@@ -18,7 +18,7 @@ export default function Dashboard() {
       <Navbar pageTitle="System Overview" />
 
       {/* --- 1. KPI STRIP --- */}
-      <div className="p-4 lg:p-6">
+      <div className="p-2 lg:p-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           <StatCard
             title="Total Inventory"
@@ -54,7 +54,7 @@ export default function Dashboard() {
         {/* --- 2. COMMAND & ACTIVITY LAYER --- */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Visual & Brand Anchor */}
-          <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 p-2 shadow-sm flex flex-col">
+          <div className="lg:col-span-2 bg-white border border-slate-200 p-2 shadow-sm flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
                 <FiActivity className="text-indigo-500" /> Operational Flow
@@ -86,7 +86,7 @@ export default function Dashboard() {
           </div>
 
           {/* --- NEW: CONVERSION & ACTION CENTER --- */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+          <div className="bg-white rounded border border-slate-200 p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-6">
               <div className="p-2 bg-amber-100 text-amber-600 rounded-lg">
                 <FiTarget size={18} />
@@ -160,7 +160,7 @@ function StatCard({ title, value, trend, icon, color, isAlert }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+    <div className="bg-white md:p-5 p-3 rounded border border-slate-200 shadow-sm hover:shadow-md transition-all group">
       <div className="flex justify-between items-start mb-4">
         <div
           className={`p-3 rounded-2xl text-white shadow-lg ${colors[color]}`}

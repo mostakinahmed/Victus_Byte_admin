@@ -214,7 +214,7 @@ const OrderList = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen p-3">
+    <div className="bg-white min-h-screen md:p-3 p-1">
       {/* Filters */}
       <div className="w-full flex flex-col gap-3 lg:flex-row lg:items-center mb-3">
         {/* Professional Status Dropdown */}
@@ -481,11 +481,9 @@ const OrderList = () => {
         </div>
 
         {/* right side */}
-
-        {/* 📑 Right Side: Industry-Standard Order Details View */}
         <div className="w-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full min-h-[700px]">
           {/* Header: Reference & Status Pill */}
-          <div className="bg-slate-50 border-b border-slate-200 px-5 py-3">
+          <div className="bg-slate-50 border-b border-slate-200 md:px-5 px-2 py-3">
             {showDetails ? (
               <div className="flex justify-between items-center">
                 <div className="space-y-1">
@@ -493,7 +491,7 @@ const OrderList = () => {
                     Order Detail View
                   </p>
                   <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-black text-slate-900 font-mono tracking-tighter">
+                    <h2 className="md:text-xl font-black text-slate-900 font-mono tracking-tighter">
                       #{showDetails.order_id}
                     </h2>
                   </div>
@@ -514,7 +512,7 @@ const OrderList = () => {
                   >
                     {showDetails.status}
                   </span>
-                  <div className="flex items-center gap-1 text-[12px] text-slate-400 font-medium">
+                  <div className="flex ml-3 md:ml-0 items-center gap-1 text-[12px] text-slate-400 font-medium">
                     <FiClock size={10} /> {showDetails.order_date}
                   </div>
                 </div>
@@ -527,7 +525,7 @@ const OrderList = () => {
           </div>
 
           {showDetails ? (
-            <div className="flex-1 overflow-y-auto p-6 space-y-3 scrollbar-hide">
+            <div className="flex-1 overflow-y-auto md:p-6 p-2 mt-2 md:mt-0 space-y-3 scrollbar-hide">
               {/* 📦 1. Product Info Section - Modern Logistics Style */}
               <section className="space-y-6 -mt-3">
                 <div className="flex items-center justify-between pb-2 border-b-2 border-slate-100">
@@ -548,7 +546,7 @@ const OrderList = () => {
                   {showDetails.items.map((item, idx) => (
                     <div
                       key={idx}
-                      className="relative pl-6 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-slate-200 hover:before:bg-indigo-500 before:rounded-full before:transition-colors transition-all"
+                      className="relative md:pl-6 pl-2 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-slate-200 hover:before:bg-indigo-500 before:rounded-full before:transition-colors transition-all"
                     >
                       <div className="flex flex-col md:flex-row gap-4">
                         {/* Product Image with subtle shadow */}
@@ -643,7 +641,7 @@ const OrderList = () => {
               </section>
 
               {/* 👤 2. Customer Info Section */}
-              <section className="space-y-2">
+              <section className="space-y-2 mt-7 md:mt-0">
                 <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                   <FiUser className="text-indigo-500" />
                   <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
@@ -747,7 +745,7 @@ const OrderList = () => {
                     <p className="text-[10px] font-black text-indigo-300 uppercase tracking-widest">
                       Final Total Amount
                     </p>
-                    <p className="text-3xl font-black text-white">
+                    <p className="md:text-3xl text-xl font-black text-white">
                       ৳{showDetails.total_amount}
                     </p>
                   </div>

@@ -216,8 +216,8 @@ export default function Invoice() {
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
               <input
                 type="text"
-                placeholder="Enter Order ID (e.g. OID1012023034045)__"
-                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-xl text-sm font-bold text-slate-700 outline-none focus:bg-white focus:border-indigo-500 transition-all"
+                placeholder="Enter Order ID - OID1012023034045"
+                className="w-full pl-12 pr-4 py-3.5 placeholder:tracking-widest bg-slate-50 border border-transparent rounded-xl text-sm font-bold text-slate-700 outline-none focus:bg-white focus:border-indigo-500 transition-all"
                 value={orderId}
                 onChange={handleInputChange}
                 onKeyDown={(e) => e.key === "Enter" && handleGenerate()}
