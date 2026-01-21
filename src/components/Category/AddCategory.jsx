@@ -46,7 +46,7 @@ const AddCategory = () => {
     setSuccess(false);
 
     try {
-      await axios.post("https://fabribuzz.onrender.com/api/category", category);
+      await axios.post("https://api.victusbyte.com/api/category", category);
       setSuccess(true);
       updateApi();
     } catch (error) {
