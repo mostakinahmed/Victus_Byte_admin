@@ -9,7 +9,7 @@ export default function Users() {
   const [activeTab, setActiveTab] = useState("customer");
 
   return (
-    <div>
+    <div className="mt-12 md:mt-0">
       <Navbar pageTitle="User Management" />
       <div className="bg-white shadow-lg  p-3 w-full mx-auto">
         {/* Buttons */}

@@ -4,7 +4,7 @@ import OrderList from "@/components/Order/OrdersList";
 
 export default function Orders() {
   return (
-    <div>
+    <div className="mt-12 md:mt-0">
       <Navbar pageTitle="Order Management" />
       <div>
         <OrderStatusCards />

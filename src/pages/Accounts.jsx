@@ -57,7 +57,7 @@ const Accounts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 mt-12 md:mt-0">
       {/* Navbar */}
       <Navbar pageTitle="Accounts Section" />
 

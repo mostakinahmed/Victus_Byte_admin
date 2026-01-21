@@ -19,13 +19,13 @@ export default function Users() {
   const [activeTab, setActiveTab] = useState("checkStock");
 
   return (
-    <div>
+    <div className="mt-12 md:mt-0">
       <Navbar pageTitle="Stock Management" />
 
       {/* 📦 Professional Stock Control Center */}
       <div className="bg-white border border-slate-200 shadow rounded overflow-hidden w-full mx-auto animate-in fade-in duration-500">
         {/* Modern Segmented Control Header */}
-        <div className="p-4 bg-slate-50 border-b border-slate-100">
+        <div className="md:p-4 p-2 bg-slate-50 border-b border-slate-100">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             {/* Tab Navigation: Pill Style */}
             <div className="flex bg-slate-200/60 p-1.5 rounded-2xl w-full lg:w-fit">

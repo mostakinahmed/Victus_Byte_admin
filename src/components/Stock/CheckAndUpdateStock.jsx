@@ -131,7 +131,7 @@ export default function CheckAndUpdateStock() {
   ).length;
 
   return (
-    <div className="md:flex border-t min-h-screen mt-3">
+    <div className="md:flex border-t min-h-screen md:mt-3">
       {/* Left Panel: Professional Inventory Lookup */}
       <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-sm flex flex-col">
         {/* Header Section */}
@@ -144,9 +144,9 @@ export default function CheckAndUpdateStock() {
           </div>
         </div>
 
-        <div className="p-5">
+        <div className="md:p-5 p-2">
           {/* Search Interaction Group */}
-          <div className="flex items-end gap-3 mb-6">
+          <div className="md:flex items-end gap-3 mb-6">
             <div className="flex-1 space-y-1.5">
               <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
                 Catalog Search
@@ -164,7 +164,7 @@ export default function CheckAndUpdateStock() {
             </div>
             <button
               onClick={handleSearch}
-              className="bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-600 transition-all active:scale-95 shadow-lg shadow-slate-200 flex items-center gap-2"
+              className="bg-slate-900 mt-2 md:mt-0 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-600 transition-all active:scale-95 shadow-lg shadow-slate-200 flex items-center gap-2"
             >
               <FiZap size={14} /> Search
             </button>

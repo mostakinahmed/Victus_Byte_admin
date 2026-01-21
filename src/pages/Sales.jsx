@@ -39,7 +39,7 @@ const monthlyData = [
 export default function Sales() {
   const Navigate = useNavigate();
   return (
-    <div className=" space-y-2">
+    <div className=" space-y-2 mt-12 md:mt-0">
       <Navbar pageTitle="Sales Overview" />
       <div className="flex flex-col sm:flex-row mb-2">
         {/* ✅ Optimized Sales Action Bar */}

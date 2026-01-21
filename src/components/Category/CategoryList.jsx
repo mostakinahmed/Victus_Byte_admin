@@ -10,7 +10,7 @@ const CategoryList = ({ data = [] }) => {
     const filtered = data.filter(
       (cat) =>
         cat.catName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cat.catID.toLowerCase().includes(searchTerm.toLowerCase())
+        cat.catID.toLowerCase().includes(searchTerm.toLowerCase()),
     );
     setFilteredData(filtered);
   }, [searchTerm, data]);
@@ -18,13 +18,13 @@ const CategoryList = ({ data = [] }) => {
   return (
     <div className="bg-white  border border-slate-200 shadow-sm overflow-hidden">
       {/* --- Minimalist Header --- */}
-      <div className="px-5 py-3 border-b border-slate-100 bg-white flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="md:px-5 px-2 py-3 border-b border-slate-100 bg-white flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <FiLayers size={16} className="text-indigo-600" />
-          <h2 className="text-sm font-black text-slate-700 uppercase tracking-widest">
+          <h2 className="md:text-sm text-xs font-black text-slate-700 uppercase tracking-widest">
             Category Manifest
           </h2>
-          <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-bold">
+          <span className="text-[10px] bg-slate-100 text-slate-500 md:px-2 px-1 py-0.5 rounded-full font-bold">
             {filteredData.length} Total
           </span>
         </div>
@@ -43,22 +43,20 @@ const CategoryList = ({ data = [] }) => {
       </div>
 
       {/* --- Single-Line High Density Table --- */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse">
+      <div className="overflow-x-auto whitespace-nowrap">
+        <table className="min-w-full border-collapse ">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
               <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-12 text-center">
                 #
               </th>
-              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-32">
+              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-32 md:text-left">
                 Reference ID
               </th>
-              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-48">
+              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-48 md:text-left">
                 Category Name
               </th>
-              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter">
-                Specifications Manifest
-              </th>
+
               <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-24 text-center">
                 Actions
               </th>
@@ -71,7 +69,7 @@ const CategoryList = ({ data = [] }) => {
                   key={cat.catID}
                   className="hover:bg-indigo-50 transition-colors group"
                 >
-                  <td className="px-4 py-2 text-[12px] font-mono text-slate-600 text-center">
+                  <td className="px-4 py-2 text-[12px] font-mono  text-slate-600 text-center">
                     {(index + 1).toString().padStart(2, "0")}
                   </td>
 
@@ -86,24 +84,6 @@ const CategoryList = ({ data = [] }) => {
                     <p className="text-[12px] font-bold text-slate-700  truncate">
                       {cat.catName}
                     </p>
-                  </td>
-
-                  <td className="px-4 py-2">
-                    <div className="flex items-center gap-2 overflow-hidden whitespace-nowrap">
-                      {cat.specifications.map((spec, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center gap-1 shrink-0"
-                        >
-                          <span className="text-[10px] font-bold text-slate-600 bg-white border border-slate-200 px-2 py-0.5 rounded shadow-sm uppercase">
-                            {spec}
-                          </span>
-                          {i < cat.specifications.length - 1 && (
-                            <div className="w-1 h-1 bg-slate-200 rounded-full" />
-                          )}
-                        </div>
-                      ))}
-                    </div>
                   </td>
 
                   <td className="px-4 py-2">
@@ -142,7 +122,6 @@ const CategoryList = ({ data = [] }) => {
             Live Sync
           </div>
         </div>
-     
       </div>
     </div>
   );

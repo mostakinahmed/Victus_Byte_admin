@@ -69,17 +69,17 @@ export const TopCategory = () => {
             <FiStar size={18} />
           </div>
           <div>
-            <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">
-              Homepage Highlights
+            <h2 className="md:text-sm text-xs font-black text-slate-800 uppercase tracking-widest">
+            <span className="hidden md:block">Homepage</span>   Highlights
             </h2>
-            <p className="text-[10px] text-slate-400 font-bold uppercase">
+            <p className="text-[10px] hidden md:block text-slate-400 font-bold uppercase">
               Featured categories on storefront
             </p>
           </div>
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-slate-900 hover:bg-indigo-600 text-white py-2 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-slate-200 active:scale-95"
+          className="flex items-center gap-2 bg-slate-900 hover:bg-indigo-600 text-white py-2 md:px-4 px-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-slate-200 active:scale-95"
         >
           <FiPlus size={14} /> Add Category
         </button>

@@ -57,21 +57,19 @@ const AddCategory = () => {
   };
 
   return (
-    <div className="relative max-w-lg mx-auto mt-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="relative max-w-lg mx-auto md:mt-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Card className="border-slate-200 shadow-xl shadow-slate-200/50 rounded-2xl overflow-hidden relative z-10 bg-white">
         {/* Header: Clean & Professional */}
-        <div className="bg-slate-50 border-b border-slate-100 p-6">
+        <div className="bg-slate-50 border-b border-slate-100 md:p-6 p-2">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-200">
               <Layers size={22} />
             </div>
             <div>
-              <h2 className="text-xl font-black text-slate-800 tracking-tight">
+              <h2 className="md:text-xl  font-black text-slate-800">
                 Create Architecture
               </h2>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                Define new product categories
-              </p>
+             
             </div>
           </div>
         </div>
@@ -127,7 +125,7 @@ const AddCategory = () => {
                   name="catID"
                   value={category.catID}
                   onChange={handleChange}
-                  placeholder="e.g., ARCH-902"
+                  placeholder="Mobile-902"
                   required
                   className="rounded-xl border-slate-200 h-11 font-bold text-slate-700 bg-slate-50/50 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
                 />
@@ -143,7 +141,7 @@ const AddCategory = () => {
                   name="catName"
                   value={category.catName}
                   onChange={handleChange}
-                  placeholder="e.g., Wearable Technology"
+                  placeholder="Wearable Technology"
                   required
                   className="rounded-xl border-slate-200 h-11 font-bold text-slate-700 bg-slate-50/50 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
                 />

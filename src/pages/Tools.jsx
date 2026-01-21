@@ -7,7 +7,7 @@ export default function Users() {
   const [activeTab, setActiveTab] = useState("invoice");
 
   return (
-    <div>
+    <div className="mt-12 md:mt-0">
       <Navbar pageTitle="Tools" />
       <div className="bg-white shadow-lg  p-3 w-full mx-auto">
         {/* Buttons */}

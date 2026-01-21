@@ -194,24 +194,24 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen pb-10">
+    <div className="bg-gray-100 min-h-screen pb-10 mt-12 md:mt-0">
       <Navbar pageTitle="Add Product (Dynamic)" />
 
-      <div className="mx-auto p-4 max-w-[1600px]">
+      <div className="mx-auto max-w-[1600px]">
         <div className="relative w-full mx-auto bg-white shadow-2xl rounded-xl overflow-hidden border border-gray-200">
           <form onSubmit={handleSubmit}>
             <div className="lg:flex">
               {/* LEFT: General Info & Attributes */}
-              <div className="lg:w-[550px] border-r border-gray-100 p-6 space-y-6">
-                <h2 className="text-xl font-bold text-gray-800 border-b pb-2">
+              <div className="lg:w-[550px] border-r border-gray-100 md:p-6 p-2 md:space-y-6 space-y-2">
+                <h2 className="md:text-xl  font-bold text-gray-800 border-b pb-2">
                   General Information
                 </h2>
 
-                <div className="space-y-4">
+                <div className="md:space-y-4 space-y-2">
                   <input
                     type="text"
                     placeholder="Product Name"
-                    className="p-3 border rounded w-full outline-blue-500"
+                    className="md:p-3 p-2 border rounded w-full outline-blue-500"
                     value={formData.name}
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
@@ -221,7 +221,7 @@ const AddProduct = () => {
                   <input
                     type="text"
                     placeholder="Brand Name"
-                    className="p-3 border rounded w-full outline-blue-500"
+                    className="md:p-3 p-2 border rounded w-full outline-blue-500"
                     value={formData.brandName}
                     onChange={(e) =>
                       setFormData({ ...formData, brandName: e.target.value })
@@ -413,17 +413,17 @@ const AddProduct = () => {
               </div>
 
               {/* RIGHT: Dynamic Specifications */}
-              <div className="flex-1 p-6 bg-gray-50">
+              <div className="flex-1 md:p-6 p-2 bg-gray-50">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-xl font-bold text-gray-800 border-b-2 border-blue-500 pb-1">
-                    Dynamic Specifications
+                  <h2 className="md:text-xl line-clamp-1 font-bold text-gray-800 border-b-2 border-blue-500 pb-1">
+                     Specifications Dynamic
                   </h2>
                   <button
                     type="button"
                     onClick={addSpecGroup}
-                    className="bg-green-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-green-700 shadow-lg shadow-green-100"
+                    className="bg-green-600 ml-2 text-white md:px-5 px-2 py-2 rounded-lg hover:bg-green-700 shadow-lg shadow-green-100"
                   >
-                    + Add Section
+                    Add Section
                   </button>
                 </div>
 
@@ -431,7 +431,7 @@ const AddProduct = () => {
                   {customSpecs.map((group, gIdx) => (
                     <div
                       key={gIdx}
-                      className="bg-white border border-gray-200 rounded-xl p-5 relative shadow-sm"
+                      className="bg-white border border-gray-200 rounded-xl md:p-5 p-2 relative shadow-sm"
                     >
                       <button
                         type="button"
@@ -451,7 +451,7 @@ const AddProduct = () => {
                           onChange={(e) =>
                             updateGroupName(gIdx, e.target.value)
                           }
-                          placeholder="e.g. Battery & Power"
+                          placeholder="Battery & Power"
                           className="w-full p-2 mt-1 border rounded-lg font-bold text-gray-700 focus:ring-1 focus:ring-blue-400 outline-none"
                           required
                         />
@@ -506,7 +506,7 @@ const AddProduct = () => {
             </div>
 
             {/* FORM FOOTER (Now Inside the Form) */}
-            <div className="bg-gray-100 px-6 py-4 flex justify-end gap-4 border-t">
+            <div className="bg-gray-100 md:px-6 px-2 py-4 flex justify-end gap-4 border-t">
               <button
                 type="button"
                 onClick={() => navigate("/products")}
@@ -516,7 +516,7 @@ const AddProduct = () => {
               </button>
               <button
                 type="submit"
-                className="px-12 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all transform active:scale-95"
+                className="md:px-12 px-3 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all transform active:scale-95"
               >
                 Publish Product
               </button>

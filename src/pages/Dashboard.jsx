@@ -14,7 +14,7 @@ import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-slate-50 pb-10">
+    <div className="min-h-screen bg-slate-50 pb-10 mt-12 md:mt-0">
       <Navbar pageTitle="System Overview" />
 
       {/* --- 1. KPI STRIP --- */}
