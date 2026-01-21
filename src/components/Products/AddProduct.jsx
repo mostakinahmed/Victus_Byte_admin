@@ -146,6 +146,8 @@ const AddProduct = () => {
       specifications: formattedSpecs,
     };
 
+    console.log(finalData);
+
     saveData(finalData);
   };
 

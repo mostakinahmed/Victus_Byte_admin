@@ -19,7 +19,6 @@ const AddCategory = () => {
   const [category, setCategory] = useState({
     catID: "",
     catName: "",
-    specifications: [""],
   });
 
   // Handle text input change
@@ -28,33 +27,15 @@ const AddCategory = () => {
     setCategory({ ...category, [name]: value });
   };
 
-  // Handle specification field change
-  const handleSpecChange = (index, value) => {
-    const newSpecs = [...category.specifications];
-    newSpecs[index] = value;
-    setCategory({ ...category, specifications: newSpecs });
-  };
 
-  // Add specification field
-  const addSpecification = () => {
-    setCategory({
-      ...category,
-      specifications: [...category.specifications, ""],
-    });
-  };
 
-  // Remove specification field
-  const removeSpecification = (index) => {
-    const newSpecs = category.specifications.filter((_, i) => i !== index);
-    setCategory({ ...category, specifications: newSpecs });
-  };
 
   // Reset form fields
   const resetForm = () => {
     setCategory({
       catID: "",
       catName: "",
-      specifications: [""],
+      
     });
   };
 
@@ -166,55 +147,6 @@ const AddCategory = () => {
                   required
                   className="rounded-xl border-slate-200 h-11 font-bold text-slate-700 bg-slate-50/50 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
                 />
-              </div>
-
-              {/* Specifications List */}
-              <div className="space-y-3">
-                <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
-                  <Cpu size={12} /> Technical Attributes
-                </label>
-
-                <div className="space-y-3 max-h-[250px] overflow-y-auto pr-1 custom-scrollbar">
-                  {category.specifications.map((spec, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-2 group animate-in slide-in-from-right-2"
-                    >
-                      <div className="flex-1 relative">
-                        <Input
-                          type="text"
-                          value={spec}
-                          onChange={(e) =>
-                            handleSpecChange(index, e.target.value)
-                          }
-                          placeholder={`Attribute ${index + 1}`}
-                          required
-                          className="rounded-xl border-slate-200 h-10 font-medium text-sm text-slate-600 bg-white focus:border-indigo-500 transition-all"
-                        />
-                      </div>
-                      {category.specifications.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="rounded-lg text-rose-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                          onClick={() => removeSpecification(index)}
-                        >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <Button
-                  type="button"
-                  onClick={addSpecification}
-                  variant="outline"
-                  className="w-full mt-2 flex justify-center border-dashed border-2 border-slate-200 rounded-xl py-6 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all text-[10px] font-black uppercase tracking-widest"
-                >
-                  <Plus className="h-4 w-4 mr-2" /> Append Attribute
-                </Button>
               </div>
             </div>
 
