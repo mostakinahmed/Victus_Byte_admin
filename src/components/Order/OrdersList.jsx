@@ -501,10 +501,10 @@ const OrderList = () => {
       </div>
 
       {/* Orders Table */}
-      <div className="md:flex gap-3">
+      <div className="md:flex gap-3 ">
         {/* Left Side: Order Table */}
-        <div className="lg:w-3/4 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-5 lg:mb-0">
-          <div className="overflow-x-auto whitespace-nowrap">
+        <div className="lg:w-3/4 bg-white rounded-xl max-h-280 overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
+          <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
               {/* Table Header */}
               <thead>
@@ -625,14 +625,14 @@ const OrderList = () => {
                     Order Detail View
                   </p>
                   <div className="flex items-center gap-2">
-                    <h2 className="md:text-xl font-black text-slate-900 font-mono tracking-tighter">
+                    <h2 className="md:text-xl font-black text-slate-900 font-mono">
                       #{showDetails.order_id}
                     </h2>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <span
-                    className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border shadow-sm ${
+                    className={`px-3 py-1 rounded-full text-[12px] font-black uppercase tracking-wider border shadow-sm ${
                       showDetails.status === "Pending"
                         ? "bg-amber-50 text-amber-600 border-amber-200"
                         : showDetails.status === "Confirmed"
@@ -646,7 +646,7 @@ const OrderList = () => {
                   >
                     {showDetails.status}
                   </span>
-                  <div className="flex ml-3 md:ml-0 items-center gap-1 text-[12px] text-slate-400 font-medium">
+                  <div className="flex ml-3 md:ml-0 items-center gap-1 text-[12px] text-slate-500 font-medium">
                     <FiClock size={10} /> {showDetails.order_date}
                   </div>
                 </div>
@@ -671,8 +671,8 @@ const OrderList = () => {
                       Inventory Manifest
                     </h3>
                   </div>
-                  <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
-                    {showDetails.items.length} Units
+                  <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                    {showDetails.items.length} Item
                   </span>
                 </div>
 
@@ -719,10 +719,10 @@ const OrderList = () => {
                           </div>
 
                           {/* Modern Data Grid for SKU & Comments */}
-                          <div className="grid grid-cols-2 gap-3 mt-3">
+                          <div className="grid md:grid-cols-2 gap-3 mt-3">
                             {/* Comment Block */}
                             <div className="p-2.5 rounded-xl bg-indigo-50/50 border border-indigo-100/50">
-                              <p className="text-[12px] font-black text-indigo-400 uppercase tracking-tighter mb-1">
+                              <p className="text-[12px] line-clamp-1 font-black text-indigo-400 uppercase mb-1">
                                 User Specifications
                               </p>
                               <p className="text-[13px] font-bold text-indigo-900">
@@ -733,7 +733,7 @@ const OrderList = () => {
 
                             {/* SKU Block */}
                             <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                              <p className="text-[12px] font-black text-slate-500 uppercase tracking-tighter mb-1">
+                              <p className="text-[12px] font-black text-slate-500 uppercase tracking mb-1">
                                 Serial Number
                               </p>
                               {showDetails.status === "Confirmed" ? (
@@ -755,7 +755,7 @@ const OrderList = () => {
                                 <div className="flex items-center gap-1.5">
                                   {item.skuID ? (
                                     <span className="text-[14px] font-mono font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">
-                                      #{item.skuID}
+                                      {item.skuID}
                                     </span>
                                   ) : (
                                     <span className="text-[10px] font-bold text-rose-400 flex items-center gap-1 uppercase tracking-tighter">
@@ -772,7 +772,7 @@ const OrderList = () => {
                               <p className="text-[12px] font-black text-slate-500 uppercase mb-1">
                                 IMEI Number
                               </p>
-                              {showDetails.status === "Confirmed" && (
+                              {showDetails.status === "Confirmed" ? (
                                 <div className="space-y-2">
                                   {/* IMEI Inputs */}
                                   <div className="flex gap-2">
@@ -790,6 +790,19 @@ const OrderList = () => {
                                     />
                                   </div>
                                 </div>
+                              ) : (
+                                <div className="flex items-center gap-1.5">
+                                  {item.imei ? (
+                                    <span className="text-[14px] font-mono font-black bg-amber-200 text-emerald-700 px-2 py-0.5 rounded">
+                                      #{item.imei}
+                                    </span>
+                                  ) : (
+                                    <span className="text-[10px] font-bold text-rose-400 flex items-center gap-1 uppercase tracking-tighter">
+                                      <div className="w-1 h-1 bg-rose-400 rounded-full animate-pulse" />{" "}
+                                      Pending IMEI
+                                    </span>
+                                  )}
+                                </div>
                               )}
                             </div>
                           </div>
@@ -804,7 +817,7 @@ const OrderList = () => {
               <section className="space-y-2 mt-7 md:mt-0">
                 <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                   <FiUser className="text-indigo-500" />
-                  <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
+                  <h3 className="text-xs mt-4 font-black text-slate-800 uppercase tracking-widest">
                     Customer Details
                   </h3>
                 </div>
@@ -851,7 +864,7 @@ const OrderList = () => {
               </section>
 
               {/* 🚚 3. Payment & Shipping Summary */}
-              <section className="bg-slate-900 rounded-2xl p-6 text-white shadow-xl space-y-5">
+              <section className="bg-slate-900  rounded-2xl md:p-6 p-3 text-white shadow-xl space-y-5">
                 <div className="flex items-center gap-2 border-b border-white/10 pb-3">
                   <FiTruck className="text-indigo-400" />
                   <h3 className="text-[10px] font-black uppercase tracking-widest text-indigo-300">
@@ -865,7 +878,7 @@ const OrderList = () => {
                       <p className="text-[12px] font-black text-slate-500 uppercase">
                         Shipping Address
                       </p>
-                      <p className="text-[12px] font-medium text-slate-300 leading-tight">
+                      <p className="text-[13px] font-medium text-slate-300 leading-tight">
                         {showDetails.shipping_address.address_line1}
                       </p>
                     </div>
