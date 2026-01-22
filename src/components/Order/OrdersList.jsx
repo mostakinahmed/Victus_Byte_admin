@@ -285,7 +285,7 @@ const OrderList = () => {
 
     try {
       const res = await axios.patch(
-        `http://api.victusbyte.com/api/order/update/${orderId}`,
+        `https://api.victusbyte.com/api/order/update/${orderId}`,
         updatedData,
         {
           headers: {
