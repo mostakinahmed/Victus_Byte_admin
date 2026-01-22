@@ -39,6 +39,7 @@ const OrderList = () => {
   const [skuInputs, setSkuInputs] = useState({});
   const [currentOrder, setCurrentOrder] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [imei1Inputs, setImei1Inputs] = useState({});
   const statuses = [
     "All Orders",
     "Pending",
@@ -115,23 +116,125 @@ const OrderList = () => {
   };
 
   //backend handle
+  // const submitBtn = async (e) => {
+  //   e.preventDefault();
+
+  //   let skuArray = [];
+
+  //   if (actionBtn === "Shipped") {
+  //     // Convert skuInputs object to array of { product_id, skuID }
+  //     skuArray = Object.entries(skuInputs)
+  //       .filter(([_, skuID]) => skuID && skuID.trim() !== "") // remove empty SKUs
+  //       .map(([product_id, skuID]) => ({
+  //         product_id,
+  //         skuID: skuID.trim(),
+  //       }));
+
+  //     if (skuArray.length === 0) {
+  //       // No SKU provided, handle as needed
+  //       alert("Please enter  SKU before shipping!");
+  //       return;
+  //     }
+  //   }
+
+  //   MySwal.fire({
+  //     title: (
+  //       <p className="text-xl font-semibold text-blue-600">Processing...</p>
+  //     ),
+  //     html: (
+  //       <p className="text-gray-600">Please wait while we update your order.</p>
+  //     ),
+  //     allowOutsideClick: false,
+  //     didOpen: () => {
+  //       MySwal.showLoading();
+  //     },
+  //     customClass: {
+  //       popup: "w-[300px] h-[200px] p-4", // 👈 controls alert size
+  //       title: "text-lg font-bold",
+  //       htmlContainer: "text-sm text-gray-600",
+  //     },
+  //   });
+
+  //   const orderId = showDetails.order_id;
+  //   let updatedData = {};
+  //   //MAKE DATA
+  //   if (actionBtn === "Confirmed") {
+  //     updatedData = {
+  //       status: "Confirmed",
+  //     };
+  //   } else if (actionBtn === "Shipped") {
+  //     updatedData = {
+  //       status: "Shipped",
+  //       items: skuArray,
+  //     };
+  //   } else if (actionBtn === "Delivered") {
+  //     updatedData = {
+  //       status: "Completed",
+  //       payment: {
+  //         status: "Paid",
+  //       },
+  //     };
+  //   }
+
+  //   const res = await axios.patch(
+  //     `https://api.victusbyte.com/api/order/update/${orderId}`,
+  //     updatedData,
+  //     {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     },
+  //   );
+
+  //   //update api
+  //   updateApi();
+
+  //   // Update success message
+  //   MySwal.hideLoading();
+  //   MySwal.update({
+  //     icon: "success",
+  //     title: (
+  //       <p className="text-green-600 text-xl font-bold">Order {actionBtn} ✅</p>
+  //     ),
+  //     html: (
+  //       <p className="text-gray-700">
+  //         Order <b>#{showDetails.order_id || "123"}</b> has been successfully
+  //         updated!
+  //       </p>
+  //     ),
+  //     showConfirmButton: true,
+  //     confirmButtonText: "OK",
+  //     customClass: {
+  //       confirmButton:
+  //         "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
+  //     },
+  //     buttonsStyling: false,
+  //   });
+
+  //   setShowDetails(null);
+  // };
+
+  //backend handle
   const submitBtn = async (e) => {
     e.preventDefault();
 
     let skuArray = [];
 
     if (actionBtn === "Shipped") {
-      // Convert skuInputs object to array of { product_id, skuID }
-      skuArray = Object.entries(skuInputs)
-        .filter(([_, skuID]) => skuID && skuID.trim() !== "") // remove empty SKUs
-        .map(([product_id, skuID]) => ({
-          product_id,
-          skuID: skuID.trim(),
-        }));
+      // Logic updated to include SKU, IMEI 1, and IMEI 2
+      skuArray = showDetails.items.map((item) => {
+        const pID = item.product_id;
+        return {
+          product_id: pID,
+          skuID: (skuInputs[pID] || "").trim(),
+          imei: (imei1Inputs[pID] || "").trim(), // Added IMEI 1
+        };
+      });
 
-      if (skuArray.length === 0) {
-        // No SKU provided, handle as needed
-        alert("Please enter  SKU before shipping!");
+      // Simple validation to ensure data is present before shipping
+      const isMissingData = skuArray.some((item) => !item.skuID);
+      if (isMissingData) {
+        alert("Please enter SKU or IMEI details before shipping!");
         return;
       }
     }
@@ -148,14 +251,16 @@ const OrderList = () => {
         MySwal.showLoading();
       },
       customClass: {
-        popup: "w-[300px] h-[200px] p-4", // 👈 controls alert size
+        popup: "w-[300px] h-[200px] p-4",
         title: "text-lg font-bold",
         htmlContainer: "text-sm text-gray-600",
       },
     });
 
     const orderId = showDetails.order_id;
+
     let updatedData = {};
+
     //MAKE DATA
     if (actionBtn === "Confirmed") {
       updatedData = {
@@ -164,7 +269,7 @@ const OrderList = () => {
     } else if (actionBtn === "Shipped") {
       updatedData = {
         status: "Shipped",
-        items: skuArray,
+        items: skuArray, // This now contains the product_id, skuID, imei1, and imei2
       };
     } else if (actionBtn === "Delivered") {
       updatedData = {
@@ -175,42 +280,71 @@ const OrderList = () => {
       };
     }
 
-    const res = await axios.patch(
-      `https://api.victusbyte.com/api/order/update/${orderId}`,
-      updatedData,
-      {
-        headers: {
-          "Content-Type": "application/json",
+    console.log(updatedData);
+    console.log(orderId);
+
+    try {
+      const res = await axios.patch(
+        `http://localhost:3000/api/order/update/${orderId}`,
+        updatedData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      },
-    );
+      );
 
-    //update api
-    updateApi();
+      // Update API and show success
+      updateApi();
 
-    // Update success message
-    MySwal.hideLoading();
-    MySwal.update({
-      icon: "success",
-      title: (
-        <p className="text-green-600 text-xl font-bold">Order {actionBtn} ✅</p>
-      ),
-      html: (
-        <p className="text-gray-700">
-          Order <b>#{showDetails.order_id || "123"}</b> has been successfully
-          updated!
-        </p>
-      ),
-      showConfirmButton: true,
-      confirmButtonText: "OK",
-      customClass: {
-        confirmButton:
-          "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
-      },
-      buttonsStyling: false,
-    });
+      MySwal.hideLoading();
+      MySwal.update({
+        icon: "success",
+        title: (
+          <p className="text-green-600 text-xl font-bold">
+            Order {actionBtn} ✅
+          </p>
+        ),
+        html: (
+          <p className="text-gray-700">
+            Order <b>#{showDetails.order_id || "123"}</b> has been successfully
+            updated!
+          </p>
+        ),
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        customClass: {
+          confirmButton:
+            "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
+        },
+        buttonsStyling: false,
+      });
 
-    setShowDetails(null);
+      setShowDetails(null);
+    } catch (error) {
+      // Hide loading first
+      MySwal.hideLoading();
+
+      // Show error alert
+      MySwal.fire({
+        icon: "error",
+        title: "Update Failed",
+        html: (
+          <p className="text-gray-700">
+            Something went wrong while updating the order.
+            <br />
+            {error.response?.data?.message || error.message}
+          </p>
+        ),
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        customClass: {
+          confirmButton:
+            "bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg",
+        },
+        buttonsStyling: false,
+      });
+    }
   };
 
   return (
@@ -600,7 +734,7 @@ const OrderList = () => {
                             {/* SKU Block */}
                             <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                               <p className="text-[12px] font-black text-slate-500 uppercase tracking-tighter mb-1">
-                                Fulfillment Status
+                                Serial Number
                               </p>
                               {showDetails.status === "Confirmed" ? (
                                 <div className="relative group/input">
@@ -629,6 +763,32 @@ const OrderList = () => {
                                       Pending SKU
                                     </span>
                                   )}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* SKU & IMEI Block */}
+                            <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                              <p className="text-[12px] font-black text-slate-500 uppercase mb-1">
+                                IMEI Number
+                              </p>
+                              {showDetails.status === "Confirmed" && (
+                                <div className="space-y-2">
+                                  {/* IMEI Inputs */}
+                                  <div className="flex gap-2">
+                                    <input
+                                      type="text"
+                                      value={imei1Inputs[item.product_id] || ""}
+                                      onChange={(e) =>
+                                        setImei1Inputs({
+                                          ...imei1Inputs,
+                                          [item.product_id]: e.target.value,
+                                        })
+                                      }
+                                      className="w-1/2 text-[13px] font-black px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                      placeholder="IMEI 1"
+                                    />
+                                  </div>
                                 </div>
                               )}
                             </div>
