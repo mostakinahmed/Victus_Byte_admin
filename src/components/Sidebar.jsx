@@ -32,6 +32,7 @@ export default function Sidebar() {
     { name: "Accounts", path: "/accounts", icon: <FiUser /> },
     { name: "Users", path: "/users", icon: <FiUsers /> },
     { name: "Tools", path: "/tools", icon: <FiFileText /> },
+    { name: "Courier", path: "/courier", icon: <FiFileText /> },
   ];
 
   return (
@@ -132,7 +133,7 @@ export default function Sidebar() {
                       window.open("https://image.victusbyte.com/");
                       setIsServicesOpen(false);
                     }}
-                    className="w-full text-left px-3 py-2.5 text-[10px] tracking-wider font-black text-slate-400 hover:bg-slate-700/30 hover:text-blue-600 rounded-2xl uppercase"
+                    className="w-full text-left px-3 py-2.5 text-[10px]   cursor-pointer tracking-wider font-black text-slate-400 hover:bg-slate-700/30 bg-slate-800 hover:text-blue-600 rounded-2xl uppercase"
                   >
                     IMAGES Upload
                   </button>
@@ -143,7 +144,7 @@ export default function Sidebar() {
                       );
                       setIsServicesOpen(false);
                     }}
-                    className="w-full text-left px-3 py-2.5 text-[10px] tracking-wider font-black text-slate-400 hover:bg-slate-700/30 hover:text-blue-600 rounded-2xl uppercase"
+                    className="w-full text-left px-3 py-2.5 text-[10px]  cursor-pointer bg-slate-800 tracking-wider font-black text-slate-400 hover:bg-slate-700/30 hover:text-blue-600 rounded-2xl uppercase"
                   >
                     E-MAIL Service
                   </button>

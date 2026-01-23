@@ -198,7 +198,7 @@ const AddProduct = () => {
       <Navbar pageTitle="Add Product (Dynamic)" />
 
       <div className="mx-auto max-w-[1600px]">
-        <div className="relative w-full mx-auto bg-white shadow-2xl rounded-xl overflow-hidden border border-gray-200">
+        <div className="relative w-full mx-auto bg-white shadow rounded-xl overflow-hidden border border-gray-200">
           <form onSubmit={handleSubmit}>
             <div className="lg:flex">
               {/* LEFT: General Info & Attributes */}
@@ -211,7 +211,7 @@ const AddProduct = () => {
                   <input
                     type="text"
                     placeholder="Product Name"
-                    className="md:p-3 p-2 border rounded w-full outline-blue-500"
+                    className="p-2 border rounded w-full outline-blue-500"
                     value={formData.name}
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
@@ -221,7 +221,7 @@ const AddProduct = () => {
                   <input
                     type="text"
                     placeholder="Brand Name"
-                    className="md:p-3 p-2 border rounded w-full outline-blue-500"
+                    className="p-2 border rounded w-full outline-blue-500"
                     value={formData.brandName}
                     onChange={(e) =>
                       setFormData({ ...formData, brandName: e.target.value })
@@ -243,7 +243,7 @@ const AddProduct = () => {
                         })
                       }
                       placeholder="0.00"
-                      className="mt-1 p-2 border rounded w-full font-bold text-lg"
+                      className="mt-1 p-2 border rounded w-full font-bold "
                       required
                     />
                   </div>

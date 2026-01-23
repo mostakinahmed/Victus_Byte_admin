@@ -23,6 +23,7 @@ import { useContext } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import Accounts from "./pages/Accounts";
 import { StatusManagement } from "./components/Products/StatusManagement";
+import Courier from "./pages/Courier.jsx";
 
 function AppLayout() {
   const { user } = useContext(AuthContext);
@@ -157,6 +158,15 @@ function AppLayout() {
             element={
               <PrivateRoute>
                 <Tools />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/courier"
+            element={
+              <PrivateRoute>
+                <Courier />
               </PrivateRoute>
             }
           />

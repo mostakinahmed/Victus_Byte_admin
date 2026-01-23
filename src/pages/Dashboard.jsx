@@ -11,6 +11,7 @@ import {
 } from "react-icons/fi";
 import FuzzyText from "@/components/FuzzyText";
 import Navbar from "../components/Navbar";
+import SmsBalanceCard from "@/components/SmsBalanceCard";
 
 export default function Dashboard() {
   return (
@@ -19,7 +20,7 @@ export default function Dashboard() {
 
       {/* --- 1. KPI STRIP --- */}
       <div className="p-2 lg:p-2">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-4">
           <StatCard
             title="Total Inventory"
             value="1,240"
@@ -34,25 +35,26 @@ export default function Dashboard() {
             icon={<FiShoppingCart />}
             color="emerald"
           />
-          <StatCard
+          {/* <StatCard
             title="Active Users"
             value="12,045"
             trend="+5%"
             icon={<FiUsers />}
             color="blue"
-          />
+          /> */}
           <StatCard
-            title="Critical Stock"
+            title="SMS Balance"
             value="08"
             trend="Needs Attention"
             icon={<FiAlertTriangle />}
             color="rose"
             isAlert
           />
+          <SmsBalanceCard />
         </div>
 
         {/* --- 2. COMMAND & ACTIVITY LAYER --- */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Main Visual & Brand Anchor */}
           <div className="lg:col-span-2 bg-white border border-slate-200 p-2 shadow-sm flex flex-col">
             <div className="flex items-center justify-between mb-6">
