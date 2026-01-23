@@ -65,8 +65,8 @@ export default function UpdateAdmin({ back, user }) {
       const data = formData;
 
       const res = await axios.put(
-        `https://fabribuzz.onrender.com/api/user/admin/update/${user._id}`,
-        data
+        `https://api.victusbyte.com/api/user/admin/update/${user._id}`,
+        data,
       );
 
       if (res.status === 200) {

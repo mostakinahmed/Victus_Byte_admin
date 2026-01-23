@@ -25,6 +25,7 @@ import {
   FiSave,
   FiXCircle,
   FiArrowRight,
+  FiChevronDown,
 } from "react-icons/fi";
 
 // Mock DB data
@@ -65,7 +66,7 @@ function getOrderDateTime12h() {
 }
 
 const AdminSaleFull = () => {
-  const { productData, updateApi } = useContext(DataContext);
+  const { productData, adminData, updateApi } = useContext(DataContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -78,7 +79,7 @@ const AdminSaleFull = () => {
     customer_id: "",
     order_date: getOrderDateTime12h(),
     status: "Pending",
-    mode: "Online",
+    mode: null,
     subtotal: 0,
     shipping_cost: "",
     discount: "",
@@ -89,13 +90,6 @@ const AdminSaleFull = () => {
       { product_id: "", product_name: "", quantity: 1, product_price: 0 },
     ],
   });
-
-  // ✅ Copy OID
-  const handleCopy = () => {
-    navigator.clipboard.writeText(order.order_id);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
 
   // Handle customer autofill
   const handleCustomerPhone = (phone) => {
@@ -171,10 +165,22 @@ const AdminSaleFull = () => {
     setOrder((prev) => ({ ...prev, discount: value }));
   };
 
+  console.log(order);
+
   // ✅ Submit order
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    //check admin droupdown field
+    if (!order.mode) {
+      MySwal.fire({
+        icon: "error",
+        title: "Missing Saler ID",
+        text: "Please select an admin before saving the order.",
+        confirmButtonColor: "#4f46e5", // Indigo color to match your theme
+      });
+      return;
+    }
     // ----------------------------------
     MySwal.fire({
       title: (
@@ -238,7 +244,7 @@ const AdminSaleFull = () => {
       customer_id: "",
       order_date: getOrderDateTime12h(),
       status: "Pending",
-      mode: "Online",
+      mode: null,
       subtotal: 0,
       shipping_cost: "",
       discount: "",
@@ -264,7 +270,7 @@ const AdminSaleFull = () => {
   }
 
   return (
-    <div className="max-w-full mx-auto relative">
+    <div className="max-w-full mx-auto relative mt-12 md:mt-0">
       <Navbar pageTitle="Create New Sale" />
       {/* //data form */}
       <form
@@ -354,11 +360,11 @@ const AdminSaleFull = () => {
 
               {/* Mode Selection */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
-                  Channel / Mode
+                <label className="text-xs font-bold text-slate-500 uppercase tracking ml-1">
+                  Channel / Mode / Saler ID
                 </label>
                 <div className="relative">
-                  <select
+                  {/* <select
                     value={order.Mode}
                     onChange={(e) =>
                       setOrder({ ...order, Mode: e.target.value })
@@ -367,7 +373,29 @@ const AdminSaleFull = () => {
                   >
                     <option value="Online">🌐 Online Store</option>
                     <option value="Offline">🏢 POS / Offline</option>
-                  </select>
+                  </select> */}
+
+                  <div className="relative w-full">
+                    {/* The Icon Label on the Left */}
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FiUser className="text-blue-600" size={18} />
+                    </div>
+
+                    <select
+                      value={order.mode || ""} // FIX: lowercase 'mode'
+                      onChange={
+                        (e) => setOrder({ ...order, mode: e.target.value }) // FIX: lowercase 'mode'
+                      }
+                      className="block w-full pl-10 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md appearance-none border shadow-sm bg-white"
+                    >
+                      <option value="">Select Admin</option>
+                      {adminData.map((admin) => (
+                        <option key={admin.adminID} value={admin.adminID}>
+                          {admin.fullName} ({admin.adminID})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -478,6 +506,7 @@ const AdminSaleFull = () => {
                       })
                     }
                     className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
+                    required
                   />
                 </div>
               </div>
@@ -851,7 +880,7 @@ const AdminSaleFull = () => {
                 <button
                   type="button"
                   onClick={() => navigate(-1)}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-bold transition-all border border-transparent hover:border-slate-700"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 md:px-6 px-2 py-3.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-bold transition-all border border-transparent hover:border-slate-700"
                 >
                   <FiXCircle size={18} />
                   <span>Discard</span>
@@ -859,10 +888,11 @@ const AdminSaleFull = () => {
 
                 <button
                   type="submit"
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-10 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] group"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 md:px-10 px-2 md:py-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] group"
                 >
                   <FiSave size={18} />
-                  <span>SAVE ORDER</span>
+                  <span className="hidden md:block"> SAVE ORDER</span>
+                  <span className="md:hidden">SAVE</span>
                   <FiArrowRight
                     size={18}
                     className="group-hover:translate-x-1 transition-transform"
@@ -873,7 +903,7 @@ const AdminSaleFull = () => {
           </div>
 
           {/* Footer Note */}
-          <p className="text-center text-slate-400 text-[10px] mt-6 uppercase tracking-[0.3em] font-medium">
+          <p className="text-center text-slate-500 text-[10px] mt-6 uppercase tracking-[0.3em] font-medium">
             Review all line items before finalizing the transaction
           </p>
         </div>

@@ -128,8 +128,8 @@ export default function AdminRegistration() {
       // );
       const data = formData;
       const res = await axios.post(
-        "https://fabribuzz.onrender.com/api/user/admin/signup",
-        data
+        "https://api.victusbyte.com/api/user/admin/signup",
+        data,
       );
 
       if (res.status === 201) {
@@ -179,9 +179,7 @@ export default function AdminRegistration() {
       MySwal.hideLoading();
       MySwal.update({
         icon: "success",
-        title: (
-          <p className="text-green-600 text-xl font-bold">Failled ✅</p>
-        ),
+        title: <p className="text-green-600 text-xl font-bold">Failled ✅</p>,
         html: (
           <div className="text-gray-700 mt-2 mb-4">
             Admin <b>#{formData.fullName}</b> can't updated!
