@@ -79,8 +79,6 @@ const OrderList = () => {
     );
   }
 
-  console.log(data);
-
   //handle click order
   const handleClickOrder = (order) => {
     setShowDetails(order);
@@ -116,105 +114,6 @@ const OrderList = () => {
   };
 
   //backend handle
-  // const submitBtn = async (e) => {
-  //   e.preventDefault();
-
-  //   let skuArray = [];
-
-  //   if (actionBtn === "Shipped") {
-  //     // Convert skuInputs object to array of { product_id, skuID }
-  //     skuArray = Object.entries(skuInputs)
-  //       .filter(([_, skuID]) => skuID && skuID.trim() !== "") // remove empty SKUs
-  //       .map(([product_id, skuID]) => ({
-  //         product_id,
-  //         skuID: skuID.trim(),
-  //       }));
-
-  //     if (skuArray.length === 0) {
-  //       // No SKU provided, handle as needed
-  //       alert("Please enter  SKU before shipping!");
-  //       return;
-  //     }
-  //   }
-
-  //   MySwal.fire({
-  //     title: (
-  //       <p className="text-xl font-semibold text-blue-600">Processing...</p>
-  //     ),
-  //     html: (
-  //       <p className="text-gray-600">Please wait while we update your order.</p>
-  //     ),
-  //     allowOutsideClick: false,
-  //     didOpen: () => {
-  //       MySwal.showLoading();
-  //     },
-  //     customClass: {
-  //       popup: "w-[300px] h-[200px] p-4", // 👈 controls alert size
-  //       title: "text-lg font-bold",
-  //       htmlContainer: "text-sm text-gray-600",
-  //     },
-  //   });
-
-  //   const orderId = showDetails.order_id;
-  //   let updatedData = {};
-  //   //MAKE DATA
-  //   if (actionBtn === "Confirmed") {
-  //     updatedData = {
-  //       status: "Confirmed",
-  //     };
-  //   } else if (actionBtn === "Shipped") {
-  //     updatedData = {
-  //       status: "Shipped",
-  //       items: skuArray,
-  //     };
-  //   } else if (actionBtn === "Delivered") {
-  //     updatedData = {
-  //       status: "Completed",
-  //       payment: {
-  //         status: "Paid",
-  //       },
-  //     };
-  //   }
-
-  //   const res = await axios.patch(
-  //     `https://api.victusbyte.com/api/order/update/${orderId}`,
-  //     updatedData,
-  //     {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     },
-  //   );
-
-  //   //update api
-  //   updateApi();
-
-  //   // Update success message
-  //   MySwal.hideLoading();
-  //   MySwal.update({
-  //     icon: "success",
-  //     title: (
-  //       <p className="text-green-600 text-xl font-bold">Order {actionBtn} ✅</p>
-  //     ),
-  //     html: (
-  //       <p className="text-gray-700">
-  //         Order <b>#{showDetails.order_id || "123"}</b> has been successfully
-  //         updated!
-  //       </p>
-  //     ),
-  //     showConfirmButton: true,
-  //     confirmButtonText: "OK",
-  //     customClass: {
-  //       confirmButton:
-  //         "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
-  //     },
-  //     buttonsStyling: false,
-  //   });
-
-  //   setShowDetails(null);
-  // };
-
-  //backend handle
   const submitBtn = async (e) => {
     e.preventDefault();
 
@@ -234,8 +133,25 @@ const OrderList = () => {
       // Simple validation to ensure data is present before shipping
       const isMissingData = skuArray.some((item) => !item.skuID);
       if (isMissingData) {
-        alert("Please enter SKU or IMEI details before shipping!");
+        alert("Please enter Serial Number before shipping!");
         return;
+      }
+
+      // Check for IMEI requirement before proceeding
+      for (const element of data) {
+        if (element.category === "C001") {
+          // corrected 'categiry' typo
+          const isMissingImei = skuArray.some(
+            (item) => !item.imei || item.imei.trim() === "",
+          );
+
+          if (isMissingImei) {
+            alert(
+              "Required: Please enter IMEI details for MObile!",
+            );
+            return; 
+          }
+        }
       }
     }
 
@@ -279,9 +195,6 @@ const OrderList = () => {
         },
       };
     }
-
-    console.log(updatedData);
-    console.log(orderId);
 
     try {
       const res = await axios.patch(
@@ -721,7 +634,7 @@ const OrderList = () => {
                           {/* Modern Data Grid for SKU & Comments */}
                           <div className="grid md:grid-cols-2 gap-3 mt-3">
                             {/* Comment Block */}
-                            <div className="p-2.5 rounded-xl bg-indigo-50/50 border border-indigo-100/50">
+                            <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-100/50">
                               <p className="text-[12px] line-clamp-1 font-black text-indigo-400 uppercase mb-1">
                                 User Specifications
                               </p>
@@ -732,7 +645,7 @@ const OrderList = () => {
                             </div>
 
                             {/* SKU Block */}
-                            <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                            <div className="p-2.5 rounded-xl bg-green-100 border border-slate-200">
                               <p className="text-[12px] font-black text-slate-500 uppercase tracking mb-1">
                                 Serial Number
                               </p>
@@ -747,7 +660,7 @@ const OrderList = () => {
                                         e.target.value,
                                       )
                                     }
-                                    className="w-full text-[13px] font-black px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                    className="w-full text-[15px] tracking-widest font-black px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
                                     placeholder="Assign SKU..."
                                   />
                                 </div>
@@ -768,7 +681,7 @@ const OrderList = () => {
                             </div>
 
                             {/* SKU & IMEI Block */}
-                            <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                            <div className="p-2.5 rounded-xl bg-red-100 border border-slate-200">
                               <p className="text-[12px] font-black text-slate-500 uppercase mb-1">
                                 IMEI Number
                               </p>
@@ -785,7 +698,7 @@ const OrderList = () => {
                                           [item.product_id]: e.target.value,
                                         })
                                       }
-                                      className="w-1/2 text-[13px] font-black px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                      className="w-full text-[15px] tracking-widest font-black px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
                                       placeholder="IMEI 1"
                                     />
                                   </div>
