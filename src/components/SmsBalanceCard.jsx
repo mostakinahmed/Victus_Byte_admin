@@ -13,7 +13,7 @@ const SmsBalanceCard = () => {
     try {
       // Calling the backend route we created
       const { data } = await axios.get(
-        "http://api.victusbyte.com/api/order/sms-balance",
+        "https://api.victusbyte.com/api/order/sms-balance",
       );
       setBalance(data.balance);
     } catch (err) {
