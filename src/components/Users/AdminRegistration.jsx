@@ -89,6 +89,8 @@ export default function AdminRegistration() {
     });
   };
 
+  console.log(formData);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -117,15 +119,6 @@ export default function AdminRegistration() {
         },
       });
 
-      // const res = await axios.patch(
-      //   `https://fabribuzz.onrender.com/api/order/update/${orderId}`,
-      //   updatedData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
       const data = formData;
       const res = await axios.post(
         "https://api.victusbyte.com/api/user/admin/signup",

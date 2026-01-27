@@ -207,17 +207,17 @@ export default function Invoice() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 ">
+    <div className="min-h-screen bg-slate-50 font-sans ">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* --- SEARCH BAR: Passive Mode --- */}
-        <div className="bg-white p-2 rounded-2xl shadow-xl shadow-slate-200/50 mb-8 border border-slate-100">
+        <div className="bg-white p-2 rounded-2xl shadow-xl shadow-slate-200/50 mb-8 border border-slate-200">
           <div className="flex flex-col lg:flex-row gap-2">
             <div className="relative flex-1 group">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
               <input
                 type="text"
                 placeholder="Enter Order ID - OID1012023034045"
-                className="w-full pl-12 pr-4 py-3.5 placeholder:tracking-widest bg-slate-50 border border-transparent rounded-xl text-sm font-bold text-slate-700 outline-none focus:bg-white focus:border-indigo-500 transition-all"
+                className="w-full pl-12 pr-4 py-3 placeholder:tracking-wider uppercase placeholder:font-normal tracking-wider bg-slate-50 border border-transparent rounded-xl text-md  font-bold text-slate-700 outline-none focus:bg-white focus:border-indigo-500 transition-all"
                 value={orderId}
                 onChange={handleInputChange}
                 onKeyDown={(e) => e.key === "Enter" && handleGenerate()}

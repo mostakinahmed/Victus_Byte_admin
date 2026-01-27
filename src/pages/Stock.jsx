@@ -78,9 +78,7 @@ export default function Users() {
             {/* Meta Indicators */}
             <div className="hidden lg:flex items-center gap-4">
               <div className="flex flex-col items-end">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">
-                  Database Engine
-                </span>
+             
                 <span className="text-[10px] font-bold text-emerald-500 flex items-center gap-1">
                   <FiArrowUpCircle /> Cloud Sync Active
                 </span>

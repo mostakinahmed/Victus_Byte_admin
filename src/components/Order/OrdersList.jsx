@@ -30,7 +30,7 @@ const OrderList = () => {
   const { productData, orderData, updateApi } = useContext(DataContext);
 
   const navigate = useNavigate();
-  const [filter, setFilter] = useState({ orderId: "", pid: "" });
+  const [filter, setFilter] = useState({ orderId: "", phone: "" });
   const [selectedStatus, setSelectedStatus] = useState("All Orders");
   const [statusOpen, setStatusOpen] = useState(false);
   const [startDate, setStartDate] = useState(null);
@@ -68,7 +68,13 @@ const OrderList = () => {
       ? order.order_id.toLowerCase().includes(filter.orderId.toLowerCase())
       : true;
 
-    return statusMatch && dateMatch && orderIdMatch;
+    const phoneMatch = filter.phone
+      ? order.shipping_address.phone
+          .toLowerCase()
+          .includes(filter.phone.toLowerCase())
+      : true;
+
+    return statusMatch && dateMatch && orderIdMatch && phoneMatch;
   });
 
   //filter product data for showing image
@@ -100,7 +106,7 @@ const OrderList = () => {
   const handleReset = () => {
     setSelectedStatus("All Orders");
     setStartDate(null);
-    setFilter({ orderId: "", pid: "" });
+    setFilter({ orderId: "", phone: "" });
     setShowDetails(null);
     setSelectedOrderId(null);
   };
@@ -146,10 +152,8 @@ const OrderList = () => {
           );
 
           if (isMissingImei) {
-            alert(
-              "Required: Please enter IMEI details for MObile!",
-            );
-            return; 
+            alert("Required: Please enter IMEI details for MObile!");
+            return;
           }
         }
       }
@@ -261,7 +265,7 @@ const OrderList = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen md:p-3 p-1">
+    <div className="bg-white min-h-screen md:p-3 p-1 font-sans">
       {/* Filters */}
       <div className="w-full flex flex-col gap-3 lg:flex-row lg:items-center mb-3">
         {/* Professional Status Dropdown */}
@@ -274,7 +278,7 @@ const OrderList = () => {
       ${
         statusOpen
           ? "border-indigo-500 ring-4 ring-indigo-500/10 shadow-sm"
-          : "border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-sm"
+          : "border-slate-300 text-slate-700 hover:border-slate-300"
       }`}
           >
             <div className="flex items-center gap-2">
@@ -360,7 +364,7 @@ const OrderList = () => {
               selected={startDate}
               onChange={(date) => setStartDate(date)}
               placeholderText="DD / MM / YYYY"
-              className="w-full pl-4 pr-11 py-2.5 bg-white border border-slate-200 text-sm font-bold text-slate-700 rounded-lg shadow-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 cursor-pointer placeholder:text-slate-300 placeholder:font-normal"
+              className="w-full pl-4 pr-11 py-2.5 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded-lg  outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 cursor-pointer placeholder:text-slate-400 placeholder:font-normal"
               dateFormat="dd / MM / yyyy"
               // This wrapper ensures the calendar popup looks clean
               calendarClassName="border-slate-200 shadow-xl rounded-xl font-sans"
@@ -374,8 +378,6 @@ const OrderList = () => {
         </div>
 
         {/* Order ID Search */}
-
-        {/* Professional Order ID Search */}
         <div className="w-full lg:w-64 relative group">
           {/* Label - Consistent with Date and Status */}
           <div className="relative">
@@ -391,7 +393,26 @@ const OrderList = () => {
               onChange={(e) =>
                 setFilter({ ...filter, orderId: e.target.value })
               }
-              className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 text-sm font-bold text-slate-700 rounded-lg shadow-sm outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 placeholder:text-slate-300 placeholder:font-normal"
+              className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded-lg outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 placeholder:text-slate-400 placeholder:font-normal"
+            />
+          </div>
+        </div>
+
+        {/* Phone Search */}
+        <div className="w-full lg:w-64 relative group">
+          {/* Label - Consistent with Date and Status */}
+          <div className="relative">
+            {/* Search Icon */}
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors duration-200">
+              <FiSearch size={18} />
+            </div>
+
+            <input
+              type="text"
+              placeholder="Phone Number..."
+              value={filter.phone}
+              onChange={(e) => setFilter({ ...filter, phone: e.target.value })}
+              className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded-lg outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 placeholder:text-slate-400 placeholder:font-normal"
             />
           </div>
         </div>
@@ -402,7 +423,7 @@ const OrderList = () => {
           {/* Aligns with inputs that have labels */}
           <button
             onClick={handleReset}
-            className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-slate-200 text-slate-500 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all duration-200 active:scale-95 group shadow-sm"
+            className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-slate-300 text-slate-500 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all duration-200 active:scale-95 group"
           >
             <FiRefreshCcw
               size={14}
@@ -416,13 +437,13 @@ const OrderList = () => {
       {/* Orders Table */}
       <div className="md:flex gap-3 ">
         {/* Left Side: Order Table */}
-        <div className="lg:w-3/4 bg-white rounded-xl max-h-280 overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
+        <div className="lg:w-5/6 bg-white rounded-xl max-h-280 overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
               {/* Table Header */}
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-200">
-                  <th className="px-6 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
                     Order Reference
                   </th>
                   <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -433,6 +454,9 @@ const OrderList = () => {
                   </th>
                   <th className="px-6 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">
                     Fulfillment Status
+                  </th>
+                  <th className="px-2 pr-5 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">
+                    Edit
                   </th>
                 </tr>
               </thead>
@@ -446,39 +470,41 @@ const OrderList = () => {
                     return (
                       <tr
                         key={order.order_id}
-                        onClick={() => handleRowClick(order)}
-                        className={`group cursor-pointer transition-all duration-200 ${
+                        className={`group transition-all duration-200 ${
                           isSelected ? "bg-indigo-50" : "hover:bg-slate-100"
                         }`}
                       >
                         {/* Order ID with Monospace font */}
-                        <td className="px-6 py-2">
+                        <td className="px-4 py-2">
                           <div className="flex items-center gap-3">
                             {isSelected && (
                               <div className="w-1 h-4 bg-indigo-600 rounded-full" />
                             )}
-                            <span className="font-mono font-bold text-sm text-indigo-600 tracking-tight">
+                            <span
+                              onClick={() => handleRowClick(order)}
+                              className="font-mono font-bold text-sm cursor-pointer text-indigo-600 tracking-tight"
+                            >
                               #{order.order_id}
                             </span>
                           </div>
                         </td>
 
                         {/* Customer Name */}
-                        <td className="px-4 py-2">
+                        <td className="px-1 py-2">
                           <span className="text-sm font-semibold text-slate-700">
                             {order.shipping_address.recipient_name}
                           </span>
                         </td>
 
                         {/* Date */}
-                        <td className="px-2 py-2">
+                        <td className="px-1 py-2">
                           <span className="text-xs font-medium text-slate-500">
                             {order.order_date}
                           </span>
                         </td>
 
                         {/* Modern Status Pills */}
-                        <td className="px-6 py-2 text-center">
+                        <td className="px-4 py-2 text-center">
                           <span
                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider border ${
                               order.status === "Pending"
@@ -507,6 +533,29 @@ const OrderList = () => {
                             />
                             {order.status}
                           </span>
+                        </td>
+
+                        {/* edit */}
+                        <td className="px-1 text-center">
+                          <button
+                            className="p-2 text-slate-500 cursor-pointer hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 group"
+                            title="Edit Item"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                          </button>
                         </td>
                       </tr>
                     );

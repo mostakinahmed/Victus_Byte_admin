@@ -63,7 +63,7 @@ const AdminList = () => {
   // };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-500">
+    <div className="bg-white rounded border border-slate-200 overflow-hidden animate-in fade-in duration-500">
       {editAdmin ? (
         <UpdateAdmin user={editAdmin} back={() => setEditAdmin(null)} />
       ) : (

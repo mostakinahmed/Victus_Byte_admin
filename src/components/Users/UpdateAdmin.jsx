@@ -106,7 +106,7 @@ export default function UpdateAdmin({ back, user }) {
   };
 
   return (
-    <div className="w-full min-h-screen lg:max-w-2xl mx-auto lg:mt-6 bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="w-full lg:max-w-2xl mx-auto lg:mt-6 mb-5 bg-white  border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header: Identity Sync */}
       <div className="bg-slate-50 border-b border-slate-100 md:p-6 p-2 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -125,11 +125,7 @@ export default function UpdateAdmin({ back, user }) {
             </p>
           </div>
         </div>
-        <div className="hidden md:block">
-          <span className="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-100">
-            System Protocol v2.0
-          </span>
-        </div>
+       
       </div>
 
       <div className="md:p-8 p-2 relative">
@@ -148,7 +144,7 @@ export default function UpdateAdmin({ back, user }) {
           </div>
         )}
 
-        {/* ✅ Success Protocol */}
+        {/*Success Protocol */}
         {success && (
           <div className="absolute inset-0 bg-white/90 backdrop-blur-lg flex items-center justify-center z-50 p-8 animate-in zoom-in-95 duration-300">
             <div className="max-w-xs w-full flex flex-col items-center text-center">
@@ -176,7 +172,7 @@ export default function UpdateAdmin({ back, user }) {
         )}
 
         {formVisible && (
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Section 1: Basic Profile */}
             <div className="space-y-5">
               <div className="flex items-center gap-2 border-b border-slate-50 pb-2">
@@ -188,7 +184,7 @@ export default function UpdateAdmin({ back, user }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-tighter ml-1">
+                  <label className="text-[15px] font-medium text-slate-500   ml-1">
                     Full Name
                   </label>
                   <div className="relative group">
@@ -206,8 +202,8 @@ export default function UpdateAdmin({ back, user }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-tighter ml-1">
-                    Account Handle
+                  <label className="text-[15px] font-medium text-slate-500   ml-1">
+                    username:
                   </label>
                   <div className="relative group">
                     <FiAtSign className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
@@ -224,7 +220,7 @@ export default function UpdateAdmin({ back, user }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-tighter ml-1">
+                  <label className="text-[15px] font-medium text-slate-500   ml-1">
                     Corporate Email
                   </label>
                   <div className="relative group">
@@ -241,7 +237,7 @@ export default function UpdateAdmin({ back, user }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-tighter ml-1">
+                  <label className="text-[15px] font-medium text-slate-500   ml-1">
                     Secure Contact
                   </label>
                   <div className="relative group">
@@ -268,8 +264,8 @@ export default function UpdateAdmin({ back, user }) {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-tighter ml-1">
-                    Change Keyphrase
+                  <label className="text-[15px] font-medium text-slate-500   ml-1">
+                    Change Password
                   </label>
                   <div className="relative group">
                     <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
@@ -285,8 +281,8 @@ export default function UpdateAdmin({ back, user }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-tighter ml-1">
-                    Avatar Resource URL
+                  <label className="text-[15px] font-medium text-slate-500   ml-1">
+                    Image Resource URL
                   </label>
                   <div className="relative group">
                     <FiImage className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
@@ -301,7 +297,7 @@ export default function UpdateAdmin({ back, user }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-tighter ml-1">
+                  <label className="text-[15px] font-medium text-slate-500   ml-1">
                     Clearance Role
                   </label>
                   <div className="relative">
@@ -320,7 +316,7 @@ export default function UpdateAdmin({ back, user }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-tighter ml-1">
+                  <label className="text-[15px] font-medium text-slate-500   ml-1">
                     Operational Status
                   </label>
                   <div className="relative">
@@ -352,7 +348,7 @@ export default function UpdateAdmin({ back, user }) {
                 />
                 <label
                   htmlFor="confirmAdmin"
-                  className="text-[11px] font-bold text-slate-600 uppercase tracking-tight cursor-pointer"
+                  className="text-[11px] font-bold text-slate-600 uppercase  cursor-pointer"
                 >
                   I certify these credential modifications are authorized.
                 </label>

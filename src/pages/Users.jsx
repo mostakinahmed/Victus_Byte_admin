@@ -9,11 +9,11 @@ export default function Users() {
   const [activeTab, setActiveTab] = useState("customer");
 
   return (
-    <div className="mt-12 md:mt-0">
+    <div className="mt-12 md:mt-0 font-sans">
       <Navbar pageTitle="User Management" />
       <div className="bg-white shadow-lg  p-3 w-full mx-auto">
         {/* Buttons */}
-        <div className="flex justify-center w-full lg:mb-0 mb-2">
+        <div className="flex justify-center w-full lg:mb-0 mb-2 pb-5">
           <button
             onClick={() => setActiveTab("customer")}
             className={`lg:px-15 px-4  lg:py-2 py-1  font-medium ${

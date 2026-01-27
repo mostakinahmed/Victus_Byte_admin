@@ -131,11 +131,11 @@ export default function CheckAndUpdateStock() {
   ).length;
 
   return (
-    <div className="md:flex border-t min-h-screen md:mt-3">
+    <div className="md:flex border-t min-h-screen md:mt-3 font-sans">
       {/* Left Panel: Professional Inventory Lookup */}
       <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-sm flex flex-col">
         {/* Header Section */}
-        <div className="md:px-5 px-2 py-4 b border-b border-slate-100 bg-slate-50/50">
+        <div className="md:px-5 px-2 py-4 b border-b border-slate-200 ">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
             <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
@@ -155,10 +155,10 @@ export default function CheckAndUpdateStock() {
                 <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                 <input
                   type="text"
-                  placeholder="Enter Product-ID or SKU-ID..."
+                  placeholder="Product-ID or SKU-ID..."
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                  className="w-full pl-10 pr-4 py-2 bg-slate-50 placeholder:text-sm  placeholder:font-normal placeholder:tracking-wider border uppercase border-slate-300 rounded-xl text-md font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                 />
               </div>
             </div>
@@ -286,7 +286,7 @@ export default function CheckAndUpdateStock() {
               <p className="text-sm font-black text-slate-400 uppercase tracking-widest">
                 Product Info Required
               </p>
-              <p className="text-[10px] text-slate-400 mt-1">
+              <p className="text-[11px] text-slate-400 mt-1">
                 Search via Product ID to populate details
               </p>
             </div>
@@ -298,7 +298,7 @@ export default function CheckAndUpdateStock() {
       {/* 📊 Middle Panel: Professional SKU Ledger */}
       <div className="md:w-1/2 mt-2 md:mt-0 border-r border-slate-200 bg-white  overflow-hidden shadow-sm flex flex-col h-full">
         {/* Section Header */}
-        <div className="md:px-5 px-2 py-4 border-b border-slate-100 bg-slate-50/50">
+        <div className="md:px-5 px-2 py-4 border-b border-slate-200">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
             <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
@@ -423,8 +423,8 @@ export default function CheckAndUpdateStock() {
         <div
           className={`md:px-5 px-2 py-4 border-b ${
             toggle
-              ? "bg-slate-50/50 border-slate-100"
-              : "bg-indigo-50/30 border-indigo-100"
+              ? "bg-slate-50/50 border-slate-200"
+              : "bg-indigo-50/30 border-indigo-200"
           }`}
         >
           <div className="flex items-center gap-2">
