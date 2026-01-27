@@ -13,13 +13,30 @@ import {
 } from "react-icons/fi";
 import { AuthContext } from "../Context Api/AuthContext";
 import { RiBroadcastLine } from "react-icons/ri";
+import { RefreshCw } from "lucide-react";
+import { DataContext } from "@/Context Api/ApiContext";
 
 export default function Navbar({ pageTitle }) {
+  const { updateApi } = useContext(DataContext);
+
   const { user, logout } = useContext(AuthContext);
   const [showPopup, setShowPopup] = useState(false);
 
   const toggleAdminPopup = () => {
     setShowPopup((prev) => !prev);
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsLoading(true);
+    try {
+      // Your API call logic here
+      updateApi();
+    } finally {
+      // Slight delay so the user sees the spin
+      setTimeout(() => setIsLoading(false), 500);
+    }
   };
 
   return (
@@ -39,7 +56,19 @@ export default function Navbar({ pageTitle }) {
       </div>
 
       {/* --- Right Side: System Actions & Identity --- */}
-      <div className="flex items-center gap-4 lg:gap-6">
+      <div className="flex items-center gap-4  lg:gap-6">
+        <button
+          onClick={handleRefresh}
+          disabled={isLoading}
+          className="p-2 rounded-full hover:bg-gray-100 cursor-pointer transition-colors disabled:opacity-50"
+          aria-label="Refresh data"
+        >
+          <RefreshCw
+            size={22}
+            className={`text-blue-600 ${isLoading ? "animate-spin" : ""}`}
+          />
+        </button>
+
         {/* Live Broadcast Indicator */}
         <a
           href="https://victusbyte.com"
