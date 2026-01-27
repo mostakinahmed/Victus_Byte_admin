@@ -4,6 +4,7 @@ import { DataContext } from "@/Context Api/ApiContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import api from "@/Context Api/api";
 
 const AddProduct = () => {
   const { updateApi, categoryData, loading } = useContext(DataContext);
@@ -158,15 +159,15 @@ const AddProduct = () => {
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading(),
       });
-      const res = await axios.post(
-        "https://api.victusbyte.com/api/product",
-        data,
-      );
+      const res = await api.post("/product", data);
+
       updateApi();
-      await axios.post("https://api.victusbyte.com/api/stock/create-stock", {
+
+      await api.post("/stock/create-stock", {
         pID: res.data.pID,
         sID: res.data.sID,
       });
+
       Swal.fire({
         icon: "success",
         title: "Product Saved!",
@@ -416,7 +417,7 @@ const AddProduct = () => {
               <div className="flex-1 md:p-6 p-2 bg-gray-50">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="md:text-xl line-clamp-1 font-bold text-gray-800 border-b-2 border-blue-500 pb-1">
-                     Specifications Dynamic
+                    Specifications Dynamic
                   </h2>
                   <button
                     type="button"

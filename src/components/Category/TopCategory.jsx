@@ -11,6 +11,7 @@ import {
   FiLayers,
   FiCheck,
 } from "react-icons/fi";
+import api from "@/Context Api/api";
 
 export const TopCategory = () => {
   const { updateApi, categoryData } = useContext(DataContext);
@@ -36,10 +37,7 @@ export const TopCategory = () => {
       };
 
       console.log(data);
-
-      await axios.patch("https://api.victusbyte.com/api/category", {
-        data,
-      });
+      const res = await api.patch("/category", data);
 
       updateApi();
 
@@ -70,7 +68,7 @@ export const TopCategory = () => {
           </div>
           <div>
             <h2 className="md:text-sm text-xs font-black text-slate-800 uppercase tracking-widest">
-            <span className="hidden md:block">Homepage</span>   Highlights
+              <span className="hidden md:block">Homepage</span> Highlights
             </h2>
             <p className="text-[10px] hidden md:block text-slate-400 font-bold uppercase">
               Featured categories on storefront

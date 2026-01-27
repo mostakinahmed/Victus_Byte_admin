@@ -12,8 +12,10 @@ import {
 import FuzzyText from "@/components/FuzzyText";
 import Navbar from "../components/Navbar";
 import SmsBalanceCard from "@/components/SmsBalanceCard";
+import Cookies from "js-cookie";
 
 export default function Dashboard() {
+
   return (
     <div className="min-h-screen bg-slate-50 pb-10 mt-12 md:mt-0">
       <Navbar pageTitle="System Overview" />

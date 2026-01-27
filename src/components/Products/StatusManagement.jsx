@@ -14,6 +14,7 @@ import {
   FiX,
   FiPlus,
 } from "react-icons/fi";
+import api from "@/Context Api/api";
 
 export const StatusManagement = () => {
   const { productData, updateApi } = useContext(DataContext);
@@ -75,7 +76,7 @@ export const StatusManagement = () => {
         value,
       };
 
-      await axios.patch("https://api.victusbyte.com/api/product", data);
+      await api.patch("/product", data);
 
       updateApi();
 
@@ -237,7 +238,7 @@ export const StatusManagement = () => {
                           onClick={() =>
                             submit(
                               item.pID,
-                              selected === "discount" ? 0 : "remove"
+                              selected === "discount" ? 0 : "remove",
                             )
                           }
                           className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all"
@@ -302,7 +303,7 @@ export const StatusManagement = () => {
                           p.pID.toLowerCase().includes(search.toLowerCase())) &&
                         (selected === "discount"
                           ? p.price.discount === 0
-                          : p.status[selected] === false)
+                          : p.status[selected] === false),
                     )
                     .map((item) => (
                       <div

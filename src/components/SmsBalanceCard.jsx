@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiMessageSquare, FiRefreshCw, FiAlertTriangle } from "react-icons/fi";
+import api from "@/Context Api/api";
 
 const SmsBalanceCard = () => {
   const [balance, setBalance] = useState(null);
@@ -10,11 +11,10 @@ const SmsBalanceCard = () => {
   const fetchBalance = async () => {
     setLoading(true);
     setError(false);
+
     try {
       // Calling the backend route we created
-      const { data } = await axios.get(
-        "https://api.victusbyte.com/api/order/sms-balance",
-      );
+      const { data } = await api.get("/order/sms-balance");
       setBalance(data.balance);
     } catch (err) {
       console.error("Balance fetch error:", err);
@@ -47,7 +47,7 @@ const SmsBalanceCard = () => {
           className="text-gray-500 hover:text-blue-600 transition-colors"
           title="Refresh Balance"
         >
-          <FiRefreshCw size={24}  className={loading ? "animate-spin" : ""} />
+          <FiRefreshCw size={24} className={loading ? "animate-spin" : ""} />
         </button>
       </div>
 

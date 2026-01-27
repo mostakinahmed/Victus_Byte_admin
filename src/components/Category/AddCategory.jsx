@@ -8,6 +8,10 @@ import { FaSpinner, FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { DataContext } from "@/Context Api/ApiContext";
 import { FiHash, FiTag } from "react-icons/fi";
+import api from "@/Context Api/api";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 const AddCategory = () => {
   const navigate = useNavigate();
@@ -27,32 +31,43 @@ const AddCategory = () => {
     setCategory({ ...category, [name]: value });
   };
 
-
-
-
   // Reset form fields
   const resetForm = () => {
     setCategory({
       catID: "",
       catName: "",
-      
     });
   };
 
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitLoader(true);
-    setSuccess(false);
 
     try {
-      await axios.post("https://api.victusbyte.com/api/category", category);
-      setSuccess(true);
+      // Show loading state
+      MySwal.fire({
+        title: "Saving...",
+        allowOutsideClick: false,
+        didOpen: () => MySwal.showLoading(),
+      });
+
+      const res = await api.post("/category", category);
       updateApi();
+      resetForm();
+      // Success Alert
+      MySwal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Category has been added to Victus Byte.",
+        timer: 2000,
+      });
     } catch (error) {
-      console.error("Error submitting category:", error);
-      alert("Failed to save category!");
-      setSubmitLoader(false);
+      // Error Alert
+      MySwal.fire({
+        icon: "error",
+        title: "Failed ❌",
+        text: error.response?.data?.message || "Could not save category",
+      });
     }
   };
 
@@ -69,49 +84,11 @@ const AddCategory = () => {
               <h2 className="md:text-xl  font-black text-slate-800">
                 Create Architecture
               </h2>
-             
             </div>
           </div>
         </div>
 
         <CardContent className="p-6">
-          {/* 🚀 Advanced Loader / Success Overlay */}
-          {submitLoader && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-md z-20 transition-all duration-300">
-              {!success ? (
-                <div className="flex flex-col items-center animate-pulse">
-                  <Loader2 className="text-indigo-600 h-12 w-12 animate-spin mb-4" />
-                  <p className="text-slate-800 font-black text-xs uppercase tracking-widest">
-                    Writing to Catalog...
-                  </p>
-                </div>
-              ) : (
-                <div className="p-8 flex flex-col items-center text-center animate-in zoom-in-95 duration-300">
-                  <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
-                    <CheckCircle className="text-emerald-500 h-12 w-12" />
-                  </div>
-                  <p className="text-slate-900 font-black text-lg">
-                    Creation Successful
-                  </p>
-                  <p className="text-slate-500 text-sm mb-6 font-medium">
-                    The new category is now live in the manifest.
-                  </p>
-                  <Button
-                    className="w-full bg-slate-900 text-white rounded-xl py-6 hover:bg-indigo-600 shadow-lg shadow-indigo-100 transition-all font-black text-xs uppercase tracking-widest"
-                    onClick={() => {
-                      resetForm();
-                      setSubmitLoader(false);
-                      setSuccess(false);
-                      navigate("/category");
-                    }}
-                  >
-                    Return to Manifest
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
-
           {/* 📝 Professional Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6">

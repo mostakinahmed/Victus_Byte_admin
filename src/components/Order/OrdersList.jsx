@@ -25,6 +25,7 @@ import {
   FiHash,
   FiClock,
 } from "react-icons/fi";
+import api from "@/Context Api/api";
 
 const OrderList = () => {
   const { productData, orderData, updateApi } = useContext(DataContext);
@@ -201,65 +202,37 @@ const OrderList = () => {
     }
 
     try {
-      const res = await axios.patch(
-        `https://api.victusbyte.com/api/order/update/${orderId}`,
-        updatedData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      // Update API and show success
-      updateApi();
-
-      MySwal.hideLoading();
-      MySwal.update({
-        icon: "success",
-        title: (
-          <p className="text-green-600 text-xl font-bold">
-            Order {actionBtn} ✅
-          </p>
-        ),
-        html: (
-          <p className="text-gray-700">
-            Order <b>#{showDetails.order_id || "123"}</b> has been successfully
-            updated!
-          </p>
-        ),
-        showConfirmButton: true,
-        confirmButtonText: "OK",
-        customClass: {
-          confirmButton:
-            "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
-        },
-        buttonsStyling: false,
+      // 1. Start the spinner
+      MySwal.fire({
+        title: "Processing...",
+        text: "Updating order status...",
+        allowOutsideClick: false,
+        didOpen: () => MySwal.showLoading(),
       });
 
+      // 2. The API Call
+      const res = await api.patch(`/order/update/${orderId}`, updatedData);
+
+      // 3. Refresh Data
+      await updateApi();
+
+      // 4. STOP THE SPINNER (Critical Fix)
+      // Since you don't want a "Success" popup, we must close it manually.
+      MySwal.close();
+
+      // 5. UI Cleanup
       setShowDetails(null);
     } catch (error) {
-      // Hide loading first
-      MySwal.hideLoading();
+      // 6. ERROR HANDLER (Loud Failure)
+      // We don't use MySwal.close() here because MySwal.fire for error will replace the loading one.
+      const status = error.response?.status;
+      const errorMsg = error.response?.data?.message || "Internal Server Error";
 
-      // Show error alert
       MySwal.fire({
         icon: "error",
-        title: "Update Failed",
-        html: (
-          <p className="text-gray-700">
-            Something went wrong while updating the order.
-            <br />
-            {error.response?.data?.message || error.message}
-          </p>
-        ),
-        showConfirmButton: true,
-        confirmButtonText: "OK",
-        customClass: {
-          confirmButton:
-            "bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg",
-        },
-        buttonsStyling: false,
+        title: status === 403 ? "Permission Denied 🚫" : "Update Failed ❌",
+        text: errorMsg,
+        confirmButtonColor: "#EF4444",
       });
     }
   };
@@ -437,7 +410,7 @@ const OrderList = () => {
       {/* Orders Table */}
       <div className="md:flex gap-3 ">
         {/* Left Side: Order Table */}
-        <div className="lg:w-5/6 bg-white rounded-xl max-h-280 overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
+        <div className="lg:w-5/6 bg-white rounded-xl max-h-240 overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
               {/* Table Header */}

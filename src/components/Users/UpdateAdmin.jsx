@@ -16,6 +16,7 @@ import {
   FiCheckCircle,
   FiAlertCircle,
 } from "react-icons/fi";
+import api from "@/Context Api/api.js";
 
 export default function UpdateAdmin({ back, user }) {
   const { updateApi, adminData } = useContext(DataContext);
@@ -64,10 +65,8 @@ export default function UpdateAdmin({ back, user }) {
       setFormVisible(false);
       const data = formData;
 
-      const res = await axios.put(
-        `https://api.victusbyte.com/api/user/admin/update/${user._id}`,
-        data,
-      );
+      //call backend
+      const res = await api.put(`/user/admin/update/${user._id}`, data);
 
       if (res.status === 200) {
         updateApi(); // refresh admin list
@@ -125,7 +124,6 @@ export default function UpdateAdmin({ back, user }) {
             </p>
           </div>
         </div>
-       
       </div>
 
       <div className="md:p-8 p-2 relative">

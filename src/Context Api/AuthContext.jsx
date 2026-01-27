@@ -1,8 +1,9 @@
 // src/context/AuthContext.jsx
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { DataContext } from "./ApiContext";
 
 export const AuthContext = createContext();
 
@@ -11,6 +12,9 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const { updateApi } = useContext(DataContext);
+
+  const Base_URL = "http://localhost:3000/api";
   // Check login status once when app loads
   useEffect(() => {
     const checkAuth = async () => {
@@ -23,10 +27,9 @@ export const AuthProvider = ({ children }) => {
           return;
         }
 
-        const res = await axios.post(
-          "https://api.victusbyte.com/api/user/admin/check-auth",
-          { token },
-        );
+        const res = await axios.post(`${Base_URL}/user/admin/check-auth`, {
+          token,
+        });
         setUser(res.data.user);
       } catch {
         setUser(null);
@@ -40,22 +43,22 @@ export const AuthProvider = ({ children }) => {
   // 🔹 Login
   const login = async (email, password) => {
     try {
-      const res = await axios.post(
-        "https://api.victusbyte.com/api/user/admin/signin",
-        { email, password },
-      );
+      const res = await axios.post(`${Base_URL}/user/admin/signin`, {
+        email,
+        password,
+      });
 
       // Save token
       Cookies.set("token", res.data.token);
 
       // Verify user after login
       const token = Cookies.get("token");
-      const res2 = await axios.post(
-        "https://api.victusbyte.com/api/user/admin/check-auth",
-        { token },
-      );
+      const res2 = await axios.post(`${Base_URL}/user/admin/check-auth`, {
+        token,
+      });
 
       setUser(res2.data.user);
+      updateApi();
       return res2.data.user; // return user data to Login component
     } catch (error) {
       // 🔹 Throw error with response so Login.jsx can handle it
@@ -68,28 +71,28 @@ export const AuthProvider = ({ children }) => {
   };
 
   // 🔹 Signup
-  const signup = async (data) => {
-    try {
-      const res = await axios.post(
-        "https://api.victusbyte.com/api/user/signup",
-        data,
-      );
+  // const signup = async (data) => {
+  //   try {
+  //     const res = await axios.post(
+  //       "https://api.victusbyte.com/api/user/signup",
+  //       data,
+  //     );
 
-      Cookies.set("token", res.data.tokenLast);
+  //     Cookies.set("token", res.data.tokenLast);
 
-      const token = Cookies.get("token");
-      const res2 = await axios.post(
-        "https://api.victusbyte.com/api/user/check-auth",
-        { token },
-      );
-      setUser(res2.data.user);
-      navigate("/profile");
-    } catch (error) {
-      throw (
-        error.response || { status: 500, data: { message: "Signup error" } }
-      );
-    }
-  };
+  //     const token = Cookies.get("token");
+  //     const res2 = await axios.post(
+  //       "https://api.victusbyte.com/api/user/check-auth",
+  //       { token },
+  //     );
+  //     setUser(res2.data.user);
+  //     navigate("/profile");
+  //   } catch (error) {
+  //     throw (
+  //       error.response || { status: 500, data: { message: "Signup error" } }
+  //     );
+  //   }
+  // };
 
   // 🔹 Logout
   const logout = async () => {
@@ -99,9 +102,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, loading, login, signup, logout }}
-    >
+    <AuthContext.Provider value={{ user, setUser, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

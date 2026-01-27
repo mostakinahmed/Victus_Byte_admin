@@ -17,6 +17,10 @@ import {
 } from "react-icons/fi"; // Feather search icon
 import { FaSpinner, FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
+import api from "@/Context Api/api";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 export default function CheckAndUpdateStock() {
   const { productData, stockData, updateApi } = useContext(DataContext);
@@ -99,28 +103,58 @@ export default function CheckAndUpdateStock() {
 
   //add stock button
   const addStock = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
+
+    // 1. Local validation before calling the API
+    if (!selectedProduct?.pID || !formData.skuID) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Please select a product and enter a SKU ID.",
+      });
+    }
 
     try {
-      // setSubmitLoader(true);
+      // We don't show a 'Loading' popup here for a "Frictionless" feel.
+      // However, you should still use your 'success' state to disable the button.
       setSuccess(true);
+
       const data = {
         pID: selectedProduct.pID,
         skuID: formData.skuID,
-        comment: formData.comment,
+        comment: formData.comment || "Manual Restock",
       };
 
-      const res = await axios.post(
-        "https://api.victusbyte.com/api/stock/add-stock",
-        data,
-      );
-      updateApi();
-      setFormData({ skuID: "", comment: "" });
-      setSuccess(false);
+      // 2. The API Call
+      const res = await api.post("/stock/add-stock", data);
+
+      // 3. SILENT SUCCESS
+      // If we reach this line, the API worked.
+      await updateApi(); // Refresh the table so the admin sees the change
+      setFormData({ skuID: "", comment: "" }); // Reset form
+
+      // Note: No 'Success' Swal.fire here as per your request!
     } catch (error) {
       console.error("Error adding stock:", error);
+
+      // 4. LOUD FAILURE
+      // Only show a popup if something actually goes wrong (Access Denied, etc.)
+      const status = error.response?.status;
+      const errorMsg =
+        error.response?.data?.message || "Check your internet connection.";
+
+      let title = "Update Failed ❌";
+      if (status === 401) title = "Session Expired ";
+      if (status === 403) title = "Access Denied 🚫";
+
+      Swal.fire({
+        icon: "error",
+        title: title,
+        text: errorMsg,
+        confirmButtonColor: "#EF4444", // Tailwind red-500
+      });
     } finally {
-      setSuccess(false);
+      setSuccess(false); // Re-enable the button
     }
   };
 

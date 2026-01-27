@@ -5,14 +5,8 @@ import axios from "axios";
 import { DataContext } from "@/Context Api/ApiContext.jsx";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import api from "@/Context Api/api.js";
 const MySwal = withReactContent(Swal);
-
-// ✅ Utility: Generate Order ID
-// function generateUserId() {
-//   const timestamp = Date.now().toString().slice(-4);
-//   const randomNum = Math.floor(10000 + Math.random() * 90000);
-//   return `A${timestamp}${randomNum}`;
-// }
 
 export default function AdminRegistration() {
   const { updateApi } = useContext(DataContext);
@@ -126,11 +120,9 @@ export default function AdminRegistration() {
         },
       });
 
+      //call backend
       const data = formData;
-      const res = await axios.post(
-        "https://api.victusbyte.com/api/user/admin/signup",
-        data,
-      );
+      const res = await api.post("/user/admin/signup", data);
 
       if (res.status === 201) {
         updateApi(); // refresh admin list
@@ -177,23 +169,26 @@ export default function AdminRegistration() {
       }
     } catch (err) {
       MySwal.hideLoading();
+
       MySwal.update({
-        icon: "success",
-        title: <p className="text-green-600 text-xl font-bold">Failled ✅</p>,
+        icon: "error", // Changed to error
+        title: <p className="text-red-600 text-xl font-bold">Failed ❌</p>, // Red text and X icon
         html: (
           <div className="text-gray-700 mt-2 mb-4">
-            Admin <b>#{formData.fullName}</b> can't updated!
+            Admin <b>#{formData.fullName}</b> could not be updated. Please try
+            again.
           </div>
         ),
         showConfirmButton: true,
-        confirmButtonText: "OK",
+        confirmButtonText: "Try Again",
         customClass: {
           popup: "ml-45",
           confirmButton:
-            "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
+            "bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg", // Red button
         },
         buttonsStyling: false,
       });
+
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
