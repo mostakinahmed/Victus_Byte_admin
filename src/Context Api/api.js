@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 // 1. Set the Base URL if you want
 const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://api.victusbyte.com/api",
 });
 
 // 2. Add the Interceptor

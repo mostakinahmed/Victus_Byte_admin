@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
   const { updateApi } = useContext(DataContext);
 
-  const Base_URL = "http://localhost:3000/api";
+  const Base_URL = "https://api.victusbyte.com/api";
   // Check login status once when app loads
   useEffect(() => {
     const checkAuth = async () => {
