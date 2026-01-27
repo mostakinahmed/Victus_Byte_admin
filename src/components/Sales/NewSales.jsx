@@ -44,12 +44,27 @@ const mockCustomers = [
   },
 ];
 
-// ✅ Utility: Generate Order ID
+// Utility: Generate Professional Unique Order ID (12 Digits)
 function generateOrderId() {
-  const timestamp = Date.now().toString().slice(-5);
-  const randomNum = Math.floor(10000 + Math.random() * 90000);
-  return `OID25${timestamp}${randomNum}`;
+  const now = new Date();
+
+  // 1. Today's Date: YYMMDD (6 digits)
+  const year = now.getFullYear().toString().slice(-2);
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const dateStr = `${year}${month}${day}`;
+
+  // 2. Milliseconds: (4 digits)
+  // We take the last 4 digits of the timestamp
+  const msStr = now.getTime().toString().slice(-4);
+
+  // 3. Random Number: (2 digits)
+  const randomStr = Math.floor(10 + Math.random() * 90).toString();
+
+  return `OID${dateStr}${msStr}${randomStr}`;
 }
+
+// Example Output: OID260127458291
 
 // ✅ Utility: Format date & time (12-hour)
 function getOrderDateTime12h() {

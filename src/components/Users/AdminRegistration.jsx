@@ -7,6 +7,13 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 const MySwal = withReactContent(Swal);
 
+// ✅ Utility: Generate Order ID
+// function generateUserId() {
+//   const timestamp = Date.now().toString().slice(-4);
+//   const randomNum = Math.floor(10000 + Math.random() * 90000);
+//   return `A${timestamp}${randomNum}`;
+// }
+
 export default function AdminRegistration() {
   const { updateApi } = useContext(DataContext);
   const [error, setError] = useState("");
