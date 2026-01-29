@@ -800,11 +800,18 @@ const OrderList = () => {
 
               {/* 🚚 3. Payment & Shipping Summary */}
               <section className="bg-slate-900  rounded-2xl md:p-6 p-3 text-white shadow-xl space-y-5">
-                <div className="flex items-center gap-2 border-b border-white/10 pb-3">
-                  <FiTruck className="text-indigo-400" />
-                  <h3 className="text-[10px] font-black uppercase tracking-widest text-indigo-300">
-                    Logistics & Settlement
-                  </h3>
+                <div className="flex justify-between">
+                  <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+                    <FiTruck className="text-indigo-400" />
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-indigo-300">
+                      Logistics & Settlement
+                    </h3>
+                  </div>
+                  <div className="flex items-center gap-2 border-b border-white/10 pb-3">
+                    <h3 className="text-[10px] font-black uppercase tracking-widest text-indigo-300">
+                      Saler ID: {showDetails.mode}
+                    </h3>
+                  </div>
                 </div>
 
                 <div className="space-y-3">
@@ -858,8 +865,9 @@ const OrderList = () => {
                     </p>
                   </div>
                   <div className="text-right flex flex-col items-end gap-1">
-                    <div className="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/20">
-                      VERIFIED
+                    <div className="bg-emerald-500/10 text-emerald-400 text-[12px] font-bold px-2 py-0.5 rounded border border-emerald-500/20">
+                      Coupon: {showDetails.coupon?.couponID} -{" "}
+                      {showDetails.coupon?.value}
                     </div>
                     <p className="text-[12px] font-bold text-slate-500 italic">
                       {showDetails.order_date}

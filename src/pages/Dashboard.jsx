@@ -128,7 +128,7 @@ export default function Dashboard() {
                   <div className="flex items-center gap-3">
                     <FiPlusCircle className="text-slate-400 group-hover:text-indigo-600" />
                     <span className="text-xs font-black text-slate-700 uppercase tracking-tighter">
-                      Add New Product
+                      Create New Sale
                     </span>
                   </div>
                   <FiArrowUpRight className="text-slate-300 group-hover:text-indigo-600" />
