@@ -14,7 +14,7 @@ import Navbar from "@/components/Navbar";
 import { DataContext } from "@/Context Api/ApiContext";
 
 const Offer = () => {
-  const { couponData, orderData } = useContext(DataContext);
+  const { couponData, orderData, updateApi } = useContext(DataContext);
 
   const [coupons, setCoupons] = useState([]);
   const [orders, setOrders] = useState([]); // New state for order handshake
@@ -46,13 +46,13 @@ const Offer = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await axios.post("https://api.victusbyte.com/coupon/create", {
+      await axios.post("https://api.victusbyte.com/api/coupon/create", {
         ...newCoupon,
         couponID: newCoupon.couponID.toUpperCase().trim(),
       });
       toast.success("Coupon created successfully!");
       setNewCoupon({ couponID: "", value: "", minTK: "", status: true });
-      fetchData(); // Refresh both lists
+      updateApi(); // Refresh both lists
     } catch (err) {
       toast.error(err.response?.data?.message || "Creation failed");
     } finally {
@@ -67,7 +67,7 @@ const Offer = () => {
         status: !currentStatus,
       });
       toast.success(`Coupon ${!currentStatus ? "Activated" : "Disabled"}`);
-      fetchData();
+      updateApi();
     } catch (err) {
       toast.error("Update failed");
     }
