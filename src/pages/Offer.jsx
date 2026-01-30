@@ -46,7 +46,7 @@ const Offer = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await axios.post("http://localhost:3000/api/coupon/create", {
+      await axios.post("https://api.victusbyte.com/coupon/create", {
         ...newCoupon,
         couponID: newCoupon.couponID.toUpperCase().trim(),
       });
@@ -63,7 +63,7 @@ const Offer = () => {
   // 4. Toggle Status (Active/Inactive)
   const toggleStatus = async (id, currentStatus) => {
     try {
-      await axios.patch(`http://localhost:3000/api/coupon/toggle/${id}`, {
+      await axios.patch(`https://api.victusbyte.com/coupon/toggle/${id}`, {
         status: !currentStatus,
       });
       toast.success(`Coupon ${!currentStatus ? "Activated" : "Disabled"}`);
