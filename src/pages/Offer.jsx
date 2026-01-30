@@ -63,7 +63,7 @@ const Offer = () => {
   // 4. Toggle Status (Active/Inactive)
   const toggleStatus = async (id, currentStatus) => {
     try {
-      await axios.patch(`https://api.victusbyte.com/coupon/toggle/${id}`, {
+      await axios.patch(`https://api.victusbyte.com/api/coupon/toggle/${id}`, {
         status: !currentStatus,
       });
       toast.success(`Coupon ${!currentStatus ? "Activated" : "Disabled"}`);
