@@ -112,7 +112,7 @@ export const StatusManagement = () => {
     <div>
       <Navbar pageTitle="Status Management" />
 
-      <div className="space-y-6 animate-in fade-in duration-500">
+      <div className="space-y-6 font-sans animate-in fade-in duration-500">
         {/* --- 1. COMMAND TOOLBAR --- */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
           <div className="flex flex-col lg:flex-row items-center gap-4">
@@ -126,7 +126,7 @@ export const StatusManagement = () => {
                 <select
                   value={selected}
                   onChange={(e) => setSelected(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
                 >
                   <option value="none">Select Campaign Category...</option>
                   <option value="isFeatured">Featured Product</option>

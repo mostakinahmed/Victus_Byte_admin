@@ -56,7 +56,7 @@ export default function Products() {
   );
 
   return (
-    <div className="mt-12  md:mt-0">
+    <div className="mt-12 font-s  md:mt-0">
       <Navbar pageTitle="Product Management" />
 
       {/* --- 1. COMMAND BAR: FILTERS & SEARCH --- */}
@@ -73,11 +73,11 @@ export default function Products() {
                   setCategoryFilter(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl md:text-sm text-xs font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
+                className="w-full pl-10 pr-4 py-1.5 bg-slate-50 border border-slate-300 rounded-xl md:text-lg text-sm text-black outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
               >
                 <option value="All">All Categories</option>
                 {catList.map((cat) => (
-                  <option key={cat} value={cat}>
+                  <option key={cat} value={cat} >
                     {cat}
                   </option>
                 ))}
@@ -95,7 +95,7 @@ export default function Products() {
                   setSearchId(e.target.value.toUpperCase());
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl md:text-sm text-xs font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                className="w-full pl-10 pr-4 py-1.5 bg-slate-50 border border-slate-300 rounded-xl md:text-lg text-sm  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
               />
             </div>
           </div>
@@ -103,13 +103,13 @@ export default function Products() {
           <div className="flex gap-3 w-full lg:w-auto">
             <button
               onClick={() => navigate("/products/status-management")}
-              className="flex-1 lg:flex-none flex items-center justify-center gap-2 md:px-6 px-2 md:py-2.5 py-1 bg-slate-200 cursor-pointer border border-slate-200 rounded-xl text-xs font-black uppercase tracking-widest text-slate-600 hover:bg-slate-100 transition-all active:scale-95"
+              className="flex-1 lg:flex-none flex items-center justify-center gap-2 md:px-6 px-2 md:py-2.5 py-1 bg-slate-300 cursor-pointer rounded-xl text-md   tracking-widest text-black hover:bg-slate-400 transition-all active:scale-95"
             >
               <FiGrid /> Status
             </button>
             <button
               onClick={() => navigate("/products/add-product")}
-              className="flex-1 lg:flex-none flex items-center justify-center gap-2 md:px-6 px-1 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95"
+              className="flex-1 lg:flex-none flex items-center justify-center gap-2 md:px-6 px-1 py-2.5 bg-slate-900 text-white rounded-xl text-sm uppercase tracking-widest hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95"
             >
               <FiPlus /> New Product
             </button>
@@ -121,28 +121,28 @@ export default function Products() {
       <div className="mx- mt-4 bg-white pb-5 rounded border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse whitespace-nowrap">
-            <thead className="bg-slate-100 border-b border-slate-100">
+            <thead className="bg-slate-100 border-b font-sans border-slate-100">
               <tr>
-                <th className="px-6 py-4 text-[12px] font-black text-slate-600 uppercase tracking-widest">
+                <th className="px-6 py-4 text-[12px]  text-black uppercase tracking-widest">
                   Image
                 </th>
-                <th className="px-6 py-4 text-[12px] font-black text-slate-600 uppercase tracking-widest">
+                <th className="px-6 py-4 text-[12px]  text-black uppercase tracking-widest">
                   Ref ID
                 </th>
-                <th className="px-6 py-4 text-[12px] font-black text-slate-600 uppercase tracking-widest">
+                <th className="px-6 py-4 text-[12px]  text-black uppercase tracking-widest">
                   Product Name
                 </th>
-                <th className="px-6 py-4 text-[12px] font-black text-slate-600 uppercase tracking-widest">
+                <th className="px-6 py-4 text-[12px]  text-black uppercase tracking-widest">
                   Brand
                 </th>
-                <th className="px-6 py-4 text-[12px] font-black text-slate-600 uppercase tracking-widest">
+                <th className="px-6 py-4 text-[12px]  text-black uppercase tracking-widest">
                   Category
                 </th>
-                <th className="px-6 py-4 text-[12px] font-black text-slate-600 uppercase tracking-widest">
+                <th className="px-6 py-4 text-[12px]  text-black uppercase tracking-widest">
                   Pricing (৳)
                 </th>
 
-                <th className="px-6 py-4 text-[12px] font-black text-slate-600 uppercase tracking-widest text-center">
+                <th className="px-6 py-4 text-[12px]  text-black uppercase tracking-widest text-center">
                   Actions
                 </th>
               </tr>
@@ -164,29 +164,29 @@ export default function Products() {
                       </div>
                     </td>
                     <td className="px-6 py-1">
-                      <span className="text-xs font-mono font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg">
+                      <span className="text-sm font-mono font-black text-black bg-indigo-200 px-2 py-1 tracking-wide rounded-lg">
                         #{product.pID}
                       </span>
                     </td>
                     <td className="px-6 py-1">
-                      <p className="text-sm font-black text-slate-800 uppercase tracking-tight truncate max-w-[200px]">
+                      <p className="text-sm text-slate-800  truncate max-w-[300px]">
                         {product.name}
                       </p>
                     </td>
                     <td className="px-6 py-1">
-                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">
+                      <span className="text-sm">
                         {product.brandName}
                       </span>
                     </td>
                     <td className="px-6 py-1">
-                      <span className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      <span className="flex items-center gap-1.5 text-sm">
                         <FiTag className="text-indigo-400" /> {product.category}
                       </span>
                     </td>
 
                     <td className="px-6 py-1">
                       <div className="flex flex-col">
-                        <span className="text-sm font-black text-slate-900">
+                        <span className="text-sm font-black text-slate-600">
                           ৳{product?.price?.selling}
                         </span>
                         {product?.price?.discount > 0 && (
@@ -199,10 +199,10 @@ export default function Products() {
 
                     <td className="px-6 py-1">
                       <div className="flex justify-center gap-2">
-                        <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+                        <button className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
                           <FiEdit3 size={16} />
                         </button>
-                        <button className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all">
+                        <button className="p-2 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all">
                           <FiTrash2 size={16} />
                         </button>
                       </div>

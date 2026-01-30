@@ -30,6 +30,7 @@ export default function Sidebar() {
     { name: "Orders", path: "/orders", icon: <FiShoppingCart /> },
     { name: "Sales", path: "/sales", icon: <FiTrendingUp /> },
     { name: "Accounts", path: "/accounts", icon: <FiUser /> },
+    { name: "Offer/Coupon", path: "/offer", icon: <FiUser /> },
     { name: "Users", path: "/users", icon: <FiUsers /> },
     { name: "Tools", path: "/tools", icon: <FiFileText /> },
     { name: "Courier", path: "/courier", icon: <FiFileText /> },
@@ -38,7 +39,7 @@ export default function Sidebar() {
   return (
     <>
       {/* --- MOBILE TOP HEADER --- */}
-      <div className="lg:hidden fixed top-0 left-0 w-full h-12 bg-slate-900 border-b border-slate-800 z-[120] flex items-center px-4 justify-between">
+      <div className="lg:hidden fixed font-sans top-0 left-0 w-full h-12 bg-slate-900 border-b border-slate-800 z-[120] flex items-center px-4 justify-between">
         <div className="flex items-center gap-3" onClick={() => navigate("/")}>
           <div className="p-1.5 bg-indigo-600 rounded-lg shadow-lg">
             <FiLayers size={20} className="text-white" />
@@ -57,7 +58,7 @@ export default function Sidebar() {
 
       {/* --- SIDEBAR --- */}
       <div
-        className={`fixed top-0 left-0 h-screen bg-slate-900 text-white flex flex-col transition-all duration-300 z-[100] border-r border-slate-800 
+        className={`fixed top-0 left-0 h-screen font-sans bg-slate-900 text-white flex flex-col transition-all duration-300 z-[100] border-r border-slate-800 
         ${isMobileExpanded ? "w-64" : "w-13"} lg:w-64 lg:sticky md:mt-16 mt-12 lg:mt-0`}
       >
         {/* --- BRAND IDENTITY (Desktop) --- */}
@@ -92,7 +93,7 @@ export default function Sidebar() {
               >
                 <span className="text-xl shrink-0">{link.icon}</span>
                 <span
-                  className={`ml-4 text-[11px] font-black uppercase tracking-widest transition-all duration-300 
+                  className={`ml-4   tracking-widest transition-all duration-300 
                   ${isMobileExpanded ? "w-32 opacity-100 block" : "w-0 opacity-0 hidden lg:block lg:w-32 lg:opacity-100"}`}
                 >
                   {link.name}
@@ -170,7 +171,7 @@ export default function Sidebar() {
       {/* --- MOBILE OVERLAY --- */}
       {isMobileExpanded && (
         <div
-          className="lg:hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[90]"
+          className="lg:hidden fixed font-sans inset-0 bg-slate-900/60 backdrop-blur-sm z-[90]"
           onClick={() => {
             setIsMobileExpanded(false);
             setIsServicesOpen(false);

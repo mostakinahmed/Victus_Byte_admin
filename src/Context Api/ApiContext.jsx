@@ -7,6 +7,7 @@ export const DataContext = createContext();
 
 export const ApiContext = ({ children }) => {
   const [productData, setProductData] = useState([]);
+  const [couponData, setCouponData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [adminData, setAdminData] = useState([]);
   const [stockData, setStockData] = useState([]);
@@ -35,6 +36,7 @@ export const ApiContext = ({ children }) => {
           api.get("/order"),
           api.get("/category"),
           api.get("/product"),
+          api.get("/coupon/admin/all"),
         ]);
 
         // Safely set data for each promise result
@@ -48,6 +50,8 @@ export const ApiContext = ({ children }) => {
           setCategoryData(results[3].value.data);
         if (results[4].status === "fulfilled")
           setProductData(results[4].value.data);
+        if (results[5].status === "fulfilled")
+          setCouponData(results[5].value.data?.data || []);
 
         // Check if all failed (Optional: show error if user is logged in but can't see anything)
         const allRejected = results.every((res) => res.status === "rejected");
@@ -67,11 +71,14 @@ export const ApiContext = ({ children }) => {
   useEffect(() => {
     updateApi();
   }, [Cookies.get("token")]);
-
+  
+  console.log(orderData);
+  console.log(couponData);
   const contextValue = {
     productData,
     categoryData,
     adminData,
+    couponData,
     stockData,
     orderData,
     loading,

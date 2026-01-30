@@ -16,7 +16,7 @@ const CategoryList = ({ data = [] }) => {
   }, [searchTerm, data]);
 
   return (
-    <div className="bg-white  border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white font-sans  border border-slate-200 shadow-sm overflow-hidden">
       {/* --- Minimalist Header --- */}
       <div className="md:px-5 px-2 py-3 border-b border-slate-100 bg-white flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -37,7 +37,7 @@ const CategoryList = ({ data = [] }) => {
             placeholder="Filter ID or Name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full md:w-60 pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium"
+            className="w-full md:w-60 pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium"
           />
         </div>
       </div>

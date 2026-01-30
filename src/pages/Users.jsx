@@ -4,9 +4,10 @@ import { div } from "framer-motion/client";
 import AdminRegistration from "../components/Users/AdminRegistration";
 import AdminList from "../components/Users/AdminList";
 import CustomerList from "../components/Users/CustomerList";
+import SystemPersonnel from "@/components/Users/EmployeeCard";
 
 export default function Users() {
-  const [activeTab, setActiveTab] = useState("customer");
+  const [activeTab, setActiveTab] = useState("system");
 
   return (
     <div className="mt-12 md:mt-0 font-sans">
@@ -14,6 +15,16 @@ export default function Users() {
       <div className="bg-white shadow-lg  p-3 w-full mx-auto">
         {/* Buttons */}
         <div className="flex justify-center w-full lg:mb-0 mb-2 pb-5">
+          <button
+            onClick={() => setActiveTab("system")}
+            className={`lg:px-15 px-4  lg:py-2 py-1  font-medium ${
+              activeTab === "system"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
+          >
+            System User
+          </button>
           <button
             onClick={() => setActiveTab("customer")}
             className={`lg:px-15 px-4  lg:py-2 py-1  font-medium ${
@@ -64,6 +75,7 @@ export default function Users() {
           {activeTab === "customer" && <CustomerList />}
 
           {activeTab === "addAdmin" && <AdminRegistration />}
+          {activeTab === "system" && <SystemPersonnel />}
         </div>
       </div>
     </div>

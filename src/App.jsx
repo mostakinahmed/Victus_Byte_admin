@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
+import Offer from "./pages/Offer";
 import Products from "./pages/Products";
 import Stock from "./pages/Stock";
 import Orders from "./pages/Orders";
@@ -167,6 +168,14 @@ function AppLayout() {
             element={
               <PrivateRoute>
                 <Courier />
+              </PrivateRoute>
+            }
+          />
+             <Route
+            path="/offer"
+            element={
+              <PrivateRoute>
+                <Offer />
               </PrivateRoute>
             }
           />
