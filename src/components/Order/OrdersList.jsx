@@ -18,17 +18,21 @@ import {
   FiCreditCard,
   FiTruck,
   FiCopy,
+  FiMinusCircle,
   FiSlash,
   FiCheckCircle,
   FiPhone,
   FiMail,
   FiHash,
   FiClock,
+  FiAlertCircle,
 } from "react-icons/fi";
 import api from "@/Context Api/api";
+import OrderEditModal from "./EditOrder";
 
 const OrderList = () => {
-  const { productData, orderData, updateApi } = useContext(DataContext);
+  const { productData, orderData, updateApi, stockData } =
+    useContext(DataContext);
 
   const navigate = useNavigate();
   const [filter, setFilter] = useState({ orderId: "", phone: "" });
@@ -49,6 +53,9 @@ const OrderList = () => {
     "Completed",
     "Cancelled",
   ];
+
+  const [isValid, setIsvalid] = useState(false);
+  console.log(skuInputs);
 
   //for highlight selection
   const handleRowClick = (order) => {
@@ -119,6 +126,53 @@ const OrderList = () => {
       [product_id]: value,
     }));
   };
+
+  console.log(stockData);
+
+  //SKU validation
+  // 1. New state to track validation status per product
+  const [skuStatus, setSkuStatus] = useState({});
+  useEffect(() => {
+    const newStatus = {};
+
+    Object.keys(skuInputs).forEach((productID) => {
+      const enteredSku = skuInputs[productID]?.toUpperCase().trim();
+
+      if (!enteredSku) {
+        setIsvalid(false);
+        newStatus[productID] = "empty";
+
+        return;
+      }
+
+      // 1. Find the stock item that contains this SKU
+      const matchedStockItem = stockData?.find((stock) =>
+        stock.SKU?.some((s) => s.skuID === enteredSku),
+      );
+
+      setIsvalid(true);
+      if (matchedStockItem) {
+        // 2. Find the specific SKU object inside that stock item
+        const specificSku = matchedStockItem.SKU.find(
+          (s) => s.skuID === enteredSku,
+        );
+
+        // 3. Check the "Sold" status
+        if (specificSku.status === true) {
+          newStatus[productID] = "valid"; // Exists & Available
+          setIsvalid(true);
+        } else {
+          newStatus[productID] = "sold"; // Exists but Sold (status: false)
+        }
+      } else {
+        newStatus[productID] = "invalid"; // Doesn't exist in system
+      }
+    });
+
+    setSkuStatus(newStatus);
+  }, [skuInputs, stockData]);
+
+  console.log(isValid);
 
   //backend handle
   const submitBtn = async (e) => {
@@ -234,6 +288,33 @@ const OrderList = () => {
         text: errorMsg,
         confirmButtonColor: "#EF4444",
       });
+    }
+  };
+  // This stores the order data when you click edit
+  const [editingOrder, setEditingOrder] = useState(null);
+
+  // This controls the visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  //edit
+  const handleOrderEdit = (order) => {
+    setEditingOrder(order); // 1. Pass the data into state
+    setIsModalOpen(true); // 2. Open the modal
+  };
+
+  const handleUpdateSubmit = async (updatedOrder) => {
+    try {
+      const res = await api.put(
+        `/order/update/${updatedOrder._id}`,
+        updatedOrder,
+      );
+
+      if (res.data.success) {
+        toast.success("Order Synced Successfully");
+        setIsModalOpen(false);
+        fetchOrders(); // Refresh your main list
+      }
+    } catch (err) {
+      toast.error("Failed to update order");
     }
   };
 
@@ -455,7 +536,7 @@ const OrderList = () => {
                             )}
                             <span
                               onClick={() => handleRowClick(order)}
-                              className="font-mono font-bold text-sm cursor-pointer text-indigo-600 tracking-tight"
+                              className="font-mono hover:underline font-bold text-sm cursor-pointer text-indigo-600 tracking-tight"
                             >
                               #{order.order_id}
                             </span>
@@ -511,6 +592,7 @@ const OrderList = () => {
                         {/* edit */}
                         <td className="px-1 text-center">
                           <button
+                            onClick={() => handleOrderEdit(order)}
                             className="p-2 text-slate-500 cursor-pointer hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 group"
                             title="Edit Item"
                           >
@@ -548,6 +630,19 @@ const OrderList = () => {
             </table>
           </div>
         </div>
+
+        {/* //edit */}
+
+        {isModalOpen && editingOrder && (
+          <OrderEditModal
+            order={editingOrder}
+            onClose={() => {
+              setIsModalOpen(false);
+              setEditingOrder(null); // Clear data on close
+            }}
+            onSave={handleUpdateSubmit}
+          />
+        )}
 
         {/* right side */}
         <div className="w-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full min-h-[700px]">
@@ -656,7 +751,7 @@ const OrderList = () => {
                           {/* Modern Data Grid for SKU & Comments */}
                           <div className="grid md:grid-cols-2 gap-3 mt-3">
                             {/* Comment Block */}
-                            <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-100/50">
+                            <div className="p-2.5 rounded-lg bg-indigo-50 border border-indigo-100/50">
                               <p className="text-[12px] line-clamp-1 font-black text-indigo-400 uppercase mb-1">
                                 User Specifications
                               </p>
@@ -667,22 +762,84 @@ const OrderList = () => {
                             </div>
 
                             {/* SKU Block */}
-                            <div className="p-2.5 rounded-xl bg-green-100 border border-slate-200">
-                              <p className="text-[12px] font-black text-slate-500 uppercase tracking mb-1">
-                                Serial Number
-                              </p>
+                            <div className="p-2.5 rounded-lg bg-orange-100 border border-slate-200">
+                              <div className="flex gap-5">
+                                <p className="text-[12px] font-black text-slate-500 uppercase tracking mb-1">
+                                  Serial Number
+                                </p>
+
+                                {isValid &&
+                                  skuStatus &&
+                                  skuStatus[item.product_id] && (
+                                    <div className="flex items-center gap-2 -mt-2">
+                                      {/* Circular Icon Handshake */}
+                                      <div
+                                        className={`
+        w-8 h-8 flex items-center justify-center rounded-full transition-all duration-500 border
+        ${
+          skuStatus[item.product_id] === "valid"
+            ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+            : skuStatus[item.product_id] === "sold"
+              ? "bg-amber-50 text-amber-600 border-amber-100"
+              : "bg-rose-50 text-rose-600 border-rose-100"
+        }
+      `}
+                                      >
+                                        {skuStatus[item.product_id] ===
+                                        "valid" ? (
+                                          <FiCheckCircle
+                                            size={16}
+                                            className="animate-in fade-in zoom-in duration-300"
+                                          />
+                                        ) : skuStatus[item.product_id] ===
+                                          "sold" ? (
+                                          <FiMinusCircle
+                                            size={16}
+                                            className="animate-in fade-in zoom-in duration-300"
+                                          />
+                                        ) : (
+                                          <FiAlertCircle
+                                            size={16}
+                                            className="animate-in fade-in zoom-in duration-300"
+                                          />
+                                        )}
+                                      </div>
+
+                                      {/* Dynamic Text Label */}
+                                      <p
+                                        className={`text-[10px] font-black uppercase tracking-tight hidden sm:block 
+        ${
+          skuStatus[item.product_id] === "valid"
+            ? "text-emerald-600"
+            : skuStatus[item.product_id] === "sold"
+              ? "text-amber-600"
+              : "text-rose-600"
+        }
+      `}
+                                      >
+                                        {skuStatus[item.product_id] === "valid"
+                                          ? "Ready to Dispatch"
+                                          : skuStatus[item.product_id] ===
+                                              "sold"
+                                            ? "Already Sold"
+                                            : "Invalid SKU"}
+                                      </p>
+                                    </div>
+                                  )}
+                              </div>
+
                               {showDetails.status === "Confirmed" ? (
-                                <div className="relative group/input">
+                                <div className="relative group/input mt-2">
                                   <input
                                     type="text"
                                     value={skuInputs[item.product_id] || ""}
                                     onChange={(e) =>
                                       handleSkuChange(
                                         item.product_id,
-                                        e.target.value,
+                                        e.target.value.toUpperCase(),
                                       )
                                     }
-                                    className="w-full text-[15px] tracking-widest font-black px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                    className="w-full text-[15px] uppercase tracking-wide font-semibold px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
                                     placeholder="Assign SKU..."
                                   />
                                 </div>
@@ -703,7 +860,7 @@ const OrderList = () => {
                             </div>
 
                             {/* SKU & IMEI Block */}
-                            <div className="p-2.5 rounded-xl bg-red-100 border border-slate-200">
+                            <div className="p-2.5 rounded-lg bg-red-100 border border-slate-200">
                               <p className="text-[12px] font-black text-slate-500 uppercase mb-1">
                                 IMEI Number
                               </p>
@@ -712,7 +869,7 @@ const OrderList = () => {
                                   {/* IMEI Inputs */}
                                   <div className="flex gap-2">
                                     <input
-                                      type="text"
+                                      type="number"
                                       value={imei1Inputs[item.product_id] || ""}
                                       onChange={(e) =>
                                         setImei1Inputs({
@@ -720,7 +877,7 @@ const OrderList = () => {
                                           [item.product_id]: e.target.value,
                                         })
                                       }
-                                      className="w-full text-[15px] tracking-widest font-black px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                      className="w-full text-[15px] tracking-wide font-semibold px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
                                       placeholder="IMEI 1"
                                     />
                                   </div>

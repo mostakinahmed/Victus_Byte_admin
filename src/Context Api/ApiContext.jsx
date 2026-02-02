@@ -72,8 +72,7 @@ export const ApiContext = ({ children }) => {
     updateApi();
   }, [Cookies.get("token")]);
   
-  console.log(orderData);
-  console.log(couponData);
+
   const contextValue = {
     productData,
     categoryData,

@@ -236,7 +236,7 @@ export default function CheckAndUpdateStock() {
 
                   {/* Core Specs */}
                   <div className="flex-1 space-y-3 pt-1">
-                    <h2 className="md:text-xl font-black text-slate-900 leading-tight">
+                    <h2 className="md:text-lg font-medium text-slate-900 leading-tight">
                       {selectedProduct.name}
                     </h2>
 
@@ -602,11 +602,11 @@ export default function CheckAndUpdateStock() {
                       <input
                         type="text"
                         name="skuID"
-                        value={formData.skuID}
+                        value={formData.skuID.toUpperCase()}
                         onChange={handleFormDataChange}
                         placeholder="SN2026011501"
                         required
-                        className="w-full bg-slate-50 placeholder:text-slate-300 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-mono"
+                        className="w-full bg-slate-50 uppercase placeholder:text-slate-300 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-mono"
                       />
                     </div>
 
