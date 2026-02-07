@@ -41,7 +41,7 @@ function AppLayout() {
         className={`flex-1 ${
           hideSidebar
             ? "p-0"
-            : "px-2 lg:px-2 pb-6 pt-2 ml-13 md:ml-0 bg-gray-100 overflow-auto scroll-container"
+            : "px-2 pb-6 pt-2 md:ml-0 bg-gray-100 overflow-auto scroll-container"
         }`}
       >
         <ScrollToTop />

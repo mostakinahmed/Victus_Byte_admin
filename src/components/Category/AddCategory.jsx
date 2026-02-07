@@ -100,17 +100,17 @@ const AddCategory = () => {
                 <Input
                   type="text"
                   name="catID"
-                  value={category.catID}
+                  value={category.catID.toUpperCase()}
                   onChange={handleChange}
-                  placeholder="Mobile-902"
+                  placeholder="C0902"
                   required
-                  className="rounded-xl border-slate-200 h-11 font-bold text-slate-700 bg-slate-50/50 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
+                  className="rounded border-slate-200 h-10 font-medium text-slate-800 bg-slate-50/50 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
                 />
               </div>
 
               {/* Category Name */}
               <div className="space-y-1.5">
-                <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+                <label className="flex items-center gap-2 text-[10px] text-slate-500 uppercase tracking-widest ml-1">
                   <FiTag /> Manifest Name
                 </label>
                 <Input
@@ -120,7 +120,7 @@ const AddCategory = () => {
                   onChange={handleChange}
                   placeholder="Wearable Technology"
                   required
-                  className="rounded-xl border-slate-200 h-11 font-bold text-slate-700 bg-slate-50/50 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
+                  className="rounded border-slate-200 h-10 font-medium text-slate-800 bg-slate-50/50 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-300"
                 />
               </div>
             </div>

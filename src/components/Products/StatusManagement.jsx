@@ -109,7 +109,7 @@ export const StatusManagement = () => {
   };
 
   return (
-    <div>
+    <div className="mt-12">
       <Navbar pageTitle="Status Management" />
 
       <div className="space-y-6 font-sans animate-in fade-in duration-500">
@@ -126,7 +126,7 @@ export const StatusManagement = () => {
                 <select
                   value={selected}
                   onChange={(e) => setSelected(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 md:py-3 py-2 bg-slate-50 border border-slate-300 rounded-xl  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
                 >
                   <option value="none">Select Campaign Category...</option>
                   <option value="isFeatured">Featured Product</option>
@@ -139,11 +139,11 @@ export const StatusManagement = () => {
             </div>
 
             {/* Dynamic Title Display */}
-            <div className="flex-1 w-full bg-slate-900 rounded-2xl px-6 py-3 flex items-center justify-center lg:justify-start gap-3 shadow-lg shadow-slate-200">
+            <div className="flex-1 w-full bg-slate-900 rounded-2xl md:px-6 px-3 py-3 flex items-center md:justify-center lg:justify-start gap-3 shadow-lg shadow-slate-200">
               <div className="p-2 bg-indigo-500 rounded-lg text-white animate-pulse">
                 <FiZap size={18} />
               </div>
-              <h1 className="font-black text-lg text-white uppercase tracking-tighter">
+              <h1 className="md:font-black font-medium md:text-lg text-white uppercase md:tracking-tighter">
                 {selected === "none"
                   ? "Campaign Control Center"
                   : titleMap[selected]}
@@ -185,9 +185,9 @@ export const StatusManagement = () => {
 
         {/* --- 3. CAMPAIGN DATA TABLE --- */}
         {selected !== "none" && (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-in slide-in-from-bottom-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden overflow-x-scroll animate-in slide-in-from-bottom-4">
             {filterData.length > 0 ? (
-              <table className="w-full text-left border-collapse whitespace-nowrap">
+              <table className="w-full text-left border-collapse overflow-x-auto whitespace-nowrap">
                 <thead className="bg-slate-100 border-b border-slate-100">
                   <tr>
                     <th className="px-6 py-4 text-[12px] font-black text-slate-500 uppercase tracking-widest">

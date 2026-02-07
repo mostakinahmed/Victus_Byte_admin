@@ -103,13 +103,13 @@ export default function Products() {
           <div className="flex gap-3 w-full lg:w-auto">
             <button
               onClick={() => navigate("/products/status-management")}
-              className="flex-1 lg:flex-none flex items-center justify-center gap-2 md:px-6 px-2 md:py-2.5 py-1 bg-slate-300 cursor-pointer rounded-xl text-md   tracking-widest text-black hover:bg-slate-400 transition-all active:scale-95"
+              className="flex-1 lg:flex-none flex items-center justify-center gap-2 md:px-6 px-2 md:py-2.5 py-1 bg-slate-300 cursor-pointer rounded-xl lg:text-md  text-sm   tracking-widest text-black hover:bg-slate-400 transition-all active:scale-95"
             >
               <FiGrid /> Status
             </button>
             <button
               onClick={() => navigate("/products/add-product")}
-              className="flex-1 lg:flex-none flex items-center justify-center gap-2 md:px-6 px-1 py-2.5 bg-slate-900 text-white rounded-xl text-sm uppercase tracking-widest hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95"
+              className="flex-1 lg:flex-none flex items-center justify-center gap-2 md:px-6 px-1 py-2.5 bg-slate-900 text-white rounded-xl text-sm  tracking-widest hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95"
             >
               <FiPlus /> New Product
             </button>
@@ -164,7 +164,7 @@ export default function Products() {
                       </div>
                     </td>
                     <td className="px-6 py-1">
-                      <span className="text-sm font-mono font-black text-black bg-indigo-200 px-2 py-1 tracking-wide rounded-lg">
+                      <span className="text-sm font-mono font-semibold text-slate-800 bg-indigo-100 px-2 py-1 tracking-wide rounded-lg">
                         #{product.pID}
                       </span>
                     </td>

@@ -141,6 +141,7 @@ const AdminSaleFull = () => {
     } else {
       items[idx][field] = value;
     }
+ 
     setOrder((prev) => ({ ...prev, items }));
   };
 
@@ -150,7 +151,7 @@ const AdminSaleFull = () => {
       ...prev,
       items: [
         ...prev.items,
-        { product_id: "", product_name: "", quantity: 1, product_price: 0 },
+        { product_id: "", product_name: "", quantity: 1, product_price: 1 },
       ],
     }));
   const removeItem = (idx) => {
@@ -161,9 +162,11 @@ const AdminSaleFull = () => {
   // Auto calculate totals
   useEffect(() => {
     const subtotal = order.items.reduce(
-      (sum, i) => sum + i.product_price * i.quantity,
+      (sum, i) => sum + i.product_price?.selling * i.quantity,
       0,
     );
+    console.log(subtotal);
+    
     const shipping = Number(order.shipping_cost || 0);
     const discount = Number(order.discount || 0);
     const total_amount = subtotal + shipping - discount;
@@ -179,8 +182,6 @@ const AdminSaleFull = () => {
     const value = e.target.value === "" ? "" : Number(e.target.value);
     setOrder((prev) => ({ ...prev, discount: value }));
   };
-
-  console.log(order);
 
   // ✅ Submit order
   const handleSubmit = async (e) => {
@@ -298,7 +299,7 @@ const AdminSaleFull = () => {
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-2">
               <div className="w-1 h-5 bg-indigo-600 rounded-full"></div>
-              <h3 className="font-bold text-slate-800 text-base uppercase tracking-wider">
+              <h3 className="font-bold text-slate-800 text-base md:uppercase tracking-wider">
                 Order Information
               </h3>
             </div>
@@ -401,7 +402,7 @@ const AdminSaleFull = () => {
                       onChange={
                         (e) => setOrder({ ...order, mode: e.target.value }) // FIX: lowercase 'mode'
                       }
-                      className="block w-full pl-10 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md appearance-none border shadow-sm bg-white"
+                      className="block w-full pl-10 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md appearance-none border  bg-white"
                     >
                       <option value="">Select Admin</option>
                       {adminData.map((admin) => (
@@ -438,7 +439,7 @@ const AdminSaleFull = () => {
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
-              <h3 className="font-bold text-slate-800 text-base uppercase tracking-wider">
+              <h3 className="font-bold text-slate-800 text-base md:uppercase tracking-wider">
                 Customer Details
               </h3>
             </div>
@@ -600,7 +601,7 @@ const AdminSaleFull = () => {
                     </label>
                     <input
                       type="text"
-                      placeholder="Full product title..."
+                      placeholder="Full product name..."
                       value={item.product_name}
                       onChange={(e) =>
                         handleItemChange(idx, "product_name", e.target.value)
@@ -623,7 +624,8 @@ const AdminSaleFull = () => {
                       </span>
                       <input
                         type="number"
-                        value={item.product_price}
+                        disabled
+                        value={item.product_price.selling}
                         onChange={(e) =>
                           handleItemChange(idx, "product_price", e.target.value)
                         }
@@ -850,7 +852,7 @@ const AdminSaleFull = () => {
                   <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
                     Subtotal
                   </p>
-                  <p className="text-white text-xl font-medium">
+                  <p className="text-white md:text-xl text-lg font-medium">
                     ৳
                     {order.subtotal.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
@@ -862,7 +864,7 @@ const AdminSaleFull = () => {
                   <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
                     Adjustments
                   </p>
-                  <p className="text-slate-300 text-xl font-medium">
+                  <p className="text-slate-300 md:text-xl text-lg font-medium">
                     {Number(order.shipping_cost || 0) > 0 && (
                       <span className="text-emerald-400">
                         +{order.shipping_cost}
@@ -881,7 +883,7 @@ const AdminSaleFull = () => {
                   <p className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em]">
                     Grand Total
                   </p>
-                  <p className="text-indigo-400 text-4xl font-black tracking-tight">
+                  <p className="text-indigo-400 md:text-4xl text-2xl  font-black tracking-tight">
                     ৳
                     {order.total_amount.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
@@ -898,7 +900,7 @@ const AdminSaleFull = () => {
                   className="flex-1 md:flex-none flex items-center justify-center gap-2 md:px-6 px-2 py-3.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl font-bold transition-all border border-transparent hover:border-slate-700"
                 >
                   <FiXCircle size={18} />
-                  <span>Discard</span>
+                  <span className="text-sm md:text-md">Discard</span>
                 </button>
 
                 <button
@@ -907,7 +909,7 @@ const AdminSaleFull = () => {
                 >
                   <FiSave size={18} />
                   <span className="hidden md:block"> SAVE ORDER</span>
-                  <span className="md:hidden">SAVE</span>
+                  <span className="md:hidden text-sm md:text-md">SAVE</span>
                   <FiArrowRight
                     size={18}
                     className="group-hover:translate-x-1 transition-transform"

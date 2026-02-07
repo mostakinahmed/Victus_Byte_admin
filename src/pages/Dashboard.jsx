@@ -21,7 +21,7 @@ export default function Dashboard() {
       <Navbar pageTitle="System Overview" />
 
       {/* --- 1. KPI STRIP --- */}
-      <div className="p-2 lg:p-2">
+      <div className="">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-4">
           <StatCard
             title="Total Inventory"

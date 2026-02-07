@@ -59,7 +59,7 @@ export default function Sales() {
           {/* Primary Action: Transaction Entry */}
           <button
             onClick={() => Navigate(`/sales/new`)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 text-white rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95 group"
+            className="flex items-center gap-2 px-6 py-2 bg-slate-900 text-white rounded-xl text-[11px] font-medium uppercase tracking-widest hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95 group"
           >
             <div className="p-1 bg-white/10 rounded-lg group-hover:bg-white/20 transition-colors">
               <FiPlus size={14} />

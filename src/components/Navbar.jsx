@@ -41,7 +41,7 @@ export default function Navbar({ pageTitle }) {
 
   return (
     /* ✅ Refined Container: White surface with subtle shadow and border */
-    <div className="flex justify-between items-center bg-white border-b border-slate-200 md:px-6 px-2 md:py-4 py-2 sticky top-0 z-[80] transition-all duration-300 mb-3 shadow mt-1">
+    <div className="flex justify-between items-center bg-white border-b border-slate-200 md:px-6 px-2 md:py-4 py-1.5 sticky top-0 z-[80] transition-all duration-300 mb-3 shadow mt-1">
       {/* --- Left Side: Dynamic Page Context --- */}
       <div className="flex items-center gap-3">
         <div className="w-1 h-8 bg-indigo-600 rounded-full hidden lg:block" />
@@ -127,15 +127,15 @@ export default function Navbar({ pageTitle }) {
 
       {/* --- Admin Profile Modal (Restored with your custom logic) --- */}
       {showPopup && user && (
-        <div className="fixed inset-0 flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0  flex items-center justify-center z-[100] p-4">
           {/* Overlay */}
           <div
-            className="absolute inset-0 bg-slate-950/40 backdrop-blur-md animate-in fade-in duration-500"
+            className="absolute inset-0  bg-slate-950/40 backdrop-blur-md animate-in fade-in duration-500"
             onClick={() => setShowPopup(false)}
           />
 
           {/* Modal Container: Landscape Orientation */}
-          <div className="relative bg-white rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.2)] w-full ml-12 max-w-[300px] md:max-w-[650px]  flex flex-col md:flex-row overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 border border-white/20">
+          <div className="relative bg-white rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.2)] w-full  max-w-[300px] md:max-w-[650px]  flex flex-col md:flex-row overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 border border-white/20">
             {/* Left Panel: Identity Branding */}
             <div className="relative w-full md:w-[240px] bg-slate-900 flex flex-col items-center justify-center p-8 overflow-hidden">
               {/* Abstract Background Decoration */}

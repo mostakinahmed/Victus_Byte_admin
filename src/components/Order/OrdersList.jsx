@@ -491,7 +491,7 @@ const OrderList = () => {
       {/* Orders Table */}
       <div className="md:flex gap-3 ">
         {/* Left Side: Order Table */}
-        <div className="lg:w-5/6 bg-white rounded-xl max-h-240 overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
+        <div className="lg:w-5/6 bg-white rounded-xl md:max-h-240 max-h-150  overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
               {/* Table Header */}
