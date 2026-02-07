@@ -20,7 +20,7 @@ export default function Products() {
   const [searchId, setSearchId] = useState("");
   const [catList, setCatList] = useState([]);
 
-  const productsPerPage = 10;
+  const productsPerPage = 9;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -155,7 +155,7 @@ export default function Products() {
                     className="hover:bg-slate-100 transition-colors group"
                   >
                     <td className="px-6 py-1">
-                      <div className="w-12 h-12  shadow-sm overflow-hidden">
+                      <div className="md:w-12 md:h-12 w-10  h-10 shadow-sm overflow-hidden">
                         <img
                           src={product.images[0]}
                           alt=""
@@ -164,7 +164,7 @@ export default function Products() {
                       </div>
                     </td>
                     <td className="px-6 py-1">
-                      <span className="text-sm font-mono font-semibold text-slate-800 bg-indigo-100 px-2 py-1 tracking-wide rounded-lg">
+                      <span className="text-xs font-mono font-semibold text-slate-800 bg-indigo-100 px-2 py-1 tracking-wide rounded-lg">
                         #{product.pID}
                       </span>
                     </td>

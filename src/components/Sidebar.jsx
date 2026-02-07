@@ -78,7 +78,7 @@ export default function Sidebar() {
         </div>
 
         {/* --- NAVIGATION --- */}
-        <nav className="flex-1 px-3 mt-5 lg:mt-4 md:space-y-2 space-y-1 overflow-y-auto no-scrollbar">
+        <nav className="flex-1 px-3 mt-5 lg:mt-4 md:space-y-2  overflow-y-auto no-scrollbar">
           {links.map((link) => {
             const isActive = location.pathname === link.path;
             return (
@@ -108,7 +108,7 @@ export default function Sidebar() {
           })}
 
           {/* --- SERVICES CLICKABLE DROPDOWN --- */}
-          <div className="relative mt-6 border border-slate-700 rounded-2xl">
+          <div className="relative mt-4 border border-slate-700 rounded-2xl">
             <button
               onClick={() => setIsServicesOpen(!isServicesOpen)}
               className={`flex items-center p-3 bg-slate-800/30 text-slate-400 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all w-full justify-start px-4`}
