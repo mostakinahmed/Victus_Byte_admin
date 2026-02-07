@@ -14,58 +14,58 @@ export default function Users() {
       <Navbar pageTitle="User Management" />
       <div className="bg-white shadow-lg  p-3 w-full mx-auto">
         {/* Buttons */}
-        <div className="flex justify-center w-full lg:mb-0 mb-2 pb-5">
-          <button
-            onClick={() => setActiveTab("system")}
-            className={`lg:px-15 px-4  lg:py-2 py-1  font-medium ${
-              activeTab === "system"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            System User
-          </button>
-          <button
-            onClick={() => setActiveTab("customer")}
-            className={`lg:px-15 px-4  lg:py-2 py-1  font-medium ${
-              activeTab === "customer"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Customer
-          </button>
+        {/* Main Container */}
+        <div className="flex flex-col lg:flex-row justify-between md:justify-center items-start w-full gap-4 mb-4">
+          {/* Left Side: System & Customer */}
+          <div className="flex flex-row lg:flex-row w-full lg:w-auto gap-2">
+            <button
+              onClick={() => setActiveTab("system")}
+              className={`flex-1 lg:w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                activeTab === "system"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              System User
+            </button>
+            <button
+              onClick={() => setActiveTab("customer")}
+              className={`flex-1 lg:w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                activeTab === "customer"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              Customer
+            </button>
+          </div>
 
-          <button
-            onClick={() => setActiveTab("admin")}
-            className={`lg:px-19 px-4 text-md ${
-              activeTab === "admin"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Admin
-          </button>
-          <button
-            onClick={() => setActiveTab("addAdmin")}
-            className={` lg:px-9 px-1 hidden lg:flex justify-center items-center font-medium line-clamp-1 ${
-              activeTab === "addAdmin"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            Add New Admin
-          </button>
-          <button
-            onClick={() => setActiveTab("addAdmin")}
-            className={` lg:px-9 w-1/3 px-1 lg:hidden font-medium  ${
-              activeTab === "addAdmin"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-          >
-            New-Admin
-          </button>
+          {/* Right Side: Admin Actions */}
+          <div className="flex flex-row w-full lg:w-auto gap-2">
+            <button
+              onClick={() => setActiveTab("admin")}
+              className={`flex-1 lg:w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                activeTab === "admin"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              Admin List
+            </button>
+
+            <button
+              onClick={() => setActiveTab("addAdmin")}
+              // Note: Removed lg:hidden so it's visible on large screens too,
+              // unless you specifically want it hidden there.
+              className={`flex-1 lg:w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                activeTab === "addAdmin"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              + New Admin
+            </button>
+          </div>
         </div>
 
         {/* Conditional Content */}

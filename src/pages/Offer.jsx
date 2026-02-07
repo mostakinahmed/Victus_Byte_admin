@@ -61,14 +61,31 @@ const Offer = () => {
   };
 
   // 4. Toggle Status (Active/Inactive)
+  // const toggleStatus = async (id, currentStatus) => {
+  //   try {
+  //     await axios.patch(`https://api.victusbyte.com/api/coupon/toggle/${id}`, {
+  //       status: !currentStatus,
+  //     });
+  //     toast.success(`Coupon ${!currentStatus ? "Activated" : "Disabled"}`);
+  //     updateApi();
+  //   } catch (err) {
+  //     toast.error("Update failed");
+  //   }
+  // };
+  
   const toggleStatus = async (id, currentStatus) => {
     try {
-      await axios.patch(`https://api.victusbyte.com/api/coupon/toggle/${id}`, {
-        status: !currentStatus,
-      });
+      // Adding withCredentials if your backend uses sessions/cookies
+      await axios.patch(
+        `https://api.victusbyte.com/api/coupon/toggle/${id}`,
+        { status: !currentStatus },
+        { withCredentials: true },
+      );
       toast.success(`Coupon ${!currentStatus ? "Activated" : "Disabled"}`);
       updateApi();
     } catch (err) {
+      // Better error logging to see what the server is saying
+      console.error("CORS or Server Error:", err.response?.data || err.message);
       toast.error("Update failed");
     }
   };
