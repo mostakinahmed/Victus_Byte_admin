@@ -76,7 +76,7 @@ const Offer = () => {
   const toggleStatus = async (id, currentStatus) => {
     try {
       // Adding withCredentials if your backend uses sessions/cookies
-      await axios.patch(
+      await axios.post(
         `https://api.victusbyte.com/api/coupon/toggle/${id}`,
         { status: !currentStatus },
         { withCredentials: true },

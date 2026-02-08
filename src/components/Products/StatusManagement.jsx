@@ -76,7 +76,7 @@ export const StatusManagement = () => {
         value,
       };
 
-      await api.patch("/product", data);
+      await api.post("/product/status", data);
 
       updateApi();
 
