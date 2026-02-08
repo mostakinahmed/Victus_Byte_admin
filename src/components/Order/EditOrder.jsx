@@ -37,7 +37,7 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
     setFormData({ ...formData, items: updatedItems, total_amount: newTotal });
   };
 
-  console.log(formData);
+
 
   return (
     <div className="fixed inset-0 z-[150] flex items-center justify-center p-0 sm:p-4">
@@ -61,7 +61,7 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
           </div>
           <button
             onClick={onClose}
-            className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-rose-500 transition-colors"
+            className="p-2.5 bg-white border border-slate-300 rounded-xl text-slate-600 hover:text-rose-500 transition-colors"
           >
             <FiX size={20} />
           </button>

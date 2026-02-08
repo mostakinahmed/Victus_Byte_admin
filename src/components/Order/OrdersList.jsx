@@ -55,7 +55,7 @@ const OrderList = () => {
   ];
 
   const [isValid, setIsvalid] = useState(false);
-  console.log(skuInputs);
+ 
 
   //for highlight selection
   const handleRowClick = (order) => {
@@ -127,7 +127,6 @@ const OrderList = () => {
     }));
   };
 
-  console.log(stockData);
 
   //SKU validation
   // 1. New state to track validation status per product
@@ -172,7 +171,7 @@ const OrderList = () => {
     setSkuStatus(newStatus);
   }, [skuInputs, stockData]);
 
-  console.log(isValid);
+
 
   //backend handle
   const submitBtn = async (e) => {

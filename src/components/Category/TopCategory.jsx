@@ -59,7 +59,7 @@ export const TopCategory = () => {
   };
 
   return (
-    <div className="relative max-w-2xl mx-auto mt-8 animate-in fade-in duration-500">
+    <div className="relative max-w-xl mx-auto mt-8 animate-in fade-in duration-500">
       {/* Header & Add Button */}
       <div className="flex items-center justify-between mb-4 px-1">
         <div className="flex items-center gap-2">
@@ -68,11 +68,9 @@ export const TopCategory = () => {
           </div>
           <div>
             <h2 className="md:text-sm text-xs font-black text-slate-800 uppercase tracking-widest">
-              <span className="hidden md:block">Homepage</span> Highlights
+              <span className="hidden md:block">Top category</span> 
             </h2>
-            <p className="text-[10px] hidden md:block text-slate-400 font-bold uppercase">
-              Featured categories on storefront
-            </p>
+           
           </div>
         </div>
         <button
@@ -89,16 +87,16 @@ export const TopCategory = () => {
           <table className="w-full text-left border-collapse">
             <thead className="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th className="p-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter w-16 text-center">
-                  Ref
+                <th className="py-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter w-16 text-center">
+                  SN
                 </th>
-                <th className="p-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter">
-                  Identity
+                <th className="py-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter">
+                  Name
                 </th>
-                <th className="p-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter text-center">
+                <th className="py-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter text-center">
                   Status
                 </th>
-                <th className="p-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter text-right">
+                <th className="py-4 pr-5 text-[10px] font-black text-slate-500 uppercase tracking-tighter text-right">
                   Actions
                 </th>
               </tr>
@@ -111,10 +109,10 @@ export const TopCategory = () => {
                     key={item.catID}
                     className="hover:bg-slate-50 transition-colors group"
                   >
-                    <td className="p-4 text-sm font-mono font-bold text-slate-400 text-center">
+                    <td className="py-4 text-sm font-mono font-bold text-slate-400 text-center">
                       {(index + 1).toString().padStart(2, "0")}
                     </td>
-                    <td className="px-4">
+                    <td className="px-2">
                       <div className="flex flex-col">
                         <span className="text-sm font-black text-slate-700 tracking-tight">
                           {item.catName}
@@ -124,7 +122,7 @@ export const TopCategory = () => {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 text-center">
+                    <td className="px-1 text-center">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 text-[9px] font-black uppercase tracking-widest">
                         <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
                         Featured
@@ -151,7 +149,7 @@ export const TopCategory = () => {
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex justify-center items-center z-[60] p-4">
           <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="p-6 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
+            <div className="md:p-6 p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-indigo-600 rounded-xl text-white">
                   <FiLayers size={18} />
@@ -162,7 +160,7 @@ export const TopCategory = () => {
               </div>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors"
+                className="text-slate-600 hover:text-slate-600 transition-colors"
               >
                 <FiX size={20} />
               </button>
@@ -175,7 +173,7 @@ export const TopCategory = () => {
                 <input
                   type="text"
                   placeholder="Search by name or reference ID..."
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium placeholder:text-slate-400"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all  placeholder:text-slate-400"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -193,7 +191,7 @@ export const TopCategory = () => {
                   .map((item) => (
                     <div
                       key={item.catID}
-                      className="p-4 border-b border-slate-50 flex justify-between items-center hover:bg-indigo-50/30 transition-colors"
+                      className="px-4 py-2 border-b border-slate-50 flex justify-between items-center hover:bg-indigo-50/30 transition-colors"
                     >
                       <div className="flex flex-col">
                         <span className="text-xs font-black text-slate-700 uppercase tracking-tight">

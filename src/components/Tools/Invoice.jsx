@@ -81,7 +81,7 @@ export default function Invoice() {
     doc.text("123 Market Street", rightX, 55);
     doc.text("Dhaka, Bangladesh", rightX, 70);
     doc.text("Email: support@victusbyte.com", rightX, 85);
-    doc.text("Phone: +880 1234 567890", rightX, 100);
+    doc.text("Phone: 09611-342936", rightX, 100);
 
     // --- Divider Line ---
     doc.setDrawColor(180);
@@ -208,7 +208,7 @@ export default function Invoice() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans ">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="md:max-w-4xl w-full mx-auto md:px-4 py-8">
         {/* --- SEARCH BAR: Passive Mode --- */}
         <div className="bg-white p-2 rounded-2xl shadow-xl shadow-slate-200/50 mb-8 border border-slate-200">
           <div className="flex flex-col lg:flex-row gap-2">
@@ -217,7 +217,7 @@ export default function Invoice() {
               <input
                 type="text"
                 placeholder="Enter Order ID - OID1012023034045"
-                className="w-full pl-12 pr-4 py-3 placeholder:tracking-wider uppercase placeholder:font-normal tracking-wider bg-slate-50 border border-transparent rounded-xl text-md  font-bold text-slate-700 outline-none focus:bg-white focus:border-indigo-500 transition-all"
+                className="w-full pl-12 pr-4 py-3 md:placeholder:tracking-wider uppercase placeholder:font-normal md:tracking-wider bg-slate-50 border rounded-xl text-md  font-bold text-slate-700 outline-none focus:bg-white focus:border-indigo-500 transition-all"
                 value={orderId}
                 onChange={handleInputChange}
                 onKeyDown={(e) => e.key === "Enter" && handleGenerate()}

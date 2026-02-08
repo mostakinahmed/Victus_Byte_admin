@@ -47,17 +47,17 @@ const CategoryList = ({ data = [] }) => {
         <table className="min-w-full border-collapse ">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-12 text-center">
+              <th className="md:px-4 px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-12 text-center">
                 #
               </th>
-              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-32 md:text-left">
-                Reference ID
+              <th className="md:px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-24 md:text-left">
+                Cat_ID
               </th>
-              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-48 md:text-left">
+              <th className="md:px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-40 md:text-left">
                 Category Name
               </th>
 
-              <th className="px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-24 text-center">
+              <th className="md:px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-24 text-center">
                 Actions
               </th>
             </tr>
@@ -67,26 +67,26 @@ const CategoryList = ({ data = [] }) => {
               filteredData.map((cat, index) => (
                 <tr
                   key={cat.catID}
-                  className="hover:bg-indigo-50 transition-colors group"
+                  className="hover:bg-indigo-50  transition-colors group"
                 >
-                  <td className="px-4 py-2 text-[12px] font-mono  text-slate-600 text-center">
+                  <td className="md:px-4  px-2 py-2 text-[12px] font-mono  text-slate-600 text-center">
                     {(index + 1).toString().padStart(2, "0")}
                   </td>
 
-                  <td className="px-4 py-2">
+                  <td className="md:px-4 py-2">
                     <span className="flex items-center gap-1 text-[12px] font-mono font-bold text-indigo-600">
                       <FiHash size={10} className="text-indigo-400" />{" "}
                       {cat.catID}
                     </span>
                   </td>
 
-                  <td className="px-4 py-2">
+                  <td className="md:px-4 py-2">
                     <p className="text-[12px] font-bold text-slate-700  truncate">
                       {cat.catName}
                     </p>
                   </td>
 
-                  <td className="px-4 py-2">
+                  <td className="md:px-4 py-2">
                     <div className="flex justify-center items-center gap-1">
                       <button className="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded transition-all">
                         <FaEdit size={12} />

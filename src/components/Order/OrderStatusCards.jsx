@@ -97,7 +97,7 @@ const OrderStatusCards = () => {
         >
           <div>
             <h4 className="text-sm font-medium mt-1 text-gray-600">{title}</h4>
-            <p className="text-2xl font-bold mt-1">{count}</p>
+            <p className="md:text-2xl text-xl font-bold mt-1">{count}</p>
           </div>
           <Icon className="w-7 h-7 opacity-80" />
         </div>

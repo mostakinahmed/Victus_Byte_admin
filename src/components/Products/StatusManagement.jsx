@@ -118,7 +118,7 @@ export const StatusManagement = () => {
           <div className="flex flex-col lg:flex-row items-center gap-4">
             {/* Category Selection */}
             <div className="w-full lg:w-1/3 group">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-1 block">
+              <label className="text-[10px] font-medium text-slate-400 uppercase tracking-widest ml-1 mb-1 block">
                 Campaign Segment
               </label>
               <div className="relative">
@@ -126,7 +126,7 @@ export const StatusManagement = () => {
                 <select
                   value={selected}
                   onChange={(e) => setSelected(e.target.value)}
-                  className="w-full pl-10 pr-4 md:py-3 py-2 bg-slate-50 border border-slate-300 rounded-xl  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4 md:py-3 py-2 text-sm md:text-md bg-slate-50 border border-slate-300 rounded-xl  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
                 >
                   <option value="none">Select Campaign Category...</option>
                   <option value="isFeatured">Featured Product</option>
@@ -139,11 +139,11 @@ export const StatusManagement = () => {
             </div>
 
             {/* Dynamic Title Display */}
-            <div className="flex-1 w-full bg-slate-900 rounded-2xl md:px-6 px-3 py-3 flex items-center md:justify-center lg:justify-start gap-3 shadow-lg shadow-slate-200">
-              <div className="p-2 bg-indigo-500 rounded-lg text-white animate-pulse">
+            <div className="flex-1 w-full bg-slate-900 rounded-2xl md:px-6 px-3 md:py-3 py-2 flex items-center md:justify-center lg:justify-start gap-3 shadow-lg shadow-slate-200">
+              <div className="md:p-2 p-1 bg-indigo-500 rounded-lg text-white animate-pulse">
                 <FiZap size={18} />
               </div>
-              <h1 className="md:font-black font-medium md:text-lg text-white uppercase md:tracking-tighter">
+              <h1 className="md:font-black font-medium md:text-lg text-sm text-white uppercase md:tracking-tighter">
                 {selected === "none"
                   ? "Campaign Control Center"
                   : titleMap[selected]}

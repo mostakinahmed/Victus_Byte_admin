@@ -264,7 +264,7 @@ const AddProduct = () => {
                           (e.preventDefault(),
                           addTag("keywords", keywordInput, setKeywordInput))
                         }
-                        placeholder="e.g. powerbank"
+                        placeholder="powerbank"
                         className="flex-1 p-2 border rounded text-sm outline-blue-500"
                       />
                       <button
@@ -311,7 +311,7 @@ const AddProduct = () => {
                           (e.preventDefault(),
                           addTag("colors", colorInput, setKeywordColorInput))
                         }
-                        placeholder="e.g. Midnight Black"
+                        placeholder="Midnight Black"
                         className="flex-1 p-2 border rounded text-sm outline-slate-500"
                       />
                       <button
@@ -428,7 +428,7 @@ const AddProduct = () => {
                   </button>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-6 md:w-2/3">
                   {customSpecs.map((group, gIdx) => (
                     <div
                       key={gIdx}
@@ -443,7 +443,7 @@ const AddProduct = () => {
                       </button>
 
                       <div className="mb-4 pr-16">
-                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                        <label className="text-[10px] font-medium uppercase tracking-widest">
                           Section Title
                         </label>
                         <input
@@ -453,14 +453,14 @@ const AddProduct = () => {
                             updateGroupName(gIdx, e.target.value)
                           }
                           placeholder="Battery & Power"
-                          className="w-full p-2 mt-1 border rounded-lg font-bold text-gray-700 focus:ring-1 focus:ring-blue-400 outline-none"
+                          className="w-full p-1.5 mt-1 px-2 border rounded-lg font-medium text-gray-800 focus:ring-1 focus:ring-blue-400 outline-none"
                           required
                         />
                       </div>
 
                       <div className="space-y-2">
                         {group.fields.map((field, fIdx) => (
-                          <div key={fIdx} className="flex gap-2">
+                          <div key={fIdx} className="flex  flex-col md:flex-row gap-2">
                             <input
                               type="text"
                               placeholder="Key (e.g. RAM)"
@@ -468,7 +468,7 @@ const AddProduct = () => {
                               onChange={(e) =>
                                 updateField(gIdx, fIdx, "key", e.target.value)
                               }
-                              className="flex-1 p-2 border rounded text-xs outline-blue-300"
+                              className="flex-1 p-1.5 border rounded text-sm outline-blue-300"
                               required
                             />
                             <input
@@ -478,7 +478,7 @@ const AddProduct = () => {
                               onChange={(e) =>
                                 updateField(gIdx, fIdx, "value", e.target.value)
                               }
-                              className="flex-1 p-2 border rounded text-xs outline-blue-300"
+                              className="flex-1 p-1.5  border rounded text-sm outline-blue-300"
                               required
                             />
                             {group.fields.length > 1 && (
