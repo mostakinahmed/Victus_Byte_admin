@@ -114,7 +114,7 @@ const Offer = () => {
               <input
                 type="text"
                 placeholder="VICTUS500"
-                className="px-2 py-1.5 border rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none uppercase text-sm font-medium"
+                className="px-2 py-1.5 border border-slate-300 rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none uppercase text-sm font-medium"
                 value={newCoupon.couponID}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, couponID: e.target.value })
@@ -129,7 +129,7 @@ const Offer = () => {
               <input
                 type="number"
                 placeholder="500"
-                className="px-2 py-1.5 border rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none text-sm font-medium"
+                className="px-2 py-1.5 border border-slate-300  rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none text-sm font-medium"
                 value={newCoupon.value}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, value: e.target.value })
@@ -144,7 +144,7 @@ const Offer = () => {
               <input
                 type="number"
                 placeholder="2000"
-                className="px-2 py-1.5 border rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none text-sm font-medium"
+                className="px-2 py-1.5 border border-slate-300  rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none text-sm font-medium"
                 value={newCoupon.minTK}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, minTK: e.target.value })

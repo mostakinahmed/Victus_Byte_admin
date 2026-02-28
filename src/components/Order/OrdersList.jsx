@@ -55,7 +55,6 @@ const OrderList = () => {
   ];
 
   const [isValid, setIsvalid] = useState(false);
- 
 
   //for highlight selection
   const handleRowClick = (order) => {
@@ -127,7 +126,6 @@ const OrderList = () => {
     }));
   };
 
-
   //SKU validation
   // 1. New state to track validation status per product
   const [skuStatus, setSkuStatus] = useState({});
@@ -170,8 +168,6 @@ const OrderList = () => {
 
     setSkuStatus(newStatus);
   }, [skuInputs, stockData]);
-
-
 
   //backend handle
   const submitBtn = async (e) => {
@@ -318,7 +314,7 @@ const OrderList = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen md:p-3 p-1 font-sans">
+    <div className="bg-white min-h-screen md:p-0 p-1 md:mt-3 font-sans">
       {/* Filters */}
       <div className="w-full flex flex-col gap-3 lg:flex-row lg:items-center mb-3">
         {/* Professional Status Dropdown */}
@@ -327,7 +323,7 @@ const OrderList = () => {
 
           <button
             onClick={() => setStatusOpen(!statusOpen)}
-            className={`w-full flex justify-between items-center bg-white border rounded-lg px-4 py-2.5 text-sm font-bold transition-all duration-200 outline-none
+            className={`w-full flex justify-between items-center bg-white border rounded px-4 py-2 text-sm font-bold transition-all duration-200 outline-none
       ${
         statusOpen
           ? "border-indigo-500 ring-4 ring-indigo-500/10 shadow-sm"
@@ -417,7 +413,7 @@ const OrderList = () => {
               selected={startDate}
               onChange={(date) => setStartDate(date)}
               placeholderText="DD / MM / YYYY"
-              className="w-full pl-4 pr-11 py-2.5 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded-lg  outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 cursor-pointer placeholder:text-slate-400 placeholder:font-normal"
+              className="w-full pl-4 pr-11 py-2 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded  outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 cursor-pointer placeholder:text-slate-400 placeholder:font-normal"
               dateFormat="dd / MM / yyyy"
               // This wrapper ensures the calendar popup looks clean
               calendarClassName="border-slate-200 shadow-xl rounded-xl font-sans"
@@ -446,7 +442,7 @@ const OrderList = () => {
               onChange={(e) =>
                 setFilter({ ...filter, orderId: e.target.value })
               }
-              className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded-lg outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 placeholder:text-slate-400 placeholder:font-normal"
+              className="w-full pl-11 pr-4 py-2 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 placeholder:text-slate-400 placeholder:font-normal"
             />
           </div>
         </div>
@@ -465,7 +461,7 @@ const OrderList = () => {
               placeholder="Phone Number..."
               value={filter.phone}
               onChange={(e) => setFilter({ ...filter, phone: e.target.value })}
-              className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded-lg outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 placeholder:text-slate-400 placeholder:font-normal"
+              className="w-full pl-11 pr-4 py-2 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 placeholder:text-slate-400 placeholder:font-normal"
             />
           </div>
         </div>
@@ -476,7 +472,7 @@ const OrderList = () => {
           {/* Aligns with inputs that have labels */}
           <button
             onClick={handleReset}
-            className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-slate-300 text-slate-500 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all duration-200 active:scale-95 group"
+            className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-2 bg-emerald-100 border border-slate-300 text-slate-700 rounded font-bold text-xs uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all duration-200 active:scale-95 group"
           >
             <FiRefreshCcw
               size={14}
@@ -490,32 +486,32 @@ const OrderList = () => {
       {/* Orders Table */}
       <div className="md:flex gap-3 ">
         {/* Left Side: Order Table */}
-        <div className="lg:w-5/6 bg-white rounded-xl md:max-h-240 max-h-150  overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
+        <div className="lg:w-5/6 bg-white rounded md:max-h-240 max-h-150  overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
               {/* Table Header */}
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-200">
-                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <th className="px-4 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
                     Order Reference
                   </th>
-                  <th className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <th className="px-4 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
                     Customer
                   </th>
-                  <th className="px-2 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                  <th className="px-2 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
                     Placement Date
                   </th>
-                  <th className="px-6 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">
+                  <th className="px-6 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-wider text-center">
                     Fulfillment Status
                   </th>
-                  <th className="px-2 pr-5 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">
+                  <th className="px-2 pr-5 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-[0.1em] text-center">
                     Edit
                   </th>
                 </tr>
               </thead>
 
               {/* Table Body */}
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-gray-100">
                 {filteredOrders.length > 0 ? (
                   [...filteredOrders].reverse().map((order) => {
                     const isSelected = selectedOrderId === order.order_id;
@@ -535,7 +531,7 @@ const OrderList = () => {
                             )}
                             <span
                               onClick={() => handleRowClick(order)}
-                              className="font-mono hover:underline font-bold text-sm cursor-pointer text-indigo-600 tracking-tight"
+                              className=" hover:underline font-medium text-sm cursor-pointer text-indigo-600 tracking-tight"
                             >
                               #{order.order_id}
                             </span>
@@ -544,14 +540,14 @@ const OrderList = () => {
 
                         {/* Customer Name */}
                         <td className="px-1 py-2">
-                          <span className="text-sm font-semibold text-slate-700">
+                          <span className="text-sm text-slate-800">
                             {order.shipping_address.recipient_name}
                           </span>
                         </td>
 
                         {/* Date */}
                         <td className="px-1 py-2">
-                          <span className="text-xs font-medium text-slate-500">
+                          <span className="text-xs  text-slate-700">
                             {order.order_date}
                           </span>
                         </td>
@@ -559,7 +555,7 @@ const OrderList = () => {
                         {/* Modern Status Pills */}
                         <td className="px-4 py-2 text-center">
                           <span
-                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider border ${
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium uppercase tracking-wider border ${
                               order.status === "Pending"
                                 ? "bg-amber-50 text-amber-700 border-amber-200"
                                 : order.status === "Confirmed"
@@ -592,7 +588,7 @@ const OrderList = () => {
                         <td className="px-1 text-center">
                           <button
                             onClick={() => handleOrderEdit(order)}
-                            className="p-2 text-slate-500 cursor-pointer hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 group"
+                            className="p-2 text-slate-400 cursor-pointer hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200 group"
                             title="Edit Item"
                           >
                             <svg
@@ -644,32 +640,32 @@ const OrderList = () => {
         )}
 
         {/* right side */}
-        <div className="w-full bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full min-h-[700px]">
+        <div className="w-full bg-white rounded border border-slate-200  overflow-hidden flex flex-col h-full min-h-[700px]">
           {/* Header: Reference & Status Pill */}
-          <div className="bg-slate-50 border-b border-slate-200 md:px-5 px-2 py-3">
+          <div className="bg-slate-50 border-b border-slate-200 md:px-3 px-2 py-3">
             {showDetails ? (
               <div className="flex justify-between items-center">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                  <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
                     Order Detail View
                   </p>
                   <div className="flex items-center gap-2">
-                    <h2 className="md:text-xl font-black text-slate-900 font-mono">
+                    <h2 className="md:text-xl font-semibold text-slate-900 ">
                       #{showDetails.order_id}
                     </h2>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <span
-                    className={`px-3 py-1 rounded-full text-[12px] font-black uppercase tracking-wider border shadow-sm ${
+                    className={`px-3 py-1 rounded-full text-[12px] font-black uppercase tracking-wider border  ${
                       showDetails.status === "Pending"
-                        ? "bg-amber-50 text-amber-600 border-amber-200"
+                        ? "bg-amber-50 text-amber-600 border-amber-300"
                         : showDetails.status === "Confirmed"
-                          ? "bg-blue-50 text-blue-600 border-blue-200"
+                          ? "bg-blue-50 text-blue-600 border-blue-300"
                           : showDetails.status === "Shipped"
-                            ? "bg-purple-50 text-purple-600 border-purple-200"
+                            ? "bg-purple-50 text-purple-600 border-purple-300"
                             : showDetails.status === "Delivered"
-                              ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+                              ? "bg-emerald-50 text-emerald-600 border-emerald-300"
                               : "bg-rose-50 text-rose-600 border-rose-200"
                     }`}
                   >
@@ -681,14 +677,14 @@ const OrderList = () => {
                 </div>
               </div>
             ) : (
-              <div className="py-2 flex items-center justify-center gap-2 text-slate-400 uppercase text-xs font-bold tracking-widest">
+              <div className="py-2 flex items-center justify-center gap-2 text-slate-600 uppercase text-xs font-bold tracking-widest">
                 <FiPackage /> Order Detail View
               </div>
             )}
           </div>
 
           {showDetails ? (
-            <div className="flex-1 overflow-y-auto md:p-6 p-2 mt-2 md:mt-0 space-y-3 scrollbar-hide">
+            <div className="flex-1 overflow-y-auto md:p-3 p-2 mt-2 space-y-3 scrollbar-hide">
               {/* 📦 1. Product Info Section - Modern Logistics Style */}
               <section className="space-y-6 -mt-3">
                 <div className="flex items-center justify-between pb-2 border-b-2 border-slate-100">
@@ -696,12 +692,12 @@ const OrderList = () => {
                     <div className="p-1.5 bg-indigo-600 rounded-lg shadow-sm shadow-indigo-200">
                       <FiPackage className="text-white" size={14} />
                     </div>
-                    <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                    <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
                       Inventory Manifest
                     </h3>
                   </div>
-                  <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                    {showDetails.items.length} Item
+                  <span className="text-[11px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded">
+                    {showDetails.items.length}
                   </span>
                 </div>
 
@@ -717,7 +713,7 @@ const OrderList = () => {
                           <img
                             src={data[idx]?.images[0]}
                             alt="prod"
-                            className="w-20 h-20 object-contain rounded-2xl border border-slate-100 bg-white shadow-sm p-1"
+                            className="w-24 h-24 object-contain rounded border border-slate-200 bg-white  p-1"
                           />
                           <div className="absolute -top-2 -right-2 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-md border-2 border-white">
                             x{item.quantity || 1}
@@ -728,11 +724,11 @@ const OrderList = () => {
                           {/* Header: Name & Price */}
                           <div className="flex justify-between items-start mb-2">
                             <div>
-                              <h4 className="text-base font-black text-slate-800 leading-tight">
+                              <h4 className="text-base font-medium text-slate-800 leading-tight">
                                 {item.product_name}
                               </h4>
                               <div className="flex items-center gap-2 mt-1">
-                                <span className="text-[13px] font-mono font-bold text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-100">
+                                <span className="text-[13px] font-medium text-slate-700  px-1.5 py-0.5 ">
                                   ID: {item.product_id}
                                 </span>
                               </div>
@@ -741,29 +737,26 @@ const OrderList = () => {
                               <p className="text-lg font-black text-slate-900 leading-none">
                                 ৳{item.product_price}
                               </p>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">
-                                MSRP Verified
-                              </p>
                             </div>
                           </div>
 
                           {/* Modern Data Grid for SKU & Comments */}
                           <div className="grid md:grid-cols-2 gap-3 mt-3">
                             {/* Comment Block */}
-                            <div className="p-2.5 rounded-lg bg-indigo-50 border border-indigo-100/50">
-                              <p className="text-[12px] line-clamp-1 font-black text-indigo-400 uppercase mb-1">
+                            <div className="p-2.5 rounded bg-indigo-50 border border-indigo-200">
+                              <p className="text-[12px] line-clamp-1 font-medium text-indigo-600 uppercase mb-1">
                                 User Specifications
                               </p>
-                              <p className="text-[13px] font-bold text-indigo-900">
+                              <p className="text-[13px] font-medium text-indigo-900">
                                 {item.product_comments ||
                                   "No specifics provided"}
                               </p>
                             </div>
 
                             {/* SKU Block */}
-                            <div className="p-2.5 rounded-lg bg-orange-100 border border-slate-200">
+                            <div className="p-2.5 rounded bg-orange-50 border border-slate-300">
                               <div className="flex gap-5">
-                                <p className="text-[12px] font-black text-slate-500 uppercase tracking mb-1">
+                                <p className="text-[12px] font-medium text-slate-600 uppercase tracking mb-1">
                                   Serial Number
                                 </p>
 
@@ -838,8 +831,7 @@ const OrderList = () => {
                                         e.target.value.toUpperCase(),
                                       )
                                     }
-                                    className="w-full text-[15px] uppercase tracking-wide font-semibold px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
-                                    placeholder="Assign SKU..."
+                                    className="w-full text-[15px] uppercase tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded shad outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
                                   />
                                 </div>
                               ) : (
@@ -859,8 +851,8 @@ const OrderList = () => {
                             </div>
 
                             {/* SKU & IMEI Block */}
-                            <div className="p-2.5 rounded-lg bg-red-100 border border-slate-200">
-                              <p className="text-[12px] font-black text-slate-500 uppercase mb-1">
+                            <div className="p-2.5 rounded bg-red-50 border border-slate-300">
+                              <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
                                 IMEI Number
                               </p>
                               {showDetails.status === "Confirmed" ? (
@@ -876,8 +868,8 @@ const OrderList = () => {
                                           [item.product_id]: e.target.value,
                                         })
                                       }
-                                      className="w-full text-[15px] tracking-wide font-semibold px-2 py-1 bg-white border border-slate-200 rounded shadow-sm outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
-                                      placeholder="IMEI 1"
+                                      className="w-full text-[15px] tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded  outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                      placeholder="Only for mobile."
                                     />
                                   </div>
                                 </div>
@@ -915,37 +907,37 @@ const OrderList = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-4">
                     <div>
-                      <p className="text-[12px] font-black text-slate-400 uppercase tracking-tighter mb-1">
+                      <p className="text-[12px] font-medium text-slate-700 uppercase  mb-1">
                         Customer ID
                       </p>
-                      <p className="text-[12px] font-bold text-slate-700">
+                      <p className="text-[12px] font-medium uppercase">
                         {showDetails.customer_id || "Guest / Unregistered"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-[12px] font-black text-slate-400 uppercase tracking-tighter mb-1">
+                      <p className="text-[12px] font-medium text-slate-700 uppercase mb-1">
                         Contact Phone
                       </p>
-                      <p className="text-sm font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg w-fit flex items-center gap-1">
-                        <FiPhone size={12} />{" "}
+                      <p className="md:text-[18px] font-bold text-slate-900 bg-emerald-300 px-2 py-1 rounded w-fit flex items-center gap-1">
+                        <FiPhone size={17} />{" "}
                         {showDetails.shipping_address.phone}
                       </p>
                     </div>
                   </div>
                   <div className="space-y-4 text-right">
                     <div>
-                      <p className="text-[12px] font-black text-slate-400 uppercase tracking-tighter mb-1">
+                      <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
                         Full Name
                       </p>
-                      <p className="text-sm font-bold text-slate-900">
+                      <p className="text-sm font-medium">
                         {showDetails.shipping_address.recipient_name}
                       </p>
                     </div>
                     <div>
-                      <p className="text-[12px] font-black text-slate-400 uppercase tracking-tighter mb-1">
+                      <p className="text-[12px] font-medium text-slate-600 uppercase  mb-1">
                         Email Address
                       </p>
-                      <p className="text-sm font-medium text-slate-500 flex items-center justify-end gap-1">
+                      <p className="text-sm font-medium flex items-center justify-end gap-1">
                         <FiMail size={12} />{" "}
                         {showDetails.shipping_address.email || "N/A"}
                       </p>
@@ -955,7 +947,7 @@ const OrderList = () => {
               </section>
 
               {/* 🚚 3. Payment & Shipping Summary */}
-              <section className="bg-slate-900  rounded-2xl md:p-6 p-3 text-white shadow-xl space-y-5">
+              <section className="bg-slate-900  rounded md:p-6 p-3 text-white space-y-5">
                 <div className="flex justify-between">
                   <div className="flex items-center gap-2 border-b border-white/10 pb-3">
                     <FiTruck className="text-indigo-400" />

@@ -141,7 +141,7 @@ const AdminSaleFull = () => {
     } else {
       items[idx][field] = value;
     }
- 
+
     setOrder((prev) => ({ ...prev, items }));
   };
 
@@ -165,8 +165,7 @@ const AdminSaleFull = () => {
       (sum, i) => sum + i.product_price?.selling * i.quantity,
       0,
     );
-    console.log(subtotal);
-    
+
     const shipping = Number(order.shipping_cost || 0);
     const discount = Number(order.discount || 0);
     const total_amount = subtotal + shipping - discount;
@@ -182,7 +181,7 @@ const AdminSaleFull = () => {
     const value = e.target.value === "" ? "" : Number(e.target.value);
     setOrder((prev) => ({ ...prev, discount: value }));
   };
-
+  console.log(order);
   // ✅ Submit order
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -197,6 +196,22 @@ const AdminSaleFull = () => {
       });
       return;
     }
+
+    // --- FIX STARTS HERE ---
+    // Create a copy of the order and flatten the product_price for each item
+    const orderToSubmit = {
+      ...order,
+      items: order.items.map((item) => ({
+        ...item,
+        // Convert the object {selling: 1350, ...} to just the number 1350
+        product_price:
+          typeof item.product_price === "object"
+            ? item.product_price.selling
+            : item.product_price,
+      })),
+    };
+    // --- FIX ENDS HERE ---
+
     // ----------------------------------
     MySwal.fire({
       title: (
@@ -219,7 +234,7 @@ const AdminSaleFull = () => {
     try {
       const res = await axios.post(
         "https://api.victusbyte.com/api/order/create-order",
-        order,
+        orderToSubmit,
       );
 
       // Update success message

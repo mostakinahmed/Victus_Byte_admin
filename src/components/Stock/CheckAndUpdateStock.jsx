@@ -387,7 +387,7 @@ export default function CheckAndUpdateStock() {
               <table className="w-full border-collapse">
                 <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
                   <tr>
-                    <th className="py-3 px-4 text-left text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                    <th className="py-3 px-4 text-left text-[10px] font-black text-slate-600 uppercase tracking-widest">
                       SKU Reference
                     </th>
                     <th className="py-3 px-4 text-right text-[10px] font-black text-slate-500 uppercase tracking-widest">
@@ -416,7 +416,7 @@ export default function CheckAndUpdateStock() {
                               <div className="w-1 h-4 bg-indigo-600 rounded-full" />
                             )}
                             <span
-                              className={`text-sm font-mono font-bold tracking-tighter ${
+                              className={`text-sm font-medium ${
                                 isSelected
                                   ? "text-indigo-600"
                                   : "text-slate-600"
@@ -427,10 +427,10 @@ export default function CheckAndUpdateStock() {
                           </td>
                           <td className="py-3 px-4 text-right">
                             <span
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border shadow-sm ${
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium  tracking-tighter border ${
                                 sku.status
-                                  ? "bg-emerald-50 text-emerald-700 border-emerald-100"
-                                  : "bg-rose-50 text-rose-700 border-rose-100"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                  : "bg-rose-50 text-rose-700 border-rose-200"
                               }`}
                             >
                               {sku.status ? (

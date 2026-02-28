@@ -73,7 +73,7 @@ export default function Products() {
                   setCategoryFilter(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-1.5 bg-slate-50 border border-slate-300 rounded-xl md:text-lg text-sm text-black outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
+                className="w-full pl-10 pr-4 py-1 bg-slate-50 border border-slate-300 rounded  text-sm md:text-[17px] text-black outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
               >
                 <option value="All">All Categories</option>
                 {catList.map((cat) => (
@@ -95,7 +95,7 @@ export default function Products() {
                   setSearchId(e.target.value.toUpperCase());
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-1.5 bg-slate-50 border border-slate-300 rounded-xl md:text-lg text-sm  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                className="w-full pl-10 pr-4 py-1 bg-slate-50 border border-slate-300 rounded  md:text-[17px] text-sm  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
               />
             </div>
           </div>
@@ -147,15 +147,15 @@ export default function Products() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50 ">
+            <tbody className="divide-y divide-slate-100 ">
               {currentProducts.length > 0 ? (
                 currentProducts.map((product, index) => (
                   <tr
                     key={product._id || index}
-                    className="hover:bg-slate-100 transition-colors group"
+                    className="hover:bg-slate-100 transition-colors group "
                   >
                     <td className="px-6 py-1">
-                      <div className="md:w-12 md:h-12 w-10  h-10 shadow-sm overflow-hidden">
+                      <div className="md:w-12 md:h-12 w-10  h-10  overflow-hidden">
                         <img
                           src={product.images[0]}
                           alt=""
@@ -164,7 +164,7 @@ export default function Products() {
                       </div>
                     </td>
                     <td className="px-6 py-1">
-                      <span className="text-xs font-mono font-semibold text-slate-800 bg-indigo-100 px-2 py-1 tracking-wide rounded-lg">
+                      <span className="text-sm font-semibold text-slate-800 bg-indigo-50 px-2 py-1 tracking-wide rounded-lg">
                         #{product.pID}
                       </span>
                     </td>

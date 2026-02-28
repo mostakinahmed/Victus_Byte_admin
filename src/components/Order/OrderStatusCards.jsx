@@ -93,7 +93,7 @@ const OrderStatusCards = () => {
       {orderStats.map(({ title, count, icon: Icon, color }, idx) => (
         <div
           key={idx}
-          className={`border ${color} md:p-4 p-1 rounded h-18 shadow-sm flex items-center justify-between transition-transform hover:scale-105 hover:shadow-md`}
+          className={`border ${color} md:p-4 p-1 rounded h-18 flex items-center justify-between transition-transform hover:scale-105 hover:shadow-md`}
         >
           <div>
             <h4 className="text-sm font-medium mt-1 text-gray-600">{title}</h4>
