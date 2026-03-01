@@ -11,6 +11,7 @@ import {
   FiLayers,
   FiCheck,
 } from "react-icons/fi";
+import * as Icons from "react-icons/fi"; 
 import api from "@/Context Api/api";
 
 export const TopCategory = () => {
@@ -81,68 +82,94 @@ export const TopCategory = () => {
         </button>
       </div>
 
-      {/* Main List Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead className="bg-slate-50 border-b border-slate-100">
-              <tr>
-                <th className="py-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter w-16 text-center">
-                  SN
-                </th>
-                <th className="py-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter">
-                  Name
-                </th>
-                <th className="py-4 text-[10px] font-black text-slate-500 uppercase tracking-tighter text-center">
-                  Status
-                </th>
-                <th className="py-4 pr-5 text-[10px] font-black text-slate-500 uppercase tracking-tighter text-right">
-                  Actions
-                </th>
+{/* Main List Table */}
+<div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+  <div className="overflow-x-auto">
+    <table className="w-full text-left">
+      <thead className="bg-slate-50/50 border-b border-slate-100">
+        <tr>
+          <th className="py-4 pl-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest w-16">
+            Ref
+          </th>
+          <th className="py-4 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            Architecture & Identity
+          </th>
+          <th className="py-4 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+            Visual
+          </th>
+          <th className="py-4 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+            Status
+          </th>
+          <th className="py-4 pr-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-slate-100">
+        {categoryData
+          .filter((data) => data.topCategory === true)
+          .map((item, index) => {
+            // Dynamically resolve the icon component
+            const CategoryIcon = Icons[item.catIcon] || Icons.FiPackage;
+
+            return (
+              <tr
+                key={item.catID}
+                className="hover:bg-slate-50/80 transition-all duration-200 group"
+              >
+                {/* Reference Number */}
+                <td className="py-4 pl-6 text-[11px] font-mono font-bold text-slate-400">
+                  {(index + 1).toString().padStart(2, "0")}
+                </td>
+
+                {/* Identity Column */}
+                <td className="px-4">
+                  <div className="flex flex-col">
+                    <span className="text-[13px] font-bold text-slate-800 leading-tight">
+                      {item.catName}
+                    </span>
+                    <span className="text-[10px] font-mono font-medium text-indigo-500 uppercase">
+                      ID: {item.catID}
+                    </span>
+                  </div>
+                </td>
+
+                {/* New Icon Column */}
+                <td className="px-4">
+                  <div className="flex justify-center">
+                    <div className="p-2 bg-slate-100 text-slate-600 rounded-lg group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                      <img src={item.catIcon} alt="" className="h-8 w-8" />
+                    </div>
+                  </div>
+                </td>
+
+                {/* Status Column */}
+                <td className="px-4 text-center">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 uppercase tracking-tighter">
+                    Featured
+                  </span>
+                </td>
+
+                {/* Actions Column */}
+                <td className="py-4 pr-6 text-right">
+                  <div className="flex justify-end gap-2  transition-opacity">
+                    <button
+                      onClick={() => submit(item.catID, false)}
+                      className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-all"
+                      title="Remove from featured"
+                    >
+                      <FiTrash2 size={16} />
+                    </button>
+                  </div>
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-50">
-              {categoryData
-                .filter((data) => data.topCategory === true)
-                .map((item, index) => (
-                  <tr
-                    key={item.catID}
-                    className="hover:bg-slate-50 transition-colors group"
-                  >
-                    <td className="py-4 text-sm font-mono font-bold text-slate-400 text-center">
-                      {(index + 1).toString().padStart(2, "0")}
-                    </td>
-                    <td className="px-2">
-                      <div className="flex flex-col">
-                        <span className="text-sm font-black text-slate-700 tracking-tight">
-                          {item.catName}
-                        </span>
-                        <span className="text-[11px] font-mono text-indigo-500 font-bold">
-                          {item.catID}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-1 text-center">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 text-[9px] font-black uppercase tracking-widest">
-                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                        Featured
-                      </span>
-                    </td>
-                    <td className="px-4 text-right">
-                      <button
-                        onClick={() => submit(item.catID, false)}
-                        className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
-                        title="Remove from featured"
-                      >
-                        <FiTrash2 size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            );
+          })}
+      </tbody>
+    </table>
+  </div>
+</div>
+
 
       {/* 🔍 Add Top Category Modal */}
       {showModal && (

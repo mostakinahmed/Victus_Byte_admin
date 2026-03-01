@@ -16,9 +16,9 @@ const CategoryList = ({ data = [] }) => {
   }, [searchTerm, data]);
 
   return (
-    <div className="bg-white font-sans  border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white md:max-h-[650px] overflow-y-auto font-sans  border border-slate-200 shadow-sm">
       {/* --- Minimalist Header --- */}
-      <div className="md:px-5 px-2 py-3 border-b border-slate-100 bg-white flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="md:px-5  px-2 py-3 border-b border-slate-100 bg-white flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <FiLayers size={16} className="text-indigo-600" />
           <h2 className="md:text-sm text-xs font-black text-slate-700 uppercase tracking-widest">
@@ -31,13 +31,13 @@ const CategoryList = ({ data = [] }) => {
 
         {/* 🔍 Compact Search */}
         <div className="relative group">
-          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 text-xs transition-colors" />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 text-xs transition-colors" />
           <input
             type="text"
             placeholder="Filter ID or Name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full md:w-60 pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium"
+            className="w-full md:w-60 pl-9 pr-3 py-2 border border-slate-300 rounded text-sm text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:font-medium"
           />
         </div>
       </div>
@@ -69,19 +69,19 @@ const CategoryList = ({ data = [] }) => {
                   key={cat.catID}
                   className="hover:bg-indigo-50  transition-colors group"
                 >
-                  <td className="md:px-4  px-2 py-2 text-[12px] font-mono  text-slate-600 text-center">
+                  <td className="md:px-4  px-2 py-2 text-[12px]  text-slate-600 text-center">
                     {(index + 1).toString().padStart(2, "0")}
                   </td>
 
                   <td className="md:px-4 py-2">
-                    <span className="flex items-center gap-1 text-[12px] font-mono font-bold text-indigo-600">
+                    <span className="flex items-center gap-1 text-[12px]  font-bold text-indigo-600">
                       <FiHash size={10} className="text-indigo-400" />{" "}
                       {cat.catID}
                     </span>
                   </td>
 
                   <td className="md:px-4 py-2">
-                    <p className="text-[12px] font-bold text-slate-700  truncate">
+                    <p className="text-[12px] font-medium text-slate-700  truncate">
                       {cat.catName}
                     </p>
                   </td>
