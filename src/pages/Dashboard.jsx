@@ -58,7 +58,7 @@ export default function Dashboard() {
         {/* --- 2. COMMAND & ACTIVITY LAYER --- */}
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Main Visual & Brand Anchor */}
-          <div className="lg:col-span-2 bg-white border border-slate-200 p-2 shadow-sm flex flex-col">
+          <div className="lg:col-span-2 bg-white border border-slate-200 p-2 shadow-xs flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
                 <FiActivity className="text-indigo-500" /> Operational Flow
@@ -90,7 +90,7 @@ export default function Dashboard() {
           </div>
 
           {/* --- NEW: CONVERSION & ACTION CENTER --- */}
-          <div className="bg-white rounded border border-slate-200 p-6 shadow-sm">
+          <div className="bg-white rounded border border-slate-200 p-6">
             <div className="flex items-center gap-2 mb-6">
               <div className="p-2 bg-amber-100 text-amber-600 rounded-lg">
                 <FiTarget size={18} />
@@ -157,14 +157,14 @@ export default function Dashboard() {
 }
 function StatCard({ title, value, trend, icon, color, isAlert }) {
   const colors = {
-    indigo: "bg-indigo-500 shadow-indigo-100",
-    emerald: "bg-emerald-500 shadow-emerald-100",
-    blue: "bg-blue-500 shadow-blue-100",
-    rose: "bg-rose-500 shadow-rose-100",
+    indigo: "bg-indigo-500 ",
+    emerald: "bg-emerald-500",
+    blue: "bg-blue-500 ",
+    rose: "bg-rose-500 ",
   };
 
   return (
-    <div className="bg-white md:p-5 p-3 rounded border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+    <div className="bg-white md:p-5 p-3 rounded border border-slate-200  transition-all group">
       <div className="flex justify-between items-start mb-4">
         <div
           className={`p-3 rounded-2xl text-white shadow-lg ${colors[color]}`}

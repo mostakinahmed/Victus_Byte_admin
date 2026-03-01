@@ -95,7 +95,7 @@ export default function Products() {
                   setSearchId(e.target.value.toUpperCase());
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-1 bg-slate-50 border border-slate-300 rounded  md:text-[17px] text-sm  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                className="w-full pl-10 pr-4 py-1 placeholder:font-light bg-slate-50 border border-slate-300 rounded  md:text-[17px] text-sm  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
               />
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function Products() {
                       </div>
                     </td>
                     <td className="px-6 py-1">
-                      <span className="text-sm font-semibold text-slate-800 bg-indigo-50 px-2 py-1 tracking-wide rounded-lg">
+                      <span className="md:text-sm text-xs font-semibold text-slate-800 bg-indigo-50 px-2 py-1 tracking-wide rounded-lg">
                         #{product.pID}
                       </span>
                     </td>

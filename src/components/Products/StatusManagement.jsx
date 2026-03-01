@@ -114,11 +114,11 @@ export const StatusManagement = () => {
 
       <div className="space-y-6 font-sans animate-in fade-in duration-500">
         {/* --- 1. COMMAND TOOLBAR --- */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+        <div className="bg-white rounded-2xl border border-slate-200  p-4">
           <div className="flex flex-col lg:flex-row items-center gap-4">
             {/* Category Selection */}
             <div className="w-full lg:w-1/3 group">
-              <label className="text-[10px] font-medium text-slate-400 uppercase tracking-widest ml-1 mb-1 block">
+              <label className="text-[10px] font-medium text-slate-600 uppercase tracking-widest ml-1 mb-1 block">
                 Campaign Segment
               </label>
               <div className="relative">
@@ -139,11 +139,11 @@ export const StatusManagement = () => {
             </div>
 
             {/* Dynamic Title Display */}
-            <div className="flex-1 w-full bg-slate-900 rounded-2xl md:px-6 px-3 md:py-3 py-2 flex items-center md:justify-center lg:justify-start gap-3 shadow-lg shadow-slate-200">
-              <div className="md:p-2 p-1 bg-indigo-500 rounded-lg text-white animate-pulse">
+            <div className="flex-1 w-full md:px-6 px-3 flex items-center md:justify-center lg:justify-start gap-3 mt-3">
+              <div className=" p-1 bg-indigo-500 rounded-lg text-white animate-pulse">
                 <FiZap size={18} />
               </div>
-              <h1 className="md:font-black font-medium md:text-lg text-sm text-white uppercase md:tracking-tighter">
+              <h1 className="md:font-black font-medium md:text-lg text-sm text-slate-800 uppercase md:tracking-tighter">
                 {selected === "none"
                   ? "Campaign Control Center"
                   : titleMap[selected]}
@@ -220,15 +220,15 @@ export const StatusManagement = () => {
                           #{item.pID}
                         </span>
                       </td>
-                      <td className="px-6 py-2 text-sm font-black text-slate-700 uppercase tracking-tight">
+                      <td className="px-6 py-2 text-sm font-medium text-slate-700">
                         {item.name}
                       </td>
-                      <td className="px-6 py-2 text-sm font-bold text-slate-500">
+                      <td className="px-6 py-2 text-sm font-medium text-slate-700">
                         ৳{item.price.selling}
                       </td>
                       {selected === "discount" && (
                         <td className="px-6 py-2">
-                          <span className="text-xs font-black text-rose-600 bg-rose-50 px-3 py-1 rounded-full border border-rose-100">
+                          <span className="text-xs font-medium text-rose-600 px-3 py-1 rounded-full border border-rose-100">
                             -৳{item.price.discount}
                           </span>
                         </td>
@@ -241,7 +241,7 @@ export const StatusManagement = () => {
                               selected === "discount" ? 0 : "remove",
                             )
                           }
-                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all"
+                          className="p-2 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all"
                           title="Remove from Segment"
                         >
                           <FiX size={18} />
@@ -285,13 +285,13 @@ export const StatusManagement = () => {
 
               <div className="px-6 pb-5">
                 <div className="relative mb-6 group">
-                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600" />
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-600" />
                   <input
                     type="text"
                     placeholder="Search by name or ID..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 placeholder:font-medium uppercase  border border-slate-500 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                   />
                 </div>
 
@@ -308,13 +308,13 @@ export const StatusManagement = () => {
                     .map((item) => (
                       <div
                         key={item.pID}
-                        className="px-4 py-2 flex  justify-between items-center hover:bg-indigo-50/30 transition-colors"
+                        className="px-4 py-2 flex  justify-between items-center hover:bg-indigo-50 transition-colors"
                       >
                         <div className="flex flex-col">
-                          <span className="text-xs font-black text-slate-700 uppercase tracking-tight">
+                          <span className="text-xs font-medium text-slate-700">
                             {item.name}
                           </span>
-                          <span className="text-[10px] font-mono text-slate-400">
+                          <span className="text-[12px] font-medium text-slate-800">
                             REF: {item.pID}
                           </span>
                         </div>

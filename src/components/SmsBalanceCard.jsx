@@ -34,7 +34,7 @@ const SmsBalanceCard = () => {
 
   return (
     <div
-      className={`p-5 rounded shadow-sm border ${isLow ? "border-red-200 bg-red-50" : "border-gray-100 bg-white"} max-w-sm`}
+      className={`p-5 rounded border ${isLow ? "border-red-200 bg-red-50" : "border-slate-400 bg-white"} max-w-sm`}
     >
       <div className="flex justify-between items-start mb-3">
         <div
@@ -44,7 +44,7 @@ const SmsBalanceCard = () => {
         </div>
         <button
           onClick={fetchBalance}
-          className="text-gray-500 hover:text-blue-600 transition-colors"
+          className="text-blue-600 cursor-pointer transition-colors"
           title="Refresh Balance"
         >
           <FiRefreshCw size={24} className={loading ? "animate-spin" : ""} />

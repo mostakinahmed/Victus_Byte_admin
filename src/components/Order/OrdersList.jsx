@@ -486,7 +486,7 @@ const OrderList = () => {
       {/* Orders Table */}
       <div className="md:flex gap-3 ">
         {/* Left Side: Order Table */}
-        <div className="lg:w-5/6 bg-white rounded md:max-h-240 max-h-150  overflow-auto border border-slate-200 shadow-sm mb-5 lg:mb-0">
+        <div className="lg:w-5/6 bg-white rounded md:max-h-240 max-h-150  overflow-auto border border-slate-300  mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
               {/* Table Header */}
@@ -640,7 +640,7 @@ const OrderList = () => {
         )}
 
         {/* right side */}
-        <div className="w-full bg-white rounded border border-slate-200  overflow-hidden flex flex-col h-full min-h-[700px]">
+        <div className="w-full bg-white rounded border border-slate-300  overflow-hidden flex flex-col h-full min-h-[700px]">
           {/* Header: Reference & Status Pill */}
           <div className="bg-slate-50 border-b border-slate-200 md:px-3 px-2 py-3">
             {showDetails ? (
@@ -657,23 +657,20 @@ const OrderList = () => {
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <span
-                    className={`px-3 py-1 rounded-full text-[12px] font-black uppercase tracking-wider border  ${
+                    className={`px-3 py-1 rounded-full text-[13px] font-black uppercase tracking-wider border  ${
                       showDetails.status === "Pending"
-                        ? "bg-amber-50 text-amber-600 border-amber-300"
+                        ? "bg-amber-50 text-amber-600 border-amber-400"
                         : showDetails.status === "Confirmed"
-                          ? "bg-blue-50 text-blue-600 border-blue-300"
+                          ? "bg-blue-50 text-blue-600 border-blue-400"
                           : showDetails.status === "Shipped"
-                            ? "bg-purple-50 text-purple-600 border-purple-300"
+                            ? "bg-purple-50 text-purple-600 border-purple-400"
                             : showDetails.status === "Delivered"
-                              ? "bg-emerald-50 text-emerald-600 border-emerald-300"
+                              ? "bg-emerald-50 text-emerald-600 border-emerald-400"
                               : "bg-rose-50 text-rose-600 border-rose-200"
                     }`}
                   >
                     {showDetails.status}
                   </span>
-                  <div className="flex ml-3 md:ml-0 items-center gap-1 text-[12px] text-slate-500 font-medium">
-                    <FiClock size={10} /> {showDetails.order_date}
-                  </div>
                 </div>
               </div>
             ) : (
