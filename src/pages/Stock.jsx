@@ -23,7 +23,7 @@ export default function Users() {
       <Navbar pageTitle="Stock Management" />
 
       {/* 📦 Professional Stock Control Center */}
-      <div className="bg-white border border-slate-200 shadow rounded overflow-hidden w-full mx-auto animate-in fade-in duration-500">
+      <div className="bg-white border border-slate-200  rounded overflow-hidden w-full mx-auto animate-in fade-in duration-500">
         {/* Modern Segmented Control Header */}
         <div className="md:p-4 p-2 bg-slate-50 border-b border-slate-100">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -50,10 +50,10 @@ export default function Users() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`relative flex flex-1 lg:flex-none items-center justify-center gap-3 px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                    className={`relative flex flex-1 lg:flex-none items-center justify-center gap-3 px-8 py-3 rounded-xl text-xs font-medium uppercase tracking-widest transition-all duration-300 ${
                       isActive
                         ? "bg-white text-indigo-600 shadow-lg shadow-slate-200"
-                        : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/40"
+                        : "text-slate-700 hover:text-slate-700 hover:bg-slate-200/40"
                     }`}
                   >
                     <span
@@ -79,7 +79,7 @@ export default function Users() {
             <div className="hidden lg:flex items-center gap-4">
               <div className="flex flex-col items-end">
              
-                <span className="text-[10px] font-bold text-emerald-500 flex items-center gap-1">
+                <span className="text-[11px] font-medium text-emerald-500 flex items-center gap-1">
                   <FiArrowUpCircle /> Cloud Sync Active
                 </span>
               </div>

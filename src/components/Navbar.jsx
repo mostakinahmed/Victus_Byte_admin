@@ -54,7 +54,6 @@ export default function Navbar({ pageTitle }) {
   </AnimatePresence>;
 
   return (
-    /* ✅ Refined Container: White surface with subtle shadow and border */
     <div className="flex justify-between items-center bg-white border border-slate-200 md:px-6 px-2 md:py-4 py-1.5 sticky top-0 z-[80] transition-all duration-300 mb-3  mt-1">
       {/* --- Left Side: Dynamic Page Context --- */}
       <div className="flex items-center gap-3">
@@ -63,7 +62,6 @@ export default function Navbar({ pageTitle }) {
           <h1 className=" lg:text-2xl text-sm font-black text-slate-800 tracking-tighter uppercase line-clamp-1">
             {pageTitle || "Command Center"}
           </h1>
-       
         </div>
       </div>
 

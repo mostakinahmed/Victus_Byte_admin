@@ -26,8 +26,8 @@ export default function Sidebar() {
     { name: "Dashboard", path: "/", icon: <FiHome /> },
     { name: "Products", path: "/products", icon: <FiBox /> },
     { name: "Category", path: "/category", icon: <FiGrid /> },
-    { name: "Stock", path: "/stock", icon: <FiArchive /> },
     { name: "Orders", path: "/orders", icon: <FiShoppingCart /> },
+    { name: "Stock", path: "/stock", icon: <FiArchive /> },
     { name: "Sales", path: "/sales", icon: <FiTrendingUp /> },
     { name: "Accounts", path: "/accounts", icon: <FiUser /> },
     { name: "Offer/Coupon", path: "/offer", icon: <FiUser /> },
@@ -40,7 +40,10 @@ export default function Sidebar() {
     <div className="">
       {/* --- MOBILE TOP HEADER --- */}
       <div className="lg:hidden fixed font-sans top-0 left-0 w-full h-12 bg-slate-900 border-b border-slate-800 z-[120] flex items-center px-4 justify-between">
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
+        <div
+          className="flex items-center gap-3 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <div className="p-1.5 bg-indigo-600 rounded-lg shadow-lg">
             <FiLayers size={20} className="text-white hidden" />
             <FiLayers size={15} className="text-white md:hidden" />
@@ -93,12 +96,14 @@ export default function Sidebar() {
                 } justify-start`}
               >
                 {/* --- ICON HIDDEN UNLESS EXPANDED OR ON DESKTOP --- */}
-                <span className={`text-xl shrink-0 ${isMobileExpanded ? "block" : "hidden lg:block"}`}>
+                <span
+                  className={`text-xl shrink-0 ${isMobileExpanded ? "block" : "hidden lg:block"}`}
+                >
                   {link.icon}
                 </span>
 
                 <span
-                  className={`ml-4 tracking-widest transition-all duration-300 
+                  className={`ml-4 tracking-wider transition-all duration-300 
                   ${isMobileExpanded ? "w-32 opacity-100 block" : "hidden lg:block lg:w-32 lg:opacity-100"}`}
                 >
                   {link.name}
@@ -115,8 +120,13 @@ export default function Sidebar() {
             >
               <div className="flex items-center gap-2">
                 {/* --- SERVICE ICON HIDDEN UNLESS EXPANDED --- */}
-                <FiFileText size={18} className={`shrink-0 ${isMobileExpanded ? "block" : "hidden lg:block"}`} />
-                <span className={`${isMobileExpanded ? "block" : "hidden lg:block"}`}>
+                <FiFileText
+                  size={18}
+                  className={`shrink-0 ${isMobileExpanded ? "block" : "hidden lg:block"}`}
+                />
+                <span
+                  className={`${isMobileExpanded ? "block" : "hidden lg:block"}`}
+                >
                   Services
                 </span>
               </div>
@@ -127,26 +137,38 @@ export default function Sidebar() {
 
             {/* Action Links */}
             {isServicesOpen && (
-              <div className={`mt-2 p-2 space-y-2 ${isMobileExpanded ? "block" : "hidden lg:block"}`}>
-                  <button
-                    onClick={() => { window.open("https://image.victusbyte.com/"); setIsServicesOpen(false); }}
-                    className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 bg-slate-800 hover:text-blue-600 rounded-2xl"
-                  >
-                    Images Upload
-                  </button>
-                  <button
-                    onClick={() => { window.open("https://meghna.hostseba.com:2003/sess47qSlz76GGNEQm39/mail/"); setIsServicesOpen(false); }}
-                    className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer bg-slate-800 tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 hover:text-blue-600 rounded-2xl "
-                  >
-                    E-mail Service
-                  </button>
+              <div
+                className={`mt-2 p-2 space-y-2 ${isMobileExpanded ? "block" : "hidden lg:block"}`}
+              >
+                <button
+                  onClick={() => {
+                    window.open("https://image.victusbyte.com/");
+                    setIsServicesOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 bg-slate-800 hover:text-blue-600 rounded-2xl"
+                >
+                  Images Upload
+                </button>
+                <button
+                  onClick={() => {
+                    window.open(
+                      "https://meghna.hostseba.com:2003/sess47qSlz76GGNEQm39/mail/",
+                    );
+                    setIsServicesOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer bg-slate-800 tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 hover:text-blue-600 rounded-2xl "
+                >
+                  E-mail Service
+                </button>
               </div>
             )}
           </div>
         </nav>
 
         {/* --- SYSTEM STATUS --- */}
-        <div className={`p-4 border-t border-slate-800 transition-all ${isMobileExpanded ? "block" : "hidden lg:block"}`}>
+        <div
+          className={`p-4 border-t border-slate-800 transition-all ${isMobileExpanded ? "block" : "hidden lg:block"}`}
+        >
           <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
