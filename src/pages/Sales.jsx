@@ -130,64 +130,6 @@ export default function Sales() {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white shadow-md rounded p-4 border border-gray-100 overflow-x-auto">
-        <h2 className="text-lg font-semibold mb-4 text-gray-700">
-          Recent Sales
-        </h2>
-        <table className="min-w-full text-sm text-left border-t border-gray-200 table-auto whitespace-nowrap">
-          <thead>
-            <tr className="bg-gray-100 text-gray-700">
-              <th className="p-3">Order ID</th>
-              <th className="p-3">Customer</th>
-              <th className="p-3">Amount</th>
-              <th className="p-3">Date</th>
-              <th className="p-3">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              {
-                id: "#1001",
-                name: "Rafi Ahmed",
-                amount: "৳ 1,200",
-                date: "2025-10-15",
-                status: "Paid",
-              },
-              {
-                id: "#1002",
-                name: "Sara Rahman",
-                amount: "৳ 900",
-                date: "2025-10-15",
-                status: "Pending",
-              },
-              {
-                id: "#1003",
-                name: "Tanvir Hasan",
-                amount: "৳ 1,800",
-                date: "2025-10-14",
-                status: "Paid",
-              },
-            ].map((sale) => (
-              <tr key={sale.id} className="border-b hover:bg-gray-50">
-                <td className="p-3 font-medium">{sale.id}</td>
-                <td className="p-3">{sale.name}</td>
-                <td className="p-3 text-blue-600">{sale.amount}</td>
-                <td className="p-3">{sale.date}</td>
-                <td
-                  className={`p-3 font-semibold ${
-                    sale.status === "Paid"
-                      ? "text-green-600"
-                      : "text-yellow-500"
-                  }`}
-                >
-                  {sale.status}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </div>
   );
 }
