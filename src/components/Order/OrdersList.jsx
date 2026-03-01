@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ChevronDown, Check, Calendar } from "lucide-react";
@@ -91,6 +91,19 @@ const OrderList = () => {
       productData.find((p) => p.pID === item.product_id),
     );
   }
+
+  // 1. Create the reference for the scrollable container
+  const detailScrollRef = useRef(null);
+
+  // 2. Reset scroll whenever showDetails changes (New order selected)
+  useEffect(() => {
+    if (detailScrollRef.current) {
+      detailScrollRef.current.scrollTo({
+        top: 0,
+        behavior: "instant", // Use "smooth" if you want a sliding effect
+      });
+    }
+  }, [showDetails?.order_id]); // Trigger only when the ID changes
 
   //handle click order
   const handleClickOrder = (order) => {
@@ -251,37 +264,43 @@ const OrderList = () => {
     }
 
     try {
-      // 1. Start the spinner
       MySwal.fire({
         title: "Processing...",
-        text: "Updating order status...",
-        allowOutsideClick: false,
         didOpen: () => MySwal.showLoading(),
       });
 
-      // 2. The API Call
       const res = await api.patch(`/order/update/${orderId}`, updatedData);
+      console.log("API Response:", res); // Debug point 1
 
-      // 3. Refresh Data
-      await updateApi();
+      // Use optional chaining to prevent crashes if res.data is missing
+      if (res.status === 200 || res?.data?.success) {
+        // Move risky UI/Refresh logic into its own safe zone
+        try {
+          await updateApi();
+          setShowDetails(null);
+          setSelectedOrderId(null);
+        } catch (innerError) {
+          console.error(
+            "UI Refresh Error (Order was actually saved):",
+            innerError,
+          );
+        }
 
-      // 4. STOP THE SPINNER (Critical Fix)
-      // Since you don't want a "Success" popup, we must close it manually.
-      MySwal.close();
-
-      // 5. UI Cleanup
-      setShowDetails(null);
+        MySwal.close();
+      }
     } catch (error) {
-      // 6. ERROR HANDLER (Loud Failure)
-      // We don't use MySwal.close() here because MySwal.fire for error will replace the loading one.
-      const status = error.response?.status;
-      const errorMsg = error.response?.data?.message || "Internal Server Error";
+      // CRITICAL: Log the actual error to your console
+      console.error("Full Catch Error:", error);
+
+      const errorMsg =
+        error.response?.data?.message ||
+        error.message ||
+        "Internal Server Error";
 
       MySwal.fire({
         icon: "error",
-        title: status === 403 ? "Permission Denied 🚫" : "Update Failed ❌",
+        title: "Update Failed",
         text: errorMsg,
-        confirmButtonColor: "#EF4444",
       });
     }
   };
@@ -314,7 +333,7 @@ const OrderList = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen md:p-0 p-1 md:mt-3 font-sans">
+    <div className="bg-white md:p-0 p-1 md:mt-3 font-sans ">
       {/* Filters */}
       <div className="w-full flex flex-col gap-3 lg:flex-row lg:items-center mb-3">
         {/* Professional Status Dropdown */}
@@ -472,7 +491,7 @@ const OrderList = () => {
           {/* Aligns with inputs that have labels */}
           <button
             onClick={handleReset}
-            className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-2 bg-emerald-100 border border-slate-300 text-slate-700 rounded font-bold text-xs uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all duration-200 active:scale-95 group"
+            className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-2  border border-green-500 bg-green-50 text-slate-700 rounded font-bold text-xs uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all duration-200 active:scale-95 group"
           >
             <FiRefreshCcw
               size={14}
@@ -486,7 +505,7 @@ const OrderList = () => {
       {/* Orders Table */}
       <div className="md:flex gap-3 ">
         {/* Left Side: Order Table */}
-        <div className="lg:w-5/6 bg-white rounded md:max-h-240 max-h-150  overflow-auto border border-slate-300  mb-5 lg:mb-0">
+        <div className="lg:w-5/6 bg-white rounded md:max-h-240 max-h-90  overflow-auto border border-slate-300  mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
               {/* Table Header */}
@@ -640,11 +659,11 @@ const OrderList = () => {
         )}
 
         {/* right side */}
-        <div className="w-full bg-white rounded border border-slate-300  overflow-hidden flex flex-col h-full min-h-[700px]">
+        <div className="w-full bg-white xl:max-h-166 lg:max-h-140 max-h-150 rounded border border-slate-300  flex flex-col">
           {/* Header: Reference & Status Pill */}
           <div className="bg-slate-50 border-b border-slate-200 md:px-3 px-2 py-3">
             {showDetails ? (
-              <div className="flex justify-between items-center">
+              <div   className="flex justify-between items-center">
                 <div className="space-y-1">
                   <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
                     Order Detail View
@@ -681,12 +700,12 @@ const OrderList = () => {
           </div>
 
           {showDetails ? (
-            <div className="flex-1 overflow-y-auto md:p-3 p-2 mt-2 space-y-3 scrollbar-hide">
+            <div ref={detailScrollRef} className="flex-1 overflow-y-auto md:p-3 p-2 mt-2 space-y-3 scrollbar-hide">
               {/* 📦 1. Product Info Section - Modern Logistics Style */}
               <section className="space-y-6 -mt-3">
                 <div className="flex items-center justify-between pb-2 border-b-2 border-slate-100">
                   <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-indigo-600 rounded-lg shadow-sm shadow-indigo-200">
+                    <div className="p-1.5 mt-2 md:mt-0 bg-indigo-600 rounded-lg shadow-sm shadow-indigo-200">
                       <FiPackage className="text-white" size={14} />
                     </div>
                     <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
