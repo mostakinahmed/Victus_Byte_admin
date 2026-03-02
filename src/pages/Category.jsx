@@ -46,7 +46,7 @@ export default function Category() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex flex-1 lg:flex-none items-center justify-center gap-2 md:px-6 px-3 py-2.5 rounded-xl text-sm uppercase tracking-widest transition-all duration-300 ${
+                    className={`flex flex-1 lg:flex-none items-center justify-center gap-2 md:px-6 px-3 py-2.5 rounded-xl text-sm uppercase transition-all duration-300 ${
                       isActive
                         ? "bg-white text-indigo-600 shadow-sm shadow-slate-200"
                         : " hover:text-slate-700 hover:bg-slate-200/40"

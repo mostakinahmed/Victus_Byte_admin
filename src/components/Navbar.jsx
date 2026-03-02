@@ -97,7 +97,7 @@ export default function Navbar({ pageTitle }) {
         </a>
 
         {/* Notifications */}
-        <button className=" hidden md:flex relative p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+        <button className=" hidden md:flex relative p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
           <FiBell size={20} />
           <span className="absolute top-2 right-2.5 inline-block w-2 h-2 bg-indigo-600 rounded-full border-2 border-white"></span>
         </button>
@@ -108,11 +108,11 @@ export default function Navbar({ pageTitle }) {
           onClick={toggleAdminPopup}
         >
           <div className="hidden md:flex flex-col items-end text-right">
-            <span className="text-xs font-black text-slate-800 uppercase tracking-tighter leading-none mb-1">
+            <span className="text-xs font-black text-slate-800 uppercase leading-none mb-1">
               {user.fullName || "Admin"}
             </span>
-            <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest leading-none">
-              {user.userName}
+            <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest leading-none">
+              {user.role}
             </span>
           </div>
 
@@ -156,7 +156,7 @@ export default function Navbar({ pageTitle }) {
               className="relative bg-white rounded-xl shadow-xl w-full max-w-[340px] overflow-hidden border border-slate-200"
             >
               {/* Profile Header (Compact) */}
-              <div className="p-5 flex items-center gap-4 bg-slate-50 border-b border-slate-100">
+              <div className="p-5 flex items-center gap-4 bg-slate-800 border-b border-slate-100">
                 <div className="relative shrink-0">
                   <img
                     src={
@@ -169,10 +169,10 @@ export default function Navbar({ pageTitle }) {
                   <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-50 rounded-full"></div>
                 </div>
                 <div className="min-w-0">
-                  <h2 className="text-sm font-bold text-slate-900 truncate">
+                  <h2 className="text-sm font-bold text-white truncate">
                     {user.fullName}
                   </h2>
-                  <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest leading-tight">
+                  <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-tight">
                     {user.role}
                   </p>
                 </div>
@@ -223,7 +223,7 @@ export default function Navbar({ pageTitle }) {
               <div className="p-3 bg-slate-50/50 border-t border-slate-100">
                 <button
                   onClick={() => logout()}
-                  className="w-full flex items-center justify-center gap-2 py-3 text-rose-600 hover:bg-rose-50 rounded-lg text-sm font-bold transition-colors active:scale-95"
+                  className="w-full flex cursor-pointer items-center justify-center gap-2 py-3 text-rose-600 hover:bg-rose-100 rounded-lg text-sm font-bold transition-colors active:scale-95"
                 >
                   <FiLogOut size={14} />
                   Logout Session

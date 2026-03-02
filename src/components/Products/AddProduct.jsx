@@ -195,11 +195,11 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen pb-10 mt-12 md:mt-0">
+    <div className=" min-h-screen pb-10 mt-12 md:mt-0">
       <Navbar pageTitle="Add Product (Dynamic)" />
 
       <div className="mx-auto max-w-[1600px]">
-        <div className="relative w-full mx-auto bg-white shadow rounded-xl overflow-hidden border border-gray-200">
+        <div className="relative w-full mx-auto bg-white  rounded overflow-hidden border border-gray-200">
           <form onSubmit={handleSubmit}>
             <div className="lg:flex">
               {/* LEFT: General Info & Attributes */}
@@ -414,7 +414,7 @@ const AddProduct = () => {
               </div>
 
               {/* RIGHT: Dynamic Specifications */}
-              <div className="flex-1 md:p-6 p-2 bg-gray-50">
+              <div className="flex-1 md:p-6 p-2">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="md:text-xl line-clamp-1 font-bold text-gray-800 border-b-2 border-blue-500 pb-1">
                     Specifications Dynamic
@@ -422,7 +422,7 @@ const AddProduct = () => {
                   <button
                     type="button"
                     onClick={addSpecGroup}
-                    className="bg-green-600 ml-2 text-white md:px-5 px-2 py-2 rounded-lg hover:bg-green-700 shadow-lg shadow-green-100"
+                    className="bg-green-600 ml-2 text-white md:px-5 px-4 py-2 rounded-lg hover:bg-green-700 shadow-lg shadow-green-100"
                   >
                     Add Section
                   </button>
@@ -432,18 +432,18 @@ const AddProduct = () => {
                   {customSpecs.map((group, gIdx) => (
                     <div
                       key={gIdx}
-                      className="bg-white border border-gray-200 rounded-xl md:p-5 p-2 relative shadow-sm"
+                      className="bg-slate-50 border border-gray-200 rounded md:p-5 p-2 relative"
                     >
                       <button
                         type="button"
                         onClick={() => removeSpecGroup(gIdx)}
-                        className="absolute top-3 right-3 text-red-400 hover:text-red-600 text-sm font-bold bg-red-50 px-2 py-1 rounded"
+                        className="absolute top-3 right-3 cursor-pointer  text-red-500 hover:text-red-600 text-sm font-bold bg-red-50 px-2 py-1 rounded"
                       >
                         Delete
                       </button>
 
                       <div className="mb-4 pr-16">
-                        <label className="text-[10px] font-medium uppercase tracking-widest">
+                        <label className="text-[11px] text-slate-600 font-medium uppercase tracking-wide">
                           Section Title
                         </label>
                         <input
@@ -452,8 +452,8 @@ const AddProduct = () => {
                           onChange={(e) =>
                             updateGroupName(gIdx, e.target.value)
                           }
-                          placeholder="Battery & Power"
-                          className="w-full p-1.5 mt-1 px-2 border rounded-lg font-medium text-gray-800 focus:ring-1 focus:ring-blue-400 outline-none"
+                          placeholder="Key Feature"
+                          className="w-full p-1.5 mt-1 px-2 bg-white border rounded font-medium text-gray-800 focus:ring-1 focus:ring-blue-400 outline-none"
                           required
                         />
                       </div>
@@ -468,7 +468,7 @@ const AddProduct = () => {
                               onChange={(e) =>
                                 updateField(gIdx, fIdx, "key", e.target.value)
                               }
-                              className="flex-1 p-1.5 border rounded text-sm outline-blue-300"
+                              className="flex-1 p-1.5 bg-white border rounded text-sm outline-blue-300"
                               required
                             />
                             <input
@@ -478,14 +478,14 @@ const AddProduct = () => {
                               onChange={(e) =>
                                 updateField(gIdx, fIdx, "value", e.target.value)
                               }
-                              className="flex-1 p-1.5  border rounded text-sm outline-blue-300"
+                              className="flex-1 p-1.5  border bg-white rounded text-sm outline-blue-300"
                               required
                             />
                             {group.fields.length > 1 && (
                               <button
                                 type="button"
                                 onClick={() => removeFieldRow(gIdx, fIdx)}
-                                className="text-red-400 font-bold px-1 text-lg"
+                                className="text-red-400 cursor-pointer font-bold px-1 text-lg"
                               >
                                 ×
                               </button>
@@ -495,7 +495,7 @@ const AddProduct = () => {
                         <button
                           type="button"
                           onClick={() => addFieldRow(gIdx)}
-                          className="text-[11px] bg-blue-50 text-blue-600 px-3 py-1 rounded font-bold mt-2"
+                          className="text-[11px] bg-blue-50 cursor-pointer  text-blue-600 px-3 py-1 rounded font-bold mt-2"
                         >
                           + Add Row
                         </button>
@@ -511,13 +511,13 @@ const AddProduct = () => {
               <button
                 type="button"
                 onClick={() => navigate("/products")}
-                className="px-8 py-2 bg-white border border-gray-300 rounded-lg text-gray-600 font-bold hover:bg-gray-50 transition-all"
+                className="px-8 py-2 bg-white border cursor-pointer  border-gray-400 rounded-lg text-gray-7700 font-bold hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="md:px-12 px-3 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all transform active:scale-95"
+                className="md:px-12 px-3 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow shadow-blue-200 transition-all transform active:scale-95"
               >
                 Publish Product
               </button>
