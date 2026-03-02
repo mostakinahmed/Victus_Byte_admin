@@ -14,6 +14,7 @@ import Users from "./pages/Users";
 import Tools from "./pages/Tools";
 import Category from "./pages/Category";
 import AddProduct from "./components/Products/AddProduct";
+import UpdateProduct from "./components/Products/UpdateProduct";
 import Sales from "./pages/Sales";
 import AdminSaleFull from "./components/Sales/NewSales";
 import Login from "./components/Authentication/Login";
@@ -62,6 +63,14 @@ function AppLayout() {
             element={
               <PrivateRoute>
                 <Products />
+              </PrivateRoute>
+            }
+          />
+            <Route
+            path="/products/update-product"
+            element={
+              <PrivateRoute>
+                <UpdateProduct />
               </PrivateRoute>
             }
           />

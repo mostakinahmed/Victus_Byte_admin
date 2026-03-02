@@ -11,6 +11,7 @@ import {
   FiTag,
   FiFilter,
 } from "react-icons/fi";
+import UpdateProduct from "@/components/Products/UpdateProduct";
 
 export default function Products() {
   const { categoryData, productData, loading } = useContext(DataContext);
@@ -55,6 +56,11 @@ export default function Products() {
     currentPage * productsPerPage,
   );
 
+  // update product
+  const updateProduct = (data) => {
+    navigate("/products/update-product", { state: { product: data } });
+  };
+
   return (
     <div className="mt-12 font-s  md:mt-0">
       <Navbar pageTitle="Product Management" />
@@ -63,7 +69,6 @@ export default function Products() {
       <div className=" bg-white rounded border border-slate-200  md:p-4 p-2">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
           <div className="flex flex-1 w-full gap-3">
-
             {/* Category Selector */}
             <div className="relative group flex-1 max-w-xs">
               <FiFilter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
@@ -77,7 +82,7 @@ export default function Products() {
               >
                 <option value="All">All Categories</option>
                 {catList.map((cat) => (
-                  <option key={cat} value={cat} >
+                  <option key={cat} value={cat}>
                     {cat}
                   </option>
                 ))}
@@ -174,9 +179,7 @@ export default function Products() {
                       </p>
                     </td>
                     <td className="px-6 py-1">
-                      <span className="text-sm">
-                        {product.brandName}
-                      </span>
+                      <span className="text-sm">{product.brandName}</span>
                     </td>
                     <td className="px-6 py-1">
                       <span className="flex items-center gap-1.5 text-sm">
@@ -199,7 +202,10 @@ export default function Products() {
 
                     <td className="px-6 py-1">
                       <div className="flex justify-center gap-2">
-                        <button className="p-2 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+                        <button
+                          onClick={() => updateProduct(product)}
+                          className="p-2 cursor-pointer text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
+                        >
                           <FiEdit3 size={16} />
                         </button>
                         <button className="p-2 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all">
