@@ -77,11 +77,9 @@ const AdminList = () => {
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-slate-800 tracking-tight">
-                    Identity Registry
+                    Identity Registry List
                   </h2>
-                  <p className="text-[10px] hidden md:block text-slate-400 font-bold uppercase tracking-widest">
-                    Master Personnel Directory
-                  </p>
+                
                 </div>
               </div>
 
@@ -144,7 +142,7 @@ const AdminList = () => {
                       className="group hover:bg-slate-50/50 transition-all"
                     >
                       {/* 1. S/N */}
-                      <td className="px-6 py-3 text-sm font-mono font-bold text-slate-400 uppercase">
+                      <td className="px-6 py-3 text-sm font-medium text-slate-600 uppercase">
                         {(index + 1).toString().padStart(2, "0")}
                       </td>
 
@@ -163,23 +161,23 @@ const AdminList = () => {
                       </td>
 
                       {/* 4. Username (Separate) */}
-                      <td className="px-6 py-3 text-xs font-bold text-slate-500 lowercase">
+                      <td className="px-6 py-3 text-sm font-medium text-slate-800 lowercase">
                         @{admin.userName}
                       </td>
 
                       {/* 5. Email (Separate) */}
-                      <td className="px-6 py-3 text-xs font-medium text-slate-600">
+                      <td className="px-6 py-3 text-sm font-medium text-slate-800 lowercase">
                         {admin.email}
                       </td>
 
                       {/* 6. Phone (Separate) */}
-                      <td className="px-6 py-3 text-xs font-mono font-bold text-slate-500 tracking-tighter">
+                      <td className="px-6 py-3 text-sm font-medium text-slate-800 lowercase">
                         {admin.phone}
                       </td>
 
                       {/* 7. Role (Separate) */}
                       <td className="px-6 py-3">
-                        <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-indigo-600 tracking-widest bg-indigo-50/50 px-2 py-0.5 rounded border border-indigo-100">
+                        <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-indigo-600 tracking-wider bg-indigo-50/50 px-2 py-0.5 rounded border border-indigo-100">
                           <FiShield size={10} /> {admin.role}
                         </div>
                       </td>
@@ -189,8 +187,8 @@ const AdminList = () => {
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
                             admin.status
-                              ? "bg-emerald-50 text-emerald-700 border-emerald-100 shadow-sm shadow-emerald-100"
-                              : "bg-rose-50 text-rose-700 border-rose-100 shadow-sm shadow-rose-100"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : "bg-rose-50 text-rose-700 border-rose-200"
                           }`}
                         >
                           <div
@@ -206,8 +204,8 @@ const AdminList = () => {
 
                       {/* 9. Last Active (Separate) */}
                       <td className="px-6 py-3">
-                        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-500 uppercase">
-                          <FiActivity size={12} className="text-slate-300" />
+                        <div className="flex items-center gap-2  text-sm font-medium text-slate-800 lowercase">
+                         
                           {formatDate(admin.lastLogin)}
                         </div>
                       </td>
