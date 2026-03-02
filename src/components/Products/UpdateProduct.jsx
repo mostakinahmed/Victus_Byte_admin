@@ -99,7 +99,7 @@ const UpdateProduct = () => {
 
     try {
       Swal.fire({ title: "Updating...", didOpen: () => Swal.showLoading() });
-      await api.patch(`/product/update/${product.pID}`, {
+      await api.post(`/product/update/${product.pID}`, {
         ...formData,
         images: formData.images.filter((img) => img.trim() !== ""),
         specifications: formattedSpecs,
