@@ -463,7 +463,7 @@ const AddProduct = () => {
                           <div key={fIdx} className="flex  flex-col md:flex-row gap-2">
                             <input
                               type="text"
-                              placeholder="Key (e.g. RAM)"
+                              placeholder="key"
                               value={field.key}
                               onChange={(e) =>
                                 updateField(gIdx, fIdx, "key", e.target.value)
@@ -473,7 +473,7 @@ const AddProduct = () => {
                             />
                             <input
                               type="text"
-                              placeholder="Value (e.g. 8GB)"
+                              placeholder="value"
                               value={field.value}
                               onChange={(e) =>
                                 updateField(gIdx, fIdx, "value", e.target.value)

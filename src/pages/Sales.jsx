@@ -101,7 +101,7 @@ export default function Sales() {
             <select
               value={filter.soldBy}
               onChange={(e) => setFilter({ ...filter, soldBy: e.target.value })}
-              className="flex-1 md:flex-none py-1.5  px-2 md:mx-2 text-sm font-medium bg-white border-l-0 md:border-l border-slate-200 outline-none text-slate-800 cursor-pointer min-w-[150px]"
+              className="flex-1 md:flex-none py-1.5 outline-none  px-2 md:mx-2 text-sm font-medium bg-white rounded border border-slate-200   cursor-pointer min-w-[150px]"
             >
               <option value="" className="">
                 All Sales
@@ -118,10 +118,10 @@ export default function Sales() {
 
             <button
               onClick={() => setFilter({ orderId: "", soldBy: "" })}
-              className="p-2 md:px-3 text-slate-400 hover:text-rose-500 transition-colors border-l border-slate-100"
+              className="p-2 md:px-4 text-green-600 cursor-pointer hover:text-rose-500 transition-colors border-l border-slate-100"
               title="Reset Filters"
             >
-              <FiRefreshCcw size={18} />
+              <FiRefreshCcw size={20} />
             </button>
           </div>
         </div>
@@ -160,18 +160,18 @@ export default function Sales() {
               {[...filteredSales].reverse().map((sale) => (
                 <tr
                   key={sale._id}
-                  className="hover:bg-slate-50 transition-colors duration-150"
+                  className="hover:bg-slate-100 transition-colors duration-150"
                 >
-                  <td className="p-4 text-sm font-medium text-indigo-600">
+                  <td className="px-4 py-2.5 text-sm font-medium text-indigo-600">
                     #{sale.order_id}
                   </td>
-                  <td className="p-4 text-sm  text-slate-800">
+                  <td className="px-4 text-sm text-slate-800">
                     {sale.shipping_address.recipient_name}
                   </td>
-                  <td className="p-4 text-sm  text-slate-7700">
+                  <td className="px-4 text-sm  text-slate-800">
                     {sale.shipping_address.phone}
                   </td>
-                  <td className="p-4">
+                  <td className="px-4">
                     <div className="flex items-center gap-2">
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white 
@@ -180,21 +180,21 @@ export default function Sales() {
                         {sale.staffName.charAt(0)}
                       </div>
                       <span
-                        className={`text-sm font-medium ${sale.staffName === "Online" ? "text-slate-500 italic" : "text-slate-800"}`}
+                        className={`text-sm ${sale.staffName === "Online" ? "text-slate-500 italic" : "text-slate-800"}`}
                       >
                         {sale.staffName}
                       </span>
                     </div>
                   </td>
-                  <td className="p-4 text-center text-sm text-slate-700">
+                  <td className="px-4 text-center text-sm text-slate-800">
                     {sale.order_date.split(" ")[0]}
                   </td>
-                  <td className="p-4 text-center">
+                  <td className="px-4 text-center">
                     <span className="text-[11px] font-medium text-slate-700 border border-slate-200 px-2 py-0.5 rounded bg-slate-50">
                       {sale.payment.method}
                     </span>
                   </td>
-                  <td className="p-4 text-right text-sm font-bold text-slate-900">
+                  <td className="px-4 text-right text-sm font-bold text-slate-900">
                     ৳{sale.total_amount.toLocaleString()}
                   </td>
                 </tr>
