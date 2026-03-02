@@ -119,14 +119,12 @@ export default function UpdateAdmin({ back, user }) {
             <h2 className="text-xl font-black text-slate-800 tracking-tight">
               Modify Credentials
             </h2>
-            <p className="text-[10px] hidden md:block text-slate-400 font-bold uppercase tracking-widest">
-              Update system access & profile info
-            </p>
+           
           </div>
         </div>
       </div>
 
-      <div className="md:p-8 p-2 relative">
+      <div className="md:p-4 p-2 relative">
         {/* 🚀 Advanced Loader Overlay */}
         {loading && (
           <div className="absolute inset-0 bg-white/60 backdrop-blur-md flex items-center justify-center z-50 transition-all duration-300">
@@ -144,17 +142,16 @@ export default function UpdateAdmin({ back, user }) {
 
         {/*Success Protocol */}
         {success && (
-          <div className="absolute inset-0 bg-white/90 backdrop-blur-lg flex items-center justify-center z-50 p-8 animate-in zoom-in-95 duration-300">
-            <div className="max-w-xs w-full flex flex-col items-center text-center">
-              <div className="w-20 h-20 bg-emerald-50 rounded-3xl flex items-center justify-center mb-6 border border-emerald-100 shadow-lg shadow-emerald-100/50">
+          <div className=" bg-white/90 backdrop-blur-lg flex items-center justify-center z-50 p-8 animate-in zoom-in-95 duration-300">
+            <div className="max-w-sm w-full flex flex-col items-center text-center">
+              <div className="w-20 h-20 bg-emerald-50 rounded-3xl flex items-center justify-center mb-6 border border-emerald-100 shadow shadow-emerald-100/50">
                 <FiCheckCircle className="text-emerald-500 text-4xl" />
               </div>
               <h3 className="text-xl font-black text-slate-900 mb-2">
                 Registry Updated
               </h3>
               <p className="text-sm font-medium text-slate-500 mb-8 leading-relaxed">
-                Admin credentials have been successfully updated in the master
-                directory.
+                Admin credentials have been successfully updated.
               </p>
               <button
                 onClick={() => {
@@ -170,30 +167,25 @@ export default function UpdateAdmin({ back, user }) {
         )}
 
         {formVisible && (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="">
             {/* Section 1: Basic Profile */}
-            <div className="space-y-5">
-              <div className="flex items-center gap-2 border-b border-slate-50 pb-2">
-                <FiUser className="text-indigo-500" />
-                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                  Core Identification
-                </h3>
-              </div>
+            <div className="">
+              
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 space-x-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-[15px] font-medium text-slate-500   ml-1">
                     Full Name
                   </label>
                   <div className="relative group">
-                    <FiUser className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
+                    <FiUser className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                     <input
                       type="text"
                       name="fullName"
                       value={formData.fullName}
                       onChange={handleChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                       placeholder="Personnel Name"
                     />
                   </div>
@@ -201,35 +193,35 @@ export default function UpdateAdmin({ back, user }) {
 
                 <div className="space-y-1.5">
                   <label className="text-[15px] font-medium text-slate-500   ml-1">
-                    username:
+                    Username:
                   </label>
                   <div className="relative group">
-                    <FiAtSign className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
+                    <FiAtSign className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                     <input
                       type="text"
                       name="userName"
                       value={formData.userName}
                       onChange={handleChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                       placeholder="username_identifier"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="">
                   <label className="text-[15px] font-medium text-slate-500   ml-1">
                     Corporate Email
                   </label>
                   <div className="relative group">
-                    <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
+                    <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                     />
                   </div>
                 </div>
@@ -245,7 +237,7 @@ export default function UpdateAdmin({ back, user }) {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm  font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                     />
                   </div>
                 </div>
@@ -253,13 +245,8 @@ export default function UpdateAdmin({ back, user }) {
             </div>
 
             {/* Section 2: Security & Assets */}
-            <div className="space-y-5">
-              <div className="flex items-center gap-2 border-b border-slate-50 pb-2">
-                <FiLock className="text-indigo-500" />
-                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                  Security Protocols
-                </h3>
-              </div>
+            <div className="mt-3">
+             
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-1.5">
                   <label className="text-[15px] font-medium text-slate-500   ml-1">
@@ -273,7 +260,7 @@ export default function UpdateAdmin({ back, user }) {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                     />
                   </div>
                 </div>
@@ -289,12 +276,12 @@ export default function UpdateAdmin({ back, user }) {
                       name="images"
                       value={formData.images}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 md:-mt-2">
                   <label className="text-[15px] font-medium text-slate-500   ml-1">
                     Clearance Role
                   </label>
@@ -304,7 +291,7 @@ export default function UpdateAdmin({ back, user }) {
                       name="role"
                       value={formData.role}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all cursor-pointer appearance-none"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all cursor-pointer appearance-none"
                     >
                       <option value="Admin">Admin / Level 1</option>
                       <option value="Super Admin">Super Admin / Level 2</option>
@@ -313,8 +300,8 @@ export default function UpdateAdmin({ back, user }) {
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[15px] font-medium text-slate-500   ml-1">
+                <div className="space-y-1.5 md:-mt-2">
+                  <label className="text-[15px] font-medium text-slate-500 ml-1">
                     Operational Status
                   </label>
                   <div className="relative">
@@ -323,7 +310,7 @@ export default function UpdateAdmin({ back, user }) {
                       name="status"
                       value={formData.status ? "Active" : "Suspended"}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-black text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all cursor-pointer appearance-none"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded text-sm font-medium text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all cursor-pointer appearance-none"
                     >
                       <option value="Active">Operational / Active</option>
                       <option value="Suspended">Suspended / Revoked</option>
@@ -335,7 +322,7 @@ export default function UpdateAdmin({ back, user }) {
 
             {/* Confirmation & Error */}
             <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 mt-3">
                 <input
                   required
                   type="checkbox"
@@ -346,7 +333,7 @@ export default function UpdateAdmin({ back, user }) {
                 />
                 <label
                   htmlFor="confirmAdmin"
-                  className="text-[11px] font-bold text-slate-600 uppercase  cursor-pointer"
+                  className="text-[11px] font-medium text-slate-7700 uppercase tracking-wide  cursor-pointer"
                 >
                   I certify these credential modifications are authorized.
                 </label>
@@ -364,13 +351,13 @@ export default function UpdateAdmin({ back, user }) {
               <button
                 onClick={back}
                 type="button"
-                className="flex-1 py-4  text-rose-500 font-black text-[11px] uppercase tracking-widest rounded-2xl border border-rose-100 hover:bg-rose-50 transition-all"
+                className="flex-1 py-3 px-5  text-rose-500 font-black text-[11px] uppercase tracking-widest rounded-2xl border border-rose-200 hover:bg-rose-50 transition-all"
               >
                 Abort Sync
               </button>
               <button
                 type="submit"
-                className="flex-[2] md:py-4 py-2 bg-slate-900 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600 shadow-xl shadow-slate-200 transition-all active:scale-95"
+                className="flex-[2] md:max-w-1/2 md:py-4 py-3 bg-slate-900 text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-2xl hover:bg-indigo-600  transition-all active:scale-95"
               >
                 Update Ledger
               </button>

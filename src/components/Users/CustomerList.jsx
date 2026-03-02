@@ -134,7 +134,7 @@ const CustomerList = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2 gap-3">
           <h2 className="text-xl font-semibold text-gray-700">Customer List</h2>
           <div className="relative w-full md:w-64">
-            <FaSearch className="absolute left-3 top-3 text-gray-400" />
+            <FaSearch className="absolute left-3 top-3 text-gray-300" />
             <input
               type="text"
               placeholder="username || phone || ID"
