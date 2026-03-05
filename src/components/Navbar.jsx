@@ -59,7 +59,7 @@ export default function Navbar({ pageTitle }) {
       <div className="flex items-center gap-3">
         <div className="w-1 h-8 bg-indigo-600 rounded-full hidden lg:block" />
         <div>
-          <h1 className=" lg:text-2xl text-sm font-black text-slate-800 tracking-tighter uppercase line-clamp-1">
+          <h1 className=" lg:text-xl text-sm font-black text-slate-800 tracking-tighter uppercase line-clamp-1">
             {pageTitle || "Command Center"}
           </h1>
         </div>

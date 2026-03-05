@@ -1,11 +1,30 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Trash2, AlertCircle, CheckCircle2, Zap } from "lucide-react";
+import {
+  Trash2,
+  AlertCircle,
+  CheckCircle2,
+  Zap,
+  RefreshCw,
+} from "lucide-react";
 import { toast } from "react-hot-toast";
 
 const SmsMonitor = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsLoading(true);
+    try {
+      // Your API call logic here
+      fetchLogs();
+    } finally {
+      // Slight delay so the user sees the spin
+      setTimeout(() => setIsLoading(false), 500);
+    }
+  };
 
   const clearLogs = async () => {
     if (!window.confirm("Clear all logs?")) return;
@@ -40,7 +59,7 @@ const SmsMonitor = () => {
     );
 
   return (
-    <div className="w-full max-w-2xl bg-[#0f172a] rounded-lg border border-slate-800 shadow-xl overflow-hidden font-sans">
+    <div className="w-full max-w-2xl mt-4 h-[375px] bg-[#0f172a] rounded-lg border border-slate-800 shadow-xl overflow-hidden font-sans">
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-3 border-b border-slate-800 bg-slate-900/50">
         <div className="flex items-center gap-2">
@@ -52,13 +71,19 @@ const SmsMonitor = () => {
             {logs.length}
           </span>
         </div>
+
         <button
-          onClick={fetchLogs}
-          className="p-1.5 text-green-500 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
-          title="Clear Monitor"
+          onClick={handleRefresh}
+          disabled={isLoading}
+          className="p-2 rounded-full hover:bg-gray-100 cursor-pointer transition-colors disabled:opacity-50"
+          aria-label="Refresh data"
         >
-          <Trash2 size={20} />
+          <RefreshCw
+            size={22}
+            className={`text-blue-600 ${isLoading ? "animate-spin" : ""}`}
+          />
         </button>
+
         <button
           onClick={clearLogs}
           className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded transition-all"
@@ -76,7 +101,7 @@ const SmsMonitor = () => {
           </div>
         ) : (
           <table className="w-full text-left border-collapse">
-            <thead className="sticky top-0 bg-slate-900 text-[10px] text-slate-500 uppercase font-black">
+            <thead className="sticky top-0 bg-slate-800 text-[10px] text-slate-500 uppercase font-black">
               <tr>
                 <th className="p-3 pl-4">Phone / ID</th>
                 <th className="p-3">Result</th>
@@ -96,7 +121,7 @@ const SmsMonitor = () => {
                         <span className="text-xs font-bold text-slate-200">
                           {log.phoneNumber}
                         </span>
-                        <span className="text-[9px] font-mono text-slate-500 uppercase tracking-tighter">
+                        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-tighter">
                           {log.type} • ID:{log.message_id || "ERR"}
                         </span>
                       </div>
@@ -112,13 +137,13 @@ const SmsMonitor = () => {
                           />
                         )}
                         <span
-                          className={`text-[10px] font-bold ${isSuccess ? "text-green-500/80" : "text-red-400"}`}
+                          className={`text-[12px] font-bold ${isSuccess ? "text-green-500/80" : "text-red-400"}`}
                         >
                           {log.response_code}
                         </span>
                         {!isSuccess && (
                           <span
-                            className="text-[9px] text-red-300/60 max-w-[120px] truncate"
+                            className="text-[11px] text-red-300/60 max-w-[210px] truncate"
                             title={log.error_message}
                           >
                             {log.error_message}
@@ -127,7 +152,7 @@ const SmsMonitor = () => {
                       </div>
                     </td>
                     <td className="p-3 text-right pr-4">
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[12px] text-slate-500 font-mono">
                         {new Date(log.createdAt).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
