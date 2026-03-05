@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import Navbar from "../components/Navbar";
-import { div } from "framer-motion/client";
 import AdminRegistration from "../components/Users/AdminRegistration";
 import AdminList from "../components/Users/AdminList";
 import CustomerList from "../components/Users/CustomerList";
@@ -12,28 +11,29 @@ export default function Users() {
   return (
     <div className="mt-12 md:mt-0 font-sans">
       <Navbar pageTitle="User Management" />
-      <div className="bg-white shadow-lg  p-3 w-full mx-auto">
-        {/* Buttons */}
-        {/* Main Container */}
-        <div className="flex flex-col lg:flex-row justify-between md:justify-center items-start w-full gap-4 mb-4">
+      <div className="bg-white shadow-xl p-4 w-full mx-auto rounded-xl border border-slate-100">
+        
+        {/* Main Navigation Container */}
+        <div className="flex flex-col lg:flex-row justify-between md:justify-center items-start w-full gap-4 mb-6">
+          
           {/* Left Side: System & Customer */}
-          <div className="flex flex-row lg:flex-row w-full lg:w-auto gap-2">
+          <div className="flex flex-row w-full lg:w-auto gap-3">
             <button
               onClick={() => setActiveTab("system")}
-              className={`flex-1 lg:w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 lg:w-44 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 ${
                 activeTab === "system"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-[#1976d2] text-white shadow-lg shadow-blue-200"
+                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"
               }`}
             >
               System User
             </button>
             <button
               onClick={() => setActiveTab("customer")}
-              className={`flex-1 lg:w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 lg:w-44 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 ${
                 activeTab === "customer"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-[#1976d2] text-white shadow-lg shadow-blue-200"
+                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"
               }`}
             >
               Customer
@@ -41,13 +41,13 @@ export default function Users() {
           </div>
 
           {/* Right Side: Admin Actions */}
-          <div className="flex flex-row w-full lg:w-auto gap-2">
+          <div className="flex flex-row w-full lg:w-auto gap-3">
             <button
               onClick={() => setActiveTab("admin")}
-              className={`flex-1 lg:w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 lg:w-44 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 ${
                 activeTab === "admin"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-[#1976d2] text-white shadow-lg shadow-blue-200"
+                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"
               }`}
             >
               Admin List
@@ -55,12 +55,10 @@ export default function Users() {
 
             <button
               onClick={() => setActiveTab("addAdmin")}
-              // Note: Removed lg:hidden so it's visible on large screens too,
-              // unless you specifically want it hidden there.
-              className={`flex-1 lg:w-40 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 lg:w-44 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 border-2 ${
                 activeTab === "addAdmin"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-slate-900 text-white border-slate-900 shadow-lg shadow-slate-200"
+                  : "bg-white text-[#1976d2] border-[#1976d2] hover:bg-blue-50"
               }`}
             >
               + New Admin
@@ -69,11 +67,9 @@ export default function Users() {
         </div>
 
         {/* Conditional Content */}
-        <div className=" min-h-screen">
+        <div className="min-h-screen animate-in fade-in slide-in-from-bottom-2 duration-500">
           {activeTab === "admin" && <AdminList />}
-
           {activeTab === "customer" && <CustomerList />}
-
           {activeTab === "addAdmin" && <AdminRegistration />}
           {activeTab === "system" && <SystemPersonnel />}
         </div>

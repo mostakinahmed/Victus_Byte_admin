@@ -7,6 +7,7 @@ export const DataContext = createContext();
 
 export const ApiContext = ({ children }) => {
   const [productData, setProductData] = useState([]);
+  const [customerData, setCustomerData] = useState([]);
   const [couponData, setCouponData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [adminData, setAdminData] = useState([]);
@@ -23,6 +24,7 @@ export const ApiContext = ({ children }) => {
     setStockData([]);
     setOrderData([]);
     setCategoryData([]);
+    setCustomerData([]);
 
     try {
       setLoading(true);
@@ -37,6 +39,7 @@ export const ApiContext = ({ children }) => {
           api.get("/category"),
           api.get("/product"),
           api.get("/coupon/admin/all"),
+          api.get("/customer/list"),
         ]);
 
         // Safely set data for each promise result
@@ -52,6 +55,8 @@ export const ApiContext = ({ children }) => {
           setProductData(results[4].value.data);
         if (results[5].status === "fulfilled")
           setCouponData(results[5].value.data?.data || []);
+        if (results[6].status === "fulfilled")
+          setCustomerData(results[6].value.data.data);
 
         // Check if all failed (Optional: show error if user is logged in but can't see anything)
         const allRejected = results.every((res) => res.status === "rejected");
@@ -66,18 +71,19 @@ export const ApiContext = ({ children }) => {
       setLoading(false);
     }
   };
+  console.log(adminData);
 
   // ✅ CRITICAL FIX: Run whenever the cookie changes
   useEffect(() => {
     updateApi();
   }, [Cookies.get("token")]);
-  
 
   const contextValue = {
     productData,
     categoryData,
     adminData,
     couponData,
+    customerData,
     stockData,
     orderData,
     loading,

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { DataContext } from "@/Context Api/ApiContext";
+import React, { useContext, useState } from "react";
 import {
   FiMail,
   FiPhone,
@@ -6,122 +7,104 @@ import {
   FiSearch,
   FiFilter,
   FiActivity,
+  FiShield,
+  FiUserCheck,
 } from "react-icons/fi";
 
 const SystemPersonnel = () => {
-  // --- DUMMY DATA ---
-  const [employees] = useState([
-    {
-      adminID: "VB-AD-1001",
-      fullName: "Imran Hossain",
-      userName: "imran_victus",
-      email: "imran@victusbyte.com",
-      phone: "+880 1712-345678",
-      role: "Admin",
-      status: "Active",
-      images:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    },
-    {
-      adminID: "VB-MOD-2005",
-      fullName: "Sumaiya Akhter",
-      userName: "sumaiya_mod",
-      email: "sumaiya@victusbyte.com",
-      phone: "+880 1822-998877",
-      role: "Moderator",
-      status: "Active",
-      images:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-    },
-    {
-      adminID: "VB-AD-1002",
-      fullName: "Tanvir Ahmed",
-      userName: "tanvir_dev",
-      email: "tanvir@victusbyte.com",
-      phone: "+880 1911-554433",
-      role: "Admin",
-      status: "Active",
-      images:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
-    },
-    {
-      adminID: "VB-MOD-2009",
-      fullName: "Ayesha Siddiqua",
-      userName: "ayesha_vibes",
-      email: "ayesha@victusbyte.com",
-      phone: "+880 1633-112233",
-      role: "Moderator",
-      status: "Away",
-      images:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop",
-    },
-  ]);
-
+  const { adminData } = useContext(DataContext);
   const [searchTerm, setSearchTerm] = useState("");
+  console.log(adminData);
 
-  // 1. First, get the overall filtered list based on search
-  const filteredUsers = employees.filter(
+  // Use live admindata if available, else fallback to empty array
+  const personnel = adminData || [];
+
+  // 1. Filter by Search Term
+  const filteredUsers = personnel.filter(
     (user) =>
-      user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.adminID.toLowerCase().includes(searchTerm.toLowerCase()),
+      user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.adminID?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // 2. Then split that filtered list into Admin and Moderator groups
-  const admins = filteredUsers.filter((user) => user.role === "Admin");
-  const moderators = filteredUsers.filter((user) => user.role === "Moderator");
+  // 2. Logic: ID starts with 45 = Admin, 15 = Moderator
+  const admins = filteredUsers.filter((user) => user.adminID?.startsWith("45"));
+  const moderators = filteredUsers.filter((user) =>
+    user.adminID?.startsWith("15"),
+  );
 
-  // Reusable Badge Component to keep code DRY
   const UserBadge = ({ user }) => {
-    const isAdmin = user.role === "Admin";
+    const isAdmin = user.adminID?.startsWith("45");
+
     return (
-      <div className="bg-white rounded-[24px] border border-slate-100 shadow-sm hover:shadow-xl hover:translate-y-[-4px] transition-all duration-500 overflow-hidden group relative max-h-[180px]">
+      <div className="bg-white rounded-[15px] border border-slate-300 hover:shadow-lg hover:translate-y-[-4px] transition-all duration-500 overflow-hidden group relative">
+        {/* Brand Accent Line */}
         <div
-          className={`h-1 w-full ${isAdmin ? "bg-slate-900" : "bg-indigo-600"}`}
+          className={`h-1.5 w-full ${isAdmin ? "bg-slate-900" : "bg-[#1976d2]"}`}
         ></div>
+
         <div className="flex flex-row h-full">
+          {/* Sidebar Section */}
           <div
-            className={`md:w-[120px] w-[80px] flex flex-col items-center justify-center relative overflow-hidden transition-colors duration-500 ${isAdmin ? "bg-[#0F172A]" : "bg-[#4F46E5]"}`}
+            className={`w-[100px] md:w-[120px] flex flex-col items-center justify-center p-4 transition-colors duration-500 ${isAdmin ? "bg-slate-900" : "bg-[#1976d2]"}`}
           >
-            <div className="relative z-10">
+            <div className="relative">
               <img
-                src={user.images}
-                className="md:w-24 md:h-24 w-18 h-18 rounded-2xl object-cover border-2 border-white/10 shadow-lg group-hover:scale-105 transition-transform"
+                src={
+                  user.images ||
+                  "https://7vgva7cju0vcfvwf.public.blob.vercel-storage.com/user.png"
+                }
+                className="w-16 h-16 md:w-20 md:h-20 rounded-2xl object-cover border-2 border-white/20 shadow-lg"
                 alt={user.fullName}
               />
-              <div
-                className={`absolute -bottom-1 -right-1 w-4 h-4 border-2 border-[#0F172A] rounded-full ${user.status === "Active" ? "bg-emerald-500" : "bg-amber-500"}`}
-              >
-                <span className="absolute inset-0 rounded-full bg-inherit animate-ping opacity-40"></span>
+              {/* Online Status Dot */}
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 border-2 border-slate-900 rounded-full bg-emerald-500">
+                <span className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-40"></span>
               </div>
             </div>
-            <div className="mt-3 px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/5">
-              <p className="md:text-[10px] text-[8px] font-black text-white uppercase tracking-widest leading-none">
-                {user.role}
+            <div className="mt-3 px-2 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/10">
+              <p className="text-[8px] md:text-[9px] font-black text-white uppercase tracking-[0.2em] leading-none">
+                {isAdmin ? "Admin" : "Moderator"}
               </p>
             </div>
           </div>
-          <div className="flex-1 md:p-4 mb-2 md:mb-0 ml-1 md:ml-0 mt-3 md:mt-0 px-1 relative flex flex-col">
-            <div className="mb-2">
-              <h3 className="md:text-xl -mt-2 font-black text-slate-900 uppercase tracking-tighter truncate w-[90%]">
+
+          {/* Details Section */}
+          <div className="flex-1 p-4 flex flex-col justify-center overflow-hidden">
+            <div className="mb-3">
+              <h3 className="text-base md:text-lg font-black text-slate-800 uppercase tracking-tighter truncate">
                 {user.fullName}
               </h3>
-              <p className="text-indigo-600 font-black text-[11px] uppercase tracking-widest opacity-70">
-                @{user.userName}
+              <p className="text-[#1976d2] font-black text-[10px] uppercase tracking-widest opacity-80">
+                {isAdmin ? "System Controller" : "Content Monitor"}
               </p>
             </div>
-            <div className="space-y-1">
+
+            <div className="space-y-1.5">
               {[
-                { icon: <FiCreditCard />, value: user.adminID, mono: true },
-                { icon: <FiMail />, value: user.email },
-                { icon: <FiPhone />, value: user.phone },
+                {
+                  icon: <FiCreditCard />,
+                  value: user.adminID,
+                  color: "text-slate-400",
+                },
+                {
+                  icon: <FiMail />,
+                  value: user.email,
+                  color: "text-slate-400",
+                },
+                {
+                  icon: <FiPhone />,
+                  value: user.phone,
+                  color: "text-slate-400",
+                },
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <div className="text-slate-500">
-                    {React.cloneElement(item.icon, { size: 13 })}
-                  </div>
-                  <p
-                    className={`text-[13px] font-medium text-slate-600 truncate ${item.mono ? "font-mono" : ""}`}
-                  >
+                <div
+                  key={i}
+                  className="flex items-center gap-2 overflow-hidden"
+                >
+                  <span className={item.color}>
+                    {React.cloneElement(item.icon, { size: 12 })}
+                  </span>
+                  <p className="text-[12px] font-bold text-slate-600 truncate">
                     {item.value}
                   </p>
                 </div>
@@ -134,79 +117,78 @@ const SystemPersonnel = () => {
   };
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen font-sans p-4 md:p-6">
-      {/* --- DASHBOARD HEADER --- */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 md:gap-6 gap-4">
-        <div className="flex items-center gap-2">
-          <FiActivity className="text-emerald-500" size={18} />
-          <p className="text-slate-400 font-bold text-[13px] uppercase tracking-[0.2em]">
-            {employees.length} Active System Users
-          </p>
-        </div>
-
-        <div className="relative group w-full lg:w-auto">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+    <div className="bg-[#F8FAFC] min-h-screen p-4 md:p-8">
+      {/* Header Section */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-10 gap-6">
+        {/* Search Bar */}
+        <div className="relative w-full lg:w-80">
+          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
-            placeholder="Search ID or Name..."
-            className="pl-11 pr-4 py-2 bg-white border placeholder:font-medium border-slate-300 rounded-2xl w-full sm:w-72 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-sm font-bold"
+            placeholder="Search by ID or Name..."
+            className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl outline-none focus:ring-4 focus:ring-[#1976d2]/5 focus:border-[#1976d2] transition-all placeholder:font-medium text-xs font-black uppercase tracking-widest"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
-      {/* --- CONTENT SECTIONS --- */}
-      <div className="space-y-12">
-        {/* --- ADMINS SECTION --- */}
+      <div className="space-y-16">
+        {/* Administrators Section */}
         {admins.length > 0 && (
-          <div>
-            <div className="flex items-center gap-4 mb-6">
-              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 whitespace-nowrap">
+          <section>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-2 bg-slate-900 rounded-lg text-white">
+                <FiShield size={16} />
+              </div>
+              <h2 className="text-xs font-black uppercase tracking-[0.4em] text-slate-400">
                 System Administrators{" "}
-                <span className="ml-2 text-indigo-500">[{admins.length}]</span>
+                <span className="text-slate-900 ml-2">({admins.length})</span>
               </h2>
-              <div className="h-[1px] w-full bg-slate-200"></div>
+              <div className="flex-1 h-[1px] bg-slate-200"></div>
             </div>
-            <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
               {admins.map((user) => (
                 <UserBadge key={user.adminID} user={user} />
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* --- MODERATORS SECTION --- */}
+        {/* Moderators Section */}
         {moderators.length > 0 && (
-          <div>
-            <div className="flex items-center gap-4 mb-6">
-              <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 whitespace-nowrap">
+          <section>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="p-2 bg-[#1976d2] rounded-lg text-white">
+                <FiUserCheck size={16} />
+              </div>
+              <h2 className="text-xs font-black uppercase tracking-[0.4em] text-slate-400">
                 System Moderators{" "}
-                <span className="ml-2 text-indigo-500">
-                  [{moderators.length}]
+                <span className="text-[#1976d2] ml-2">
+                  ({moderators.length})
                 </span>
               </h2>
-              <div className="h-[1px] w-full bg-slate-200"></div>
+              <div className="flex-1 h-[1px] bg-slate-200"></div>
             </div>
-            <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
               {moderators.map((user) => (
                 <UserBadge key={user.adminID} user={user} />
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* --- EMPTY SEARCH STATE --- */}
+        {/* Empty State */}
         {filteredUsers.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[40px] border-2 border-dashed border-slate-200">
+          <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[3rem] border border-slate-100 shadow-sm">
             <div className="p-6 bg-slate-50 rounded-3xl text-slate-300 mb-4">
               <FiFilter size={48} />
             </div>
-            <h3 className="text-slate-900 font-black uppercase tracking-tight text-lg">
+            <h3 className="text-slate-900 font-black uppercase tracking-widest text-sm">
               Identity Not Found
             </h3>
-            <p className="text-slate-400 font-medium text-sm">
-              No personnel matches your current query
+            <p className="text-slate-400 font-bold text-[10px] uppercase mt-2">
+              Try searching by different criteria
             </p>
           </div>
         )}

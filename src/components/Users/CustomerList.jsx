@@ -1,231 +1,127 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaEdit, FaTrash, FaSearch, FaEye } from "react-icons/fa";
 import CustomerView from "./CustomerView";
+import { DataContext } from "@/Context Api/ApiContext";
 
 const CustomerList = () => {
+  const { customerData } = useContext(DataContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("list");
-  const [selectedAdmin, setSelectedAdmin] = useState(null); // <-- store selected admin
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-  const adminData = [
-{
-      id: "A001",
-      fullName: "Mostakin Ahmed",
-      username: "mostakin",
-      email: "mostakin@example.com",
-      phone: "+8801789001234",
-      role: "Super Admin",
-      status: "Active",
-      createdAt: "2025-10-01",
-      lastLogin: "2025-10-18 14:32",
-    },
-    {
-      id: "A002",
-      fullName: "Rafiul Islam",
-      username: "rafiul",
-      email: "rafiul@example.com",
-      phone: "+8801790005678",
-      role: "Admin",
-      status: "Active",
-      createdAt: "2025-09-25",
-      lastLogin: "2025-10-20 09:15",
-    },
-    {
-      id: "A003",
-      fullName: "Nusrat Jahan",
-      username: "nusrat",
-      email: "nusrat@example.com",
-      phone: "+8801876003344",
-      role: "Moderator",
-      status: "Inactive",
-      createdAt: "2025-08-12",
-      lastLogin: "2025-09-30 18:45",
-    },
-    {
-      id: "A004",
-      fullName: "Sajid Hasan",
-      username: "sajid",
-      email: "sajid@example.com",
-      phone: "+8801754002233",
-      role: "Admin",
-      status: "Active",
-      createdAt: "2025-07-05",
-      lastLogin: "2025-10-19 21:10",
-    },
-    {
-      id: "A005",
-      fullName: "Farzana Akter",
-      username: "farzana",
-      email: "farzana@example.com",
-      phone: "+8801998007890",
-      role: "Editor",
-      status: "Active",
-      createdAt: "2025-09-14",
-      lastLogin: "2025-10-17 10:05",
-    },
-    {
-      id: "A006",
-      fullName: "Tareq Rahman",
-      username: "tareq",
-      email: "tareq@example.com",
-      phone: "+8801711005566",
-      role: "Support",
-      status: "Suspended",
-      createdAt: "2025-06-10",
-      lastLogin: "2025-08-29 12:30",
-    },
-    {
-      id: "A007",
-      fullName: "Mim Chowdhury",
-      username: "mimc",
-      email: "mimc@example.com",
-      phone: "+8801817009988",
-      role: "Admin",
-      status: "Active",
-      createdAt: "2025-08-30",
-      lastLogin: "2025-10-18 16:25",
-    },
-    {
-      id: "A008",
-      fullName: "Hasan Mahmud",
-      username: "hasan",
-      email: "hasan@example.com",
-      phone: "+8801788001112",
-      role: "Editor",
-      status: "Active",
-      createdAt: "2025-09-10",
-      lastLogin: "2025-10-19 19:50",
-    },
-    {
-      id: "A009",
-      fullName: "Sadia Khatun",
-      username: "sadiak",
-      email: "sadiak@example.com",
-      phone: "+8801979003344",
-      role: "Moderator",
-      status: "Inactive",
-      createdAt: "2025-07-18",
-      lastLogin: "2025-09-25 08:55",
-    },
-    {
-      id: "A010",
-      fullName: "Arif Hossain",
-      username: "arifh",
-      email: "arifh@example.com",
-      phone: "+8801702006677",
-      role: "Support",
-      status: "Active",
-      createdAt: "2025-10-02",
-      lastLogin: "2025-10-20 11:47",
-    },
-  ];
-
-  const filteredAdmins = adminData.filter(
-    (admin) =>
-      admin.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      admin.phone.includes(searchTerm) ||
-      admin.id.includes(searchTerm.toUpperCase())
-  );
+  // Filter logic for live data
+  const filteredCustomers =
+    customerData?.filter(
+      (customer) =>
+        customer.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.phone?.includes(searchTerm) ||
+        customer.cID?.toUpperCase().includes(searchTerm.toUpperCase()),
+    ) || [];
 
   return (
-    <div className="bg-white rounded  ">
-      {/* Header + Search */}
+    <div className="bg-white rounded-xl shadow-xs md:px-4 px-2">
+      {/* 1. Header + Brand Search */}
       {activeTab === "list" && (
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2 gap-3">
-          <h2 className="text-xl font-semibold text-gray-700">Customer List</h2>
-          <div className="relative w-full md:w-64">
-            <FaSearch className="absolute left-3 top-3 text-gray-300" />
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
+          <h2 className="text-[14px] font-black text-slate-800 uppercase tracking-[0.2em] flex items-center gap-3">
+            <span className="w-1.5 h-5 bg-[#1976d2] rounded-full"></span>
+            Customer List
+          </h2>
+          <div className="relative w-full md:w-80">
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
             <input
               type="text"
-              placeholder="username || phone || ID"
+              placeholder="Search by username, phone, or ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              className="w-full pl-10 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-[#1976d2] focus:outline-none transition-all"
             />
           </div>
         </div>
       )}
 
-      <div className="overflow-x-auto">
-        {/* Admin Table */}
-        {activeTab === "list" && (
-          <table className="w-full border border-gray-200 text-sm text-left whitespace-nowrap">
-            <thead className="bg-gray-200 text-gray-700 uppercase text-xs whitespace-nowrap">
+      {/* 2. Customer Table */}
+      {activeTab === "list" && (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left whitespace-nowrap">
+            <thead className="bg-slate-100 shadow-sm text-slate-500 uppercase text-[10px] font-black tracking-widest">
               <tr>
-                <th className="py-3 px-4 border-b">User ID</th>
-                <th className="py-3 px-4 border-b">Full Name</th>
-                <th className="py-3 px-4 border-b">Username</th>
-                <th className="py-3 px-4 border-b">Email</th>
-                <th className="py-3 px-4 border-b">Phone</th>
-                <th className="py-3 px-4 border-b">Role</th>
-                <th className="py-3 px-4 border-b">Status</th>
-                <th className="py-3 px-4 border-b">Created</th>
-                <th className="py-3 px-4 border-b">Last Login</th>
-                <th className="py-3 px-4 border-b text-center">Action</th>
+                <th className="py-4 px-4 border-b border-slate-100">User ID</th>
+                <th className="py-4 px-4 border-b border-slate-100">
+                  Full Name
+                </th>
+                <th className="py-4 px-4 border-b border-slate-100">Email</th>
+                <th className="py-4 px-4 border-b border-slate-100">Phone</th>
+                <th className="py-4 px-4 border-b border-slate-100">Status</th>
+                <th className="py-4 px-4 border-b border-slate-100 text-center">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody>
-              {filteredAdmins.length > 0 ? (
-                filteredAdmins.map((admin) => (
+            <tbody className="divide-y divide-slate-100 ">
+              {filteredCustomers.length > 0 ? (
+                filteredCustomers.map((customer) => (
                   <tr
-                    key={admin.id}
-                    className="hover:bg-gray-100 transition duration-150"
+                    key={customer._id}
+                    className="hover:bg-slate-100 transition-colors group"
                   >
-                    <td className="py-3 px-4 border-b">{admin.id}</td>
-                    <td className="py-3 px-4 border-b">{admin.fullName}</td>
-                    <td className="py-3 px-4 border-b">{admin.username}</td>
-                    <td className="py-3 px-4 border-b">{admin.email}</td>
-                    <td className="py-3 px-4 border-b">{admin.phone}</td>
-                    <td className="py-3 px-4 border-b">{admin.role}</td>
-                    <td
-                      className={`py-3 px-4 border-b font-medium ${
-                        admin.status === "Active"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {admin.status}
+                    <td className="py-2 px-4 font-bold text-[#1976d2]">
+                      {customer.cID}
                     </td>
-                    <td className="py-3 px-4 border-b">{admin.createdAt}</td>
-                    <td className="py-3 px-4 border-b">{admin.lastLogin}</td>
-                    <td className="py-1 px-4 border-b text-center space-x-3">
-                      <button
-                        onClick={() => {
-                          setSelectedAdmin(admin); // <-- set selected admin
-                          setActiveTab("view"); // <-- switch tab
-                        }}
-                        className="text-blue-500 hover:text-blue-700 text-xl"
-                      >
-                        <FaEye />
-                      </button>
-                      <button className="text-yellow-500 hover:text-yellow-700 text-xl">
-                        <FaEdit />
-                      </button>
-                      <button className="text-red-500 hover:text-red-700 text-xl">
-                        <FaTrash />
-                      </button>
+                    <td className="py-2 px-4 text-slate-800 font-medium">
+                      {customer.userName}
+                    </td>
+                    <td className="py-2 px-4 text-slate-800">
+                      {customer.email}
+                    </td>
+                    <td className="py-2 px-4 text-slate-800">
+                      {customer.phone}
+                    </td>
+                    <td className="py-2 px-4">
+                      {customer.isVerified ? (
+                        <span className="bg-emerald-50 text-emerald-600 text-[10px] font-black px-2 py-1 rounded uppercase  border border-emerald-100">
+                          Verified
+                        </span>
+                      ) : (
+                        <span className="bg-slate-100 text-slate-700 text-[9px] font-black px-2 py-1 rounded uppercase tracking-tighter border border-slate-200">
+                          Unverified
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-2 px-4 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => {
+                            setSelectedCustomer(customer); // FIXED: Passing customer instead of admin
+                            setActiveTab("view");
+                          }}
+                          className="p-2 text-slate-500 cursor-pointer hover:text-[#1976d2] hover:bg-white rounded-lg transition-all"
+                        >
+                          <FaEye size={17} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan="10"
-                    className="text-center py-4 text-gray-500 italic"
+                    colSpan="6"
+                    className="text-center py-12 text-slate-400 italic text-xs"
                   >
-                    No matching admins found
+                    No customers found matching "{searchTerm}"
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* CustomerView */}
+      {/* 3. Customer Detail View */}
       {activeTab === "view" && (
         <CustomerView
-          user={selectedAdmin}
+          user={selectedCustomer}
           goBack={() => setActiveTab("list")}
         />
       )}

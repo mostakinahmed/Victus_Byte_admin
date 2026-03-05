@@ -1,11 +1,13 @@
 import { useContext, useState } from "react";
-import { AuthContext } from "../../Context Api/AuthContext.jsx";
-import { FaSpinner, FaCheckCircle } from "react-icons/fa";
-import axios from "axios";
 import { DataContext } from "@/Context Api/ApiContext.jsx";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import api from "@/Context Api/api.js";
+import { 
+  FiUser, FiAtSign, FiMail, FiPhone, 
+  FiLock, FiImage, FiShield, FiActivity 
+} from "react-icons/fi";
+
 const MySwal = withReactContent(Swal);
 
 export default function AdminRegistration() {
@@ -25,324 +27,169 @@ export default function AdminRegistration() {
 
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  // handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     if (name === "status") {
-      // convert string to boolean
       setFormData({ ...formData, [name]: value === "Active" });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
-  const extra = () => {
-    MySwal.fire({
-      title: (
-        <p className="text-xl font-semibold text-blue-600">Processing...</p>
-      ),
-      html: (
-        <p className="text-gray-600">Please wait while we update your order.</p>
-      ),
-      allowOutsideClick: false,
-      didOpen: () => {
-        MySwal.showLoading();
-      },
-      customClass: {
-        popup: "w-[300px] h-[200px] p-4 lg:ml-45", // 👈 controls alert size
-        title: "text-lg font-bold",
-        htmlContainer: "text-sm text-gray-600",
-      },
-    });
-
-    // const res = await axios.patch(
-    //   `https://fabribuzz.onrender.com/api/order/update/${orderId}`,
-    //   updatedData,
-    //   {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   }
-    // );
-
-    //update api
-    // updateApi();
-
-    // Update success message
-    MySwal.hideLoading();
-    MySwal.update({
-      icon: "success",
-      title: <p className="text-green-600 text-xl font-bold">Order ✅</p>,
-      html: (
-        <div className="text-gray-700 mt-2 mb-4">
-          Order <b>#123</b> has been successfully updated!
-        </div>
-      ),
-      showConfirmButton: true,
-      confirmButtonText: "OK",
-      customClass: {
-        popup: "ml-45",
-        confirmButton:
-          "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
-      },
-      buttonsStyling: false,
-    });
-  };
-
-  console.log(formData);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isConfirmed) {
-      setError("Please confirm to create the admin account.");
+      setError("Please confirm the authorization to proceed.");
       return;
     }
 
     try {
       setError("");
       MySwal.fire({
-        title: (
-          <p className="text-xl font-semibold text-blue-600">Processing...</p>
-        ),
-        html: (
-          <p className="text-gray-600">Please wait while we create Admin.</p>
-        ),
+        title: <p className="text-lg font-black text-slate-800 uppercase tracking-widest">Processing</p>,
+        html: <p className="text-xs font-bold text-slate-500 uppercase">Synchronizing Ledger...</p>,
         allowOutsideClick: false,
-        didOpen: () => {
-          MySwal.showLoading();
-        },
+        didOpen: () => { MySwal.showLoading(); },
         customClass: {
-          popup: "w-[300px] h-[200px] p-4 lg:ml-45",
-          title: "text-lg font-bold",
-          htmlContainer: "text-sm text-gray-600",
+          popup: "rounded-[2rem] border-none shadow-2xl",
+          loader: "text-[#1976d2]"
         },
       });
 
-      //call backend
-      const data = formData;
-      const res = await api.post("/user/admin/signup", data);
+      const res = await api.post("/user/admin/signup", formData);
 
       if (res.status === 201) {
-        updateApi(); // refresh admin list
-        console.log("Success:", res.data);
-        setError("");
-
-        // reset confirmation
+        updateApi();
         setIsConfirmed(false);
-        // Update success message
         MySwal.hideLoading();
         MySwal.update({
           icon: "success",
-          title: (
-            <p className="text-green-600 text-xl font-bold">Admin Created ✅</p>
-          ),
+          iconColor: "#1976d2",
+          title: <p className="text-lg font-black text-slate-800 uppercase tracking-widest">Success ✅</p>,
           html: (
-            <div className="text-gray-700 mt-2 mb-4">
-              Admin <b>#{formData.fullName}</b> has been successfully updated!
+            <div className="text-xs font-bold text-slate-500 uppercase mt-2">
+              Admin <b className="text-[#1976d2]">{formData.fullName}</b> has been registered.
             </div>
           ),
           showConfirmButton: true,
-          confirmButtonText: "OK",
+          confirmButtonText: "Acknowledge",
           customClass: {
-            popup: "ml-45",
-            confirmButton:
-              "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
+            popup: "rounded-[2rem]",
+            confirmButton: "bg-[#1976d2] hover:bg-[#1565c0] text-white font-black px-8 py-3 rounded-xl uppercase text-[10px] tracking-widest",
           },
           buttonsStyling: false,
         });
+        
         setFormData({
-          // optionally reset form
-          fullName: "",
-          userName: "",
-          email: "",
-          images: "",
-          phone: "",
-          password: "",
-          role: "Admin",
-          status: true,
+          fullName: "", userName: "", email: "",
+          images: "", phone: "", password: "",
+          role: "Admin", status: true,
         });
-
-        //update api
-        updateApi();
       }
     } catch (err) {
       MySwal.hideLoading();
-
       MySwal.update({
-        icon: "error", // Changed to error
-        title: <p className="text-red-600 text-xl font-bold">Failed ❌</p>, // Red text and X icon
-        html: (
-          <div className="text-gray-700 mt-2 mb-4">
-            Admin <b>#{formData.fullName}</b> could not be updated. Please try
-            again.
-          </div>
-        ),
+        icon: "error",
+        title: <p className="text-lg font-black text-rose-600 uppercase tracking-widest">Failed ❌</p>,
+        html: <div className="text-xs font-bold text-slate-500 uppercase mt-2">Registration process interrupted.</div>,
         showConfirmButton: true,
-        confirmButtonText: "Try Again",
+        confirmButtonText: "Retry",
         customClass: {
-          popup: "ml-45",
-          confirmButton:
-            "bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg", // Red button
+          popup: "rounded-[2rem]",
+          confirmButton: "bg-rose-500 hover:bg-rose-600 text-white font-black px-8 py-3 rounded-xl uppercase text-[10px] tracking-widest",
         },
         buttonsStyling: false,
       });
-
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Failed to register admin. Please try again.");
-      }
+      setError(err.response?.data?.message || "Internal server failure.");
     }
   };
 
   return (
-    <div className="w-full lg:max-w-xl mx-auto lg:mt-3 bg-white">
-      <h2 className="lg:text-2xl text-xl  font-bold mb-4 lg:mt-10 mt-5 text-center bg-gray-200 p-2 rounded">
-        Register New Admin
-      </h2>
+    <div className="w-full lg:max-w-2xl mx-auto lg:mt-6 mb-10 bg-white border border-slate-100 rounded p-8 shadow animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex items-center gap-3 mb-8 justify-center lg:justify-start">
+        <span className="w-1.5 h-6 bg-[#1976d2] rounded-full"></span>
+        <h2 className="text-[14px] font-black text-slate-800 uppercase tracking-[0.3em]">
+          Register New Admin
+        </h2>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Basic Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1 font-medium">Full Name</label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              placeholder="Mostakin Ahmed"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Username</label>
-            <input
-              type="text"
-              name="userName"
-              value={formData.userName}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              placeholder="mostakin111111"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              placeholder="admin@victusbyte.com"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Phone</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              placeholder="+880123456789"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">
-              Profile Picture URL
-            </label>
-            <input
-              type="text"
-              name="images"
-              value={formData.images}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              placeholder="https://example.com/avatar.jpg"
-              required
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InputBlock label="Full Name" icon={<FiUser />} name="fullName" value={formData.fullName} onChange={handleChange} placeholder="Mostakin Ahmed" />
+          <InputBlock label="Username" icon={<FiAtSign />} name="userName" value={formData.userName} onChange={handleChange} placeholder="mostakin11" />
+          <InputBlock label="Email" icon={<FiMail />} type="email" name="email" value={formData.email} onChange={handleChange} placeholder="admin@victusbyte.com" />
+          <InputBlock label="Phone" icon={<FiPhone />} name="phone" value={formData.phone} onChange={handleChange} placeholder="+880123456789" />
+          <InputBlock label="Password" icon={<FiLock />} type="password" name="password" value={formData.password} onChange={handleChange} placeholder="••••••••" />
+          <InputBlock label="Profile Image URL" icon={<FiImage />} name="images" value={formData.images} onChange={handleChange} placeholder="https://..." />
         </div>
 
-        {/* Security & Login Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1 font-medium">Role</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-            >
-              <option value="Admin">Admin</option>
-              <option value="Super Admin">Super Admin</option>
-              <option value="Moderator">Moderator</option>
-            </select>
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Status</label>
-            <select
-              name="status"
-              value={formData.status ? "Active" : "Suspended"}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-            >
-              <option value="Active">Active</option>
-              <option value="Suspended">Suspended</option>
-            </select>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <SelectBlock label="Role" icon={<FiShield />} name="role" value={formData.role} onChange={handleChange} options={["Admin", "Super Admin", "Moderator"]} />
+          <SelectBlock label="Status" icon={<FiActivity />} name="status" value={formData.status ? "Active" : "Suspended"} onChange={handleChange} options={["Active", "Suspended"]} />
         </div>
 
-        {/* Confirmation Checkbox */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
           <input
             required
             type="checkbox"
             id="confirmAdmin"
             checked={isConfirmed}
             onChange={() => setIsConfirmed(!isConfirmed)}
-            className="w-4 h-4"
+            className="w-5 h-5 rounded-md border-slate-300 text-[#1976d2] focus:ring-[#1976d2] transition-all cursor-pointer"
           />
-          <label htmlFor="confirmAdmin" className="text-gray-700">
-            I confirm that I want to create a new admin account
+          <label htmlFor="confirmAdmin" className="text-[10px] font-black text-slate-500 uppercase tracking-wide cursor-pointer">
+            I certify that this administrative account creation is authorized.
           </label>
         </div>
 
-        {/* Error message */}
         {error && (
-          <div className="text-red-600 font-medium bg-red-100 p-2 rounded">
-            {error}
+          <div className="text-rose-600 font-black text-[10px] uppercase bg-rose-50 p-3 rounded-xl border border-rose-100 flex items-center gap-2">
+            <FiAlertCircle /> {error}
           </div>
         )}
 
-        {/* Submit Button */}
-        <div className="text-center">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 w-full py-2 rounded hover:bg-blue-700 transition-all font-medium"
-          >
-            Register Admin
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="w-full bg-slate-900 hover:bg-[#1976d2] text-white py-4 rounded-2xl font-black uppercase text-[11px] tracking-[0.2em] transition-all shadow-xl shadow-blue-900/10 active:scale-95"
+        >
+          Dispatch Registration
+        </button>
       </form>
     </div>
   );
 }
+
+// Reusable Input Component
+const InputBlock = ({ label, icon, ...props }) => (
+  <div className="space-y-1.5">
+    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
+    <div className="relative group">
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#1976d2] transition-colors">
+        {icon}
+      </div>
+      <input
+        {...props}
+        className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-500/5 focus:border-[#1976d2] transition-all placeholder:text-slate-300"
+      />
+    </div>
+  </div>
+);
+
+// Reusable Select Component
+const SelectBlock = ({ label, icon, options, ...props }) => (
+  <div className="space-y-1.5">
+    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
+    <div className="relative">
+      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+        {icon}
+      </div>
+      <select
+        {...props}
+        className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-500/5 focus:border-[#1976d2] transition-all appearance-none cursor-pointer"
+      >
+        {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+      </select>
+    </div>
+  </div>
+);
