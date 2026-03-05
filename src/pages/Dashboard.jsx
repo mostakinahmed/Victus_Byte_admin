@@ -12,10 +12,9 @@ import {
 import FuzzyText from "@/components/FuzzyText";
 import Navbar from "../components/Navbar";
 import SmsBalanceCard from "@/components/SmsBalanceCard";
-import Cookies from "js-cookie";
+import SmsMonitor from "@/components/SmsMonitor";
 
 export default function Dashboard() {
-
   return (
     <div className="min-h-screen bg-slate-50 pb-10 mt-12 md:mt-0">
       <Navbar pageTitle="System Overview" />
@@ -55,106 +54,14 @@ export default function Dashboard() {
           <SmsBalanceCard />
         </div>
 
-        {/* --- 2. COMMAND & ACTIVITY LAYER --- */}
-        <div className="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Main Visual & Brand Anchor */}
-          <div className="lg:col-span-2 bg-white border border-slate-200 p-2 shadow-xs flex flex-col">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                <FiActivity className="text-indigo-500" /> Operational Flow
-              </h3>
-              <div className="flex gap-2">
-                <span className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
-                  Live Status
-                </span>
-              </div>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-200 relative overflow-hidden">
-              <img
-                src="/logo final.png"
-                alt="Logo"
-                className="h-16 w-auto  mix-blend-multiply opacity-20 grayscale mb-6"
-              />
-              <div className="hidden md:block ">
-                <FuzzyText
-                  baseIntensity={0.1}
-                  hoverIntensity={0.4}
-                  enableHover={true}
-                  color="#94a3b8"
-                >
-                  VICTUS BYTE
-                </FuzzyText>
-              </div>
-            </div>
-          </div>
-
-          {/* --- NEW: CONVERSION & ACTION CENTER --- */}
-          <div className="bg-white rounded border border-slate-200 p-6">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="p-2 bg-amber-100 text-amber-600 rounded-lg">
-                <FiTarget size={18} />
-              </div>
-              <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
-                Growth Center
-              </h3>
-            </div>
-
-            <div className="space-y-6">
-              {/* Revenue Summary */}
-              <div className="bg-slate-900 rounded-2xl p-5 text-white shadow-xl shadow-slate-200">
-                <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">
-                  Est. Revenue (MTD)
-                </p>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <h4 className="text-2xl font-black tracking-tighter">
-                    ৳ 4,82,900
-                  </h4>
-                  <span className="text-[10px] text-emerald-400 font-bold">
-                    +2.4%
-                  </span>
-                </div>
-                <div className="w-full bg-slate-800 h-1.5 rounded-full mt-4 overflow-hidden">
-                  <div className="bg-indigo-500 h-full w-[65%] rounded-full"></div>
-                </div>
-                <p className="text-[9px] text-slate-500 mt-2 font-bold uppercase">
-                  65% of monthly goal reached
-                </p>
-              </div>
-
-              {/* Quick Action Buttons */}
-              <div className="grid grid-cols-1 gap-3">
-                <button className="flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl group hover:border-indigo-500 transition-all">
-                  <div className="flex items-center gap-3">
-                    <FiPlusCircle className="text-slate-400 group-hover:text-indigo-600" />
-                    <span className="text-xs font-black text-slate-700 uppercase tracking-tighter">
-                      Create New Sale
-                    </span>
-                  </div>
-                  <FiArrowUpRight className="text-slate-300 group-hover:text-indigo-600" />
-                </button>
-
-                <button className="flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl group hover:border-indigo-500 transition-all">
-                  <div className="flex items-center gap-3">
-                    <FiBarChart2 className="text-slate-400 group-hover:text-indigo-600" />
-                    <span className="text-xs font-black text-slate-700 uppercase tracking-tighter">
-                      Export Analytics
-                    </span>
-                  </div>
-                  <FiArrowUpRight className="text-slate-300 group-hover:text-indigo-600" />
-                </button>
-              </div>
-            </div>
-          </div>
+        <div>
+          <SmsMonitor />
         </div>
       </div>
     </div>
   );
 }
 
-{
-  /* Helper StatCard Component */
-}
 function StatCard({ title, value, trend, icon, color, isAlert }) {
   const colors = {
     indigo: "bg-indigo-500 ",
