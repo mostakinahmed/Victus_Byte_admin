@@ -1,14 +1,4 @@
-import {
-  FiPackage,
-  FiShoppingCart,
-  FiUsers,
-  FiAlertTriangle,
-  FiArrowUpRight,
-  FiActivity,
-  FiTarget,
-  FiPlusCircle,
-  FiBarChart2,
-} from "react-icons/fi";
+import { FiPackage, FiShoppingCart, FiAlertTriangle } from "react-icons/fi";
 import FuzzyText from "@/components/FuzzyText";
 import Navbar from "../components/Navbar";
 import SmsBalanceCard from "@/components/SmsBalanceCard";
