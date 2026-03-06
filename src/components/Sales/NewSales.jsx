@@ -51,17 +51,14 @@ function generateOrderId() {
   // 1. Today's Date: YYMMDD (6 digits)
   const year = now.getFullYear().toString().slice(-2);
   const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  const dateStr = `${year}${month}${day}`;
+  // const day = String(now.getDate()).padStart(2, "0");
 
-  // 2. Milliseconds: (4 digits)
   // We take the last 4 digits of the timestamp
   const msStr = now.getTime().toString().slice(-4);
 
   // 3. Random Number: (2 digits)
-  const randomStr = Math.floor(10 + Math.random() * 90).toString();
-
-  return `OID${dateStr}${msStr}${randomStr}`;
+  const randomStr = Math.floor(1000 + Math.random() * 9000).toString();
+  return `OID${year}${msStr}${month}${randomStr}`;
 }
 
 // Example Output: OID260127458291
