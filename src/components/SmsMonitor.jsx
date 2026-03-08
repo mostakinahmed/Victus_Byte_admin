@@ -59,7 +59,7 @@ const SmsMonitor = () => {
     );
 
   return (
-    <div className="w-full max-w-2xl mt-4 h-[375px] bg-[#0f172a] rounded-lg border border-slate-800 shadow-xl overflow-hidden font-sans">
+    <div className="w-full max-w-2xl mt-4 h-[375px] bg-[#0f172a] rounded border border-slate-800 shadow-xl overflow-hidden font-sans">
       {/* Header */}
       <div className="flex justify-between items-center px-4 py-3 border-b border-slate-800 bg-slate-900/50">
         <div className="flex items-center gap-2">
