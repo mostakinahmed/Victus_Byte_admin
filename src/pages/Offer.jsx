@@ -8,6 +8,7 @@ import {
   Power,
   BarChart3,
 } from "lucide-react";
+import { FiGrid, FiActivity, FiLayers, FiZap } from "react-icons/fi";
 import toast from "react-hot-toast";
 import api from "@/Context Api/api";
 import Navbar from "@/components/Navbar";
@@ -91,30 +92,34 @@ const Offer = () => {
   };
 
   return (
-    <div className=" bg-slate-50 mt-13 md:mt-0 min-h-screen font-inter">
+    <div className=" mt-13 md:mt-0 min-h-screen font-inter">
       <Navbar pageTitle={"Offer & Coupon Center"} />
 
       {/* <Ticket className="text-orange-500" size={32} /> */}
       {/* TOP SECTION: Create & Active Stats */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Create Coupon Form */}
-        <div className="lg:col-span-2 bg-white py-3 px-3 rounded  border ">
-          <h2 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-            <PlusCircle size={20} className="text-orange-500" /> Create New
-            Offer
+        <div className="lg:col-span-2 bg-white p-6 rounded border border-slate-200 transition-all duration-300">
+          <h2 className="text-sm font-black text-slate-800 mb-6 flex items-center gap-3 uppercase tracking-widest">
+            <div className="p-2 bg-[#1976d2]/10 text-[#1976d2] rounded-lg">
+              <PlusCircle size={18} />
+            </div>
+            Create New Coupon
           </h2>
+
           <form
             onSubmit={handleCreate}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 items-end"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 items-end"
           >
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-slate-500 uppercase">
+            {/* Coupon ID */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                 Coupon ID
               </label>
               <input
                 type="text"
                 placeholder="VICTUS500"
-                className="px-2 py-1.5 border border-slate-300 rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none uppercase text-sm font-medium"
+                className="px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none uppercase text-xs font-bold transition-all placeholder:text-slate-300"
                 value={newCoupon.couponID}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, couponID: e.target.value })
@@ -122,14 +127,16 @@ const Offer = () => {
                 required
               />
             </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-slate-500 uppercase">
+
+            {/* Value */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                 Value (TK)
               </label>
               <input
                 type="number"
                 placeholder="500"
-                className="px-2 py-1.5 border border-slate-300  rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none text-sm font-medium"
+                className="px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none text-xs font-bold transition-all placeholder:text-slate-300"
                 value={newCoupon.value}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, value: e.target.value })
@@ -137,14 +144,16 @@ const Offer = () => {
                 required
               />
             </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-slate-500 uppercase">
+
+            {/* Min Purchase */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                 Min Purchase
               </label>
               <input
                 type="number"
                 placeholder="2000"
-                className="px-2 py-1.5 border border-slate-300  rounded-lg placeholder:text-slate-300 bg-slate-50 focus:ring-2 focus:ring-orange-500 outline-none text-sm font-medium"
+                className="px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none text-xs font-bold transition-all placeholder:text-slate-300"
                 value={newCoupon.minTK}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, minTK: e.target.value })
@@ -152,17 +161,18 @@ const Offer = () => {
                 required
               />
             </div>
+
+            {/* Submit Button */}
             <button
               disabled={loading}
-              className="bg-slate-800 cursor-pointer hover:bg-orange-600 text-white font-bold px-2.5 py-1.5 rounded-lg transition-all flex items-center justify-center gap-2"
+              className="bg-slate-900 cursor-pointer hover:bg-[#1976d2] text-white text-[10px] font-black uppercase tracking-widest h-[42px] rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
             >
-              {loading ? "..." : "Create Offer"}
+              {loading ? "Deploying..." : "Deploy Offer"}
             </button>
           </form>
         </div>
-
         {/* Mini Active List Summary */}
-        <div className="bg-slate-800 text-white p-6 rounded-2xl shadow-lg shadow-orange-200/20">
+        <div className="bg-slate-800 text-white p-6 rounded">
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-400">
             <ListChecks size={20} /> Active Now
           </h2>
@@ -189,15 +199,15 @@ const Offer = () => {
 
       {/* BOTTOM SECTION: Full Table with Usage Handshake */}
       <div className="bg-white rounded  border border-slate-200 overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
-          <h2 className="md:text-xl font-black text-slate-800 flex items-center gap-2">
-            <BarChart3 className="text-orange-500" size={24} /> Global Coupon
-            Ledger
-          </h2>
+        <div className="bg-[#1976d2] flex justify-between border-b border-slate-100 px-5 py-3">
+          <h3 className="text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+            <FiZap className="" /> Coupon List
+          </h3>
           <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
             Total: {coupons.length}
           </span>
         </div>
+
         <div className="overflow-x-auto pb-5">
           <table className="w-full text-left border-collapse pb-5">
             <thead className="bg-slate-50">

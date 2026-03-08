@@ -84,7 +84,7 @@ const AddCategory = () => {
               onChange={handleChange}
               placeholder="C-101"
               required
-              className="h-9 text-xs rounded-lg placeholder:font-normal border-slate-200 bg-slate-50/50 focus:border-[#1976d2] focus:ring-0 transition-all font-bold"
+              className="h-10 text-sm rounded placeholder:font-normal border-slate-200 bg-slate-50/50 focus:border-[#1976d2] focus:ring-0 transition-all font-medium"
             />
           </div>
 
@@ -100,7 +100,7 @@ const AddCategory = () => {
               onChange={handleChange}
               placeholder="Electronics"
               required
-              className="h-9 text-xs rounded-lg border-slate-200 placeholder:font-normal bg-slate-50/50 focus:border-[#1976d2] focus:ring-0 transition-all font-bold"
+              className="h-10 text-sm rounded border-slate-200 placeholder:font-normal bg-slate-50/50 focus:border-[#1976d2] focus:ring-0 transition-all font-bold"
             />
           </div>
 
@@ -117,7 +117,7 @@ const AddCategory = () => {
                 onChange={handleChange}
                 placeholder="https://..."
                 required
-                className="h-9 text-xs pl-10 rounded-lg border-slate-200 bg-slate-50/50 focus:border-[#1976d2] transition-all"
+                className="h-10 text pl-10 rounded border border-slate-200 bg-slate-50 transition-all"
               />
               <div className="absolute left-1.5 top-1/2 -translate-y-1/2 h-6 w-6 bg-white rounded border border-slate-100 flex items-center justify-center overflow-hidden">
                 {category.catIcon ? (

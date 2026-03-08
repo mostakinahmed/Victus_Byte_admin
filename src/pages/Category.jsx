@@ -20,13 +20,10 @@ export default function Category() {
           {/* LEFT: Main List (Takes 7/12) */}
           <div className="lg:col-span-7 space-y-6">
             <div className="bg-white rounded border border-slate-200  overflow-hidden min-h-[75vh]">
-              <div className="bg-slate-50/50 border-b border-slate-100 px-5 py-3 flex items-center justify-between">
-                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                  <FiLayers className="text-[#1976d2]" /> Database Entry
+              <div className="bg-[#1976d2] border-b border-slate-100 px-5 py-3">
+                <h3 className="text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                  <FiZap className="" /> Category List
                 </h3>
-                <span className="text-[9px] font-black text-[#1976d2] bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase">
-                  Count: {categoryData?.length || 0}
-                </span>
               </div>
               <div className="p-2 md:p-4">
                 {loading ? (

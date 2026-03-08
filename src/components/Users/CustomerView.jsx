@@ -69,11 +69,11 @@ export default function CustomerView({ user, goBack }) {
           <div className="relative">
             <img
               src={
-                user.images ||
-                "https://i.ibb.co.com/RkQyDx1v/Untitled-design-1.png"
+                "https://7vgva7cju0vcfvwf.public.blob.vercel-storage.com/user.png" ||
+                user.images
               }
               alt={user.userName}
-              className="w-32 h-32 rounded-[2rem] object-cover shadow-xl border-4 border-white ring-1 ring-slate-100"
+              className="w-32 h-32 p-2 rounded-[2rem] object-cover shadow-xl border-4 border-white ring-1 ring-slate-100"
             />
             {user.isVerified && (
               <div className="absolute -bottom-2 -right-2 bg-[#1976d2] text-white p-2 rounded-2xl border-4 border-white shadow-lg">

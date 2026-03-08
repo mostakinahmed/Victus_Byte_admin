@@ -38,7 +38,7 @@ const AdminList = () => {
     (admin) =>
       admin.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       admin.phone?.includes(searchTerm) ||
-      admin.adminID?.includes(searchTerm.toUpperCase())
+      admin.adminID?.includes(searchTerm.toUpperCase()),
   );
 
   // 🔹 Delete admin handler
@@ -72,14 +72,11 @@ const AdminList = () => {
           <div className="md:p-6 p-3 border-b border-slate-100 bg-white">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-slate-900 rounded-xl text-white shadow-lg shadow-slate-200">
-                  <FiShield size={20} />
-                </div>
                 <div>
-                  <h2 className="text-lg font-black text-slate-800 tracking-tight">
-                    Identity Registry List
+                  <h2 className="text-[14px] font-black text-slate-800 uppercase tracking-[0.2em] flex items-center gap-3">
+                    <span className="w-1.5 h-5 bg-[#1976d2] rounded-full"></span>
+                    Customer List
                   </h2>
-                
                 </div>
               </div>
 
@@ -205,7 +202,6 @@ const AdminList = () => {
                       {/* 9. Last Active (Separate) */}
                       <td className="px-6 py-3">
                         <div className="flex items-center gap-2  text-sm font-medium text-slate-800 lowercase">
-                         
                           {formatDate(admin.lastLogin)}
                         </div>
                       </td>

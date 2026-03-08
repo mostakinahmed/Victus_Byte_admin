@@ -50,14 +50,14 @@ const CategoryList = ({ data = [] }) => {
               <th className="md:px-4 px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-12 text-center">
                 #
               </th>
-              <th className="md:px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-24 md:text-left">
+              <th className="md:px-4 py-2.5 text-[12px] font-medium text-slate-500 uppercase tracking-tighter w-24 md:text-left">
                 Cat_ID
               </th>
-              <th className="md:px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-40 md:text-left">
+              <th className="md:px-4 py-2.5 text-[12px] font-medium text-slate-500 uppercase tracking-tighter w-40 md:text-left">
                 Category Name
               </th>
 
-              <th className="md:px-4 py-2.5 text-[12px] font-black text-slate-400 uppercase tracking-tighter w-24 text-center">
+              <th className="md:px-4 py-2.5 text-[12px] font-medium text-slate-500 uppercase tracking-tighter w-24 text-center">
                 Actions
               </th>
             </tr>

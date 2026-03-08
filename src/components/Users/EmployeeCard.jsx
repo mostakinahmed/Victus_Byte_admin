@@ -36,7 +36,7 @@ const SystemPersonnel = () => {
     const isAdmin = user.adminID?.startsWith("45");
 
     return (
-      <div className="bg-white rounded-[15px] border border-slate-300 hover:shadow-lg hover:translate-y-[-4px] transition-all duration-500 overflow-hidden group relative">
+      <div className="bg-white rounded border hover:shadow-lg hover:translate-y-[-4px] transition-all duration-500 overflow-hidden group relative">
         {/* Brand Accent Line */}
         <div
           className={`h-1.5 w-full ${isAdmin ? "bg-slate-900" : "bg-[#1976d2]"}`}
@@ -71,7 +71,7 @@ const SystemPersonnel = () => {
           {/* Details Section */}
           <div className="flex-1 p-4 flex flex-col justify-center overflow-hidden">
             <div className="mb-3">
-              <h3 className="text-base md:text-lg font-black text-slate-800 uppercase tracking-tighter truncate">
+              <h3 className="text-base md:text-md font-semibold text-slate-800 uppercase tracking-tighter truncate">
                 {user.fullName}
               </h3>
               <p className="text-[#1976d2] font-black text-[10px] uppercase tracking-widest opacity-80">
@@ -104,7 +104,7 @@ const SystemPersonnel = () => {
                   <span className={item.color}>
                     {React.cloneElement(item.icon, { size: 12 })}
                   </span>
-                  <p className="text-[12px] font-bold text-slate-600 truncate">
+                  <p className="text-[12px] font-medium text-slate-600 truncate">
                     {item.value}
                   </p>
                 </div>
@@ -117,7 +117,7 @@ const SystemPersonnel = () => {
   };
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen p-4 md:p-8">
+    <div className=" min-h-screen p-4 md:p-8">
       {/* Header Section */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-10 gap-6">
         {/* Search Bar */}

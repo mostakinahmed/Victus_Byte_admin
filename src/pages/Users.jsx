@@ -11,7 +11,7 @@ export default function Users() {
   return (
     <div className="mt-12 md:mt-0 font-sans">
       <Navbar pageTitle="User Management" />
-      <div className="bg-white shadow-xl p-4 w-full mx-auto rounded-xl border border-slate-100">
+      <div className=" shadow-xl p-4 w-full mx-auto rounded-xl border border-slate-100">
         
         {/* Main Navigation Container */}
         <div className="flex flex-col lg:flex-row justify-between md:justify-center items-start w-full gap-4 mb-6">
@@ -23,7 +23,7 @@ export default function Users() {
               className={`flex-1 lg:w-44 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 ${
                 activeTab === "system"
                   ? "bg-[#1976d2] text-white shadow-lg shadow-blue-200"
-                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"
+                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-300"
               }`}
             >
               System User
@@ -33,7 +33,7 @@ export default function Users() {
               className={`flex-1 lg:w-44 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 ${
                 activeTab === "customer"
                   ? "bg-[#1976d2] text-white shadow-lg shadow-blue-200"
-                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"
+                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-300"
               }`}
             >
               Customer
@@ -47,7 +47,7 @@ export default function Users() {
               className={`flex-1 lg:w-44 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 ${
                 activeTab === "admin"
                   ? "bg-[#1976d2] text-white shadow-lg shadow-blue-200"
-                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"
+                  : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-300"
               }`}
             >
               Admin List
