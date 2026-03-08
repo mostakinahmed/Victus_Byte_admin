@@ -22,6 +22,8 @@ export default function Sidebar() {
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
 
+  // BRAND COLOR: #1976d2 (Used in bg-[#1976d2] and shadow-[rgba(25,118,210,0.4)])
+
   const links = [
     { name: "Dashboard", path: "/", icon: <FiHome /> },
     { name: "Products", path: "/products", icon: <FiBox /> },
@@ -44,7 +46,8 @@ export default function Sidebar() {
           className="flex items-center gap-3 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <div className="p-1.5 bg-indigo-600 rounded-lg shadow-lg">
+          {/* Brand Color Applied to Mobile Logo Bg */}
+          <div className="p-1.5 bg-[#1976d2] rounded-lg shadow-lg">
             <FiLayers size={20} className="text-white hidden" />
             <FiLayers size={15} className="text-white md:hidden" />
           </div>
@@ -70,7 +73,8 @@ export default function Sidebar() {
           className="hidden lg:flex p-6 items-center gap-3 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <div className="p-1 bg-indigo-600 rounded-xl">
+          {/* Brand Color Applied to Desktop Logo Bg */}
+          <div className="p-1 bg-[#1976d2] rounded-xl shadow-[0_0_15px_rgba(25,118,210,0.3)]">
             <FiLayers size={24} className="text-white" />
           </div>
           <div className="flex flex-col">
@@ -91,11 +95,10 @@ export default function Sidebar() {
                 onClick={() => setIsMobileExpanded(false)}
                 className={`group flex items-center p-3 rounded-xl transition-all ${
                   isActive
-                    ? "bg-indigo-600 text-white shadow-lg"
+                    ? "bg-[#1976d2] text-white shadow-[0_4px_12px_rgba(25,118,210,0.4)]"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 } justify-start`}
               >
-                {/* --- ICON HIDDEN UNLESS EXPANDED OR ON DESKTOP --- */}
                 <span
                   className={`text-xl shrink-0 ${isMobileExpanded ? "block" : "hidden lg:block"}`}
                 >
@@ -119,7 +122,6 @@ export default function Sidebar() {
               className={`flex items-center p-3 bg-slate-800/30 text-slate-400 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all w-full justify-start px-4`}
             >
               <div className="flex items-center gap-2">
-                {/* --- SERVICE ICON HIDDEN UNLESS EXPANDED --- */}
                 <FiFileText
                   size={18}
                   className={`shrink-0 ${isMobileExpanded ? "block" : "hidden lg:block"}`}
@@ -145,7 +147,7 @@ export default function Sidebar() {
                     window.open("https://image.victusbyte.com/");
                     setIsServicesOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 bg-slate-800 hover:text-blue-600 rounded-2xl"
+                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 bg-slate-800 hover:text-[#1976d2] rounded-2xl"
                 >
                   Images Upload
                 </button>
@@ -156,7 +158,7 @@ export default function Sidebar() {
                     );
                     setIsServicesOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer bg-slate-800 tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 hover:text-blue-600 rounded-2xl "
+                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer bg-slate-800 tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 hover:text-[#1976d2] rounded-2xl "
                 >
                   E-mail Service
                 </button>

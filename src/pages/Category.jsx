@@ -1,78 +1,76 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import Navbar from "../components/Navbar";
 import CategoryList from "../components/Category/CategoryList";
 import { DataContext } from "../Context Api/ApiContext";
 import AddCategory from "../components/Category/AddCategory";
 import { TopCategory } from "@/components/Category/TopCategory";
-import { FiList, FiPlusSquare, FiAward, FiSettings } from "react-icons/fi";
+import { FiGrid, FiActivity, FiLayers, FiZap } from "react-icons/fi";
 
 export default function Category() {
-  const { categoryData, productData, loading } = useContext(DataContext);
+  const { categoryData, loading } = useContext(DataContext);
 
-  const [activeTab, setActiveTab] = useState("catList");
   return (
-    <div className="mt-12 md:mt-0">
+    <div className="mt-12 md:mt-0  min-h-screen font-sans pb-10">
       <Navbar pageTitle="Category Management" />
 
-      {/* 📑 Professional Category Control Panel */}
-      <div className="bg-white border font-sans border-slate-200  overflow-hidden w-full mx-auto animate-in fade-in duration-500">
-        {/* Modern Segmented Control Header */}
-        <div className="md:p-4 p-2 bg-slate-50/50 ">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            {/* Tab Navigation */}
-            <div className="flex bg-slate-200/60 p-1 rounded-2xl w-full lg:w-fit">
-              {[
-                {
-                  id: "catList",
-                  label: "Catalog List",
-                  mobileLabel: "All",
-                  icon: <FiList />,
-                },
-                {
-                  id: "addCat",
-                  label: "Add New Category",
-                  mobileLabel: "Create",
-                  icon: <FiPlusSquare />,
-                },
-                {
-                  id: "topCategory",
-                  label: "Top Categories",
-                  mobileLabel: "Top",
-                  icon: <FiAward />,
-                },
-              ].map((tab) => {
-                const isActive = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex flex-1 lg:flex-none items-center justify-center gap-2 md:px-6 px-3 py-2.5 rounded-xl text-sm uppercase transition-all duration-300 ${
-                      isActive
-                        ? "bg-white text-indigo-600 shadow-sm shadow-slate-200"
-                        : " hover:text-slate-700 hover:bg-slate-200/40"
-                    }`}
-                  >
-                    <span className="text-lg lg:text-base">{tab.icon}</span>
-                    <span className="hidden lg:inline">{tab.label}</span>
-                    <span className="lg:hidden">{tab.mobileLabel}</span>
-                  </button>
-                );
-              })}
+      {/* --- DASHBOARD HEADER --- */}
+      <div className=" mx-auto ">
+        {/* --- MAIN INTEGRATED GRID --- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-start">
+          {/* LEFT: Main List (Takes 7/12) */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="bg-white rounded border border-slate-200  overflow-hidden min-h-[75vh]">
+              <div className="bg-slate-50/50 border-b border-slate-100 px-5 py-3 flex items-center justify-between">
+                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                  <FiLayers className="text-[#1976d2]" /> Database Entry
+                </h3>
+                <span className="text-[9px] font-black text-[#1976d2] bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase">
+                  Count: {categoryData?.length || 0}
+                </span>
+              </div>
+              <div className="p-2 md:p-4">
+                {loading ? (
+                  <div className="py-20 text-center text-slate-300 font-black uppercase text-[10px] animate-pulse">
+                    Syncing...
+                  </div>
+                ) : (
+                  <CategoryList data={categoryData} />
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: Tools (Takes 5/12) - Stays Compact */}
+          <div className="lg:col-span-5 flex flex-col gap-3">
+            {/* Quick Creation Card */}
+            <div className="bg-white rounded border border-slate-200  overflow-hidden">
+              <div className="bg-[#1976d2] border-b border-slate-100 px-5 py-3">
+                <h3 className="text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                  <FiZap className="" /> New category
+                </h3>
+              </div>
+              <div className="p-4 scale-95 origin-top">
+                {" "}
+                {/* Scale down for compactness */}
+                <AddCategory />
+              </div>
             </div>
 
+            {/* Featured Management Card */}
+            <div className="bg-white rounded border border-slate-200 overflow-hidden">
+              <div className="bg-[#1976d2] border-b border-slate-100 px-5 py-3">
+                <h3 className="text-[11px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                  <FiZap className="" /> Featured category
+                </h3>
+              </div>
+              <div className="p-4 scale-95 origin-top">
+                {" "}
+                {/* Scale down for compactness */}
+                <TopCategory />
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Main Content Area */}
-        <div className="md:p-4 p-3  min-h-[70vh] bg-white">
-          <div className="animate-in slide-in-from-bottom-2 duration-500">
-            {activeTab === "catList" && <CategoryList data={categoryData} />}
-            {activeTab === "addCat" && <AddCategory />}
-            {activeTab === "topCategory" && <TopCategory />}
-          </div>
-        </div>
-
-     
       </div>
     </div>
   );

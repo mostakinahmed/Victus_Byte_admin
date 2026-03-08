@@ -109,7 +109,7 @@ export const StatusManagement = () => {
   };
 
   return (
-    <div className="mt-12">
+    <div className="mt-12 md:mt-0">
       <Navbar pageTitle="Status Management" />
 
       <div className="space-y-6 font-sans animate-in fade-in duration-500">
@@ -158,7 +158,7 @@ export const StatusManagement = () => {
                     ? setDisModel(true)
                     : setShowModal(true)
                 }
-                className="w-full lg:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all active:scale-95"
+                className="w-full lg:w-auto flex items-center justify-center gap-2 bg-[#1976d2] text-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest cursor-pointer hover:bg-[#1976d2] shadow-xl shadow-indigo-100 transition-all active:scale-95"
               >
                 <FiPlus />{" "}
                 {selected === "discount" ? "Add Discount" : "Add Product"}
@@ -264,7 +264,7 @@ export const StatusManagement = () => {
 
         {/* --- 4. MODALS (Unified Styling) --- */}
         {(showModal || disModel) && (
-          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+          <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex justify-center items-center z-100 p-4">
             <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
               <div className="p-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
                 <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">
@@ -324,7 +324,7 @@ export const StatusManagement = () => {
                               ? addDiscount(item)
                               : submit(item.pID, true)
                           }
-                          className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95"
+                          className="flex items-center gap-2 bg-[#1976d2] cursor-pointer text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#1976d2] shadow-lg shadow-indigo-100 transition-all active:scale-95"
                         >
                           Add
                         </button>
