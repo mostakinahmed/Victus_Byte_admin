@@ -78,7 +78,11 @@ function getOrderDateTime12h() {
 }
 
 const AdminSaleFull = () => {
-  const { productData, adminData, updateApi } = useContext(DataContext);
+  const { productData, adminData, updateApi, customerData } =
+    useContext(DataContext);
+
+  console.log(customerData);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -97,7 +101,12 @@ const AdminSaleFull = () => {
     discount: "",
     total_amount: 0,
     payment: { method: "COD", status: "Pending" },
-    shipping_address: { recipient_name: "", phone: "", address_line1: "" },
+    shipping_address: {
+      recipient_name: "",
+      phone: "",
+      address_line1: "",
+      email: "",
+    },
     items: [
       { product_id: "", product_name: "", quantity: 1, product_price: 0 },
     ],
@@ -105,15 +114,16 @@ const AdminSaleFull = () => {
 
   // Handle customer autofill
   const handleCustomerPhone = (phone) => {
-    const customer = mockCustomers.find((c) => c.phone === phone);
+    const customer = customerData.find((c) => c.phone === phone);
     setOrder((prev) => ({
       ...prev,
-      customer_id: customer ? customer.id : "",
+      customer_id: customer ? customer.cID : "",
       shipping_address: {
         ...prev.shipping_address,
         phone,
-        recipient_name: customer?.name || "",
+        recipient_name: customer?.userName || "",
         address_line1: customer?.address || "",
+        email: customer?.email || "",
       },
     }));
   };

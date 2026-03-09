@@ -5,6 +5,7 @@ import { DataContext } from "@/Context Api/ApiContext";
 
 const CustomerList = () => {
   const { customerData } = useContext(DataContext);
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("list");
   const [selectedCustomer, setSelectedCustomer] = useState(null);
