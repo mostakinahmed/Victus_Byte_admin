@@ -28,22 +28,6 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 
-// Mock DB data
-const mockCustomers = [
-  {
-    id: "CUS-0001",
-    phone: "01711111111",
-    name: "Rahim Uddin",
-    address: "House 12, Road 5",
-  },
-  {
-    id: "CUS-0002",
-    phone: "01722222222",
-    name: "Karim Ahmed",
-    address: "House 45, Road 12",
-  },
-];
-
 // Utility: Generate Professional Unique Order ID (12 Digits)
 // function generateOrderId() {
 //   const now = new Date();
@@ -86,7 +70,7 @@ const AdminSaleFull = () => {
   const { productData, adminData, updateApi, customerData } =
     useContext(DataContext);
 
-  console.log(customerData);
+
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -193,38 +177,33 @@ const AdminSaleFull = () => {
     const value = e.target.value === "" ? "" : Number(e.target.value);
     setOrder((prev) => ({ ...prev, discount: value }));
   };
-  console.log(order);
+
   // ✅ Submit order
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //check admin droupdown field
     if (!order.mode) {
       MySwal.fire({
         icon: "error",
         title: "Missing Saler ID",
         text: "Please select an admin before saving the order.",
-        confirmButtonColor: "#4f46e5", // Indigo color to match your theme
+        confirmButtonColor: "#4f46e5",
       });
       return;
     }
 
-    // --- FIX STARTS HERE ---
-    // Create a copy of the order and flatten the product_price for each item
     const orderToSubmit = {
       ...order,
       items: order.items.map((item) => ({
         ...item,
-        // Convert the object {selling: 1350, ...} to just the number 1350
         product_price:
           typeof item.product_price === "object"
             ? item.product_price.selling
             : item.product_price,
       })),
     };
-    // --- FIX ENDS HERE ---
 
-    // ----------------------------------
     MySwal.fire({
       title: (
         <p className="text-xl font-semibold text-blue-600">Processing...</p>
@@ -233,14 +212,7 @@ const AdminSaleFull = () => {
         <p className="text-gray-600">Please wait while we create your order.</p>
       ),
       allowOutsideClick: false,
-      didOpen: () => {
-        MySwal.showLoading();
-      },
-      customClass: {
-        popup: "w-[300px] h-[200px] p-4",
-        title: "text-lg font-bold",
-        htmlContainer: "text-sm text-gray-600",
-      },
+      didOpen: () => MySwal.showLoading(),
     });
 
     try {
@@ -249,7 +221,9 @@ const AdminSaleFull = () => {
         orderToSubmit,
       );
 
-      // Update success message
+      // Get the final ID from the backend response
+      const finalId = res.data?.order?.order_id || "N/A";
+
       MySwal.hideLoading();
       MySwal.update({
         icon: "success",
@@ -257,26 +231,37 @@ const AdminSaleFull = () => {
           <p className="text-green-600 text-xl font-bold">Order Created ✅</p>
         ),
         html: (
-          <p className="text-gray-700">
-            Order <b>#{res.data.order_id}</b> has been successfully updated!
-          </p>
+          <div className="text-center">
+            <p className="text-gray-700">
+              Order <b className="text-indigo-600">#{finalId}</b> created
+              successfully!
+            </p>
+          </div>
         ),
         showConfirmButton: true,
-
-        confirmButtonText: "OK",
+        confirmButtonText: "Done",
+        buttonsStyling: false,
         customClass: {
           confirmButton:
-            "bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg",
+            "bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-lg transition-colors",
         },
-        buttonsStyling: false,
       });
+
+      // Refresh your table/UI
       updateApi();
+
+      // VERY IMPORTANT: Reset the form so the user can start a new sale
       handleNewSale();
     } catch (error) {
-      console.error(
-        "Error saving order:",
-        error.response ? error.response.data : error.message,
-      );
+      MySwal.hideLoading();
+      const errorMsg = error.response?.data?.message || "Failed to save order.";
+
+      MySwal.fire({
+        icon: "error",
+        title: "Save Failed",
+        text: errorMsg,
+      });
+      console.error("Error saving order:", error);
     }
   };
 
