@@ -45,25 +45,30 @@ const mockCustomers = [
 ];
 
 // Utility: Generate Professional Unique Order ID (12 Digits)
-function generateOrderId() {
-  const now = new Date();
+// function generateOrderId() {
+//   const now = new Date();
 
-  // 1. Today's Date: YYMMDD (6 digits)
-  const year = now.getFullYear().toString().slice(-2);
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  // const day = String(now.getDate()).padStart(2, "0");
+//   // 1. Today's Date: YYMMDD (6 digits)
+//   const year = now.getFullYear().toString().slice(-2);
+//   const month = String(now.getMonth() + 1).padStart(2, "0");
+//   // const day = String(now.getDate()).padStart(2, "0");
 
-  // We take the last 4 digits of the timestamp
-  const msStr = now.getTime().toString().slice(-4);
+//   // We take the last 4 digits of the timestamp
+//   const msStr = now.getTime().toString().slice(-4);
 
-  // 3. Random Number: (2 digits)
-  const randomStr = Math.floor(1000 + Math.random() * 9000).toString();
-  return `OID${year}${msStr}${month}${randomStr}`;
-}
+//   // 3. Random Number: (2 digits)
+//   const randomStr = Math.floor(1000 + Math.random() * 9000).toString();
+//   return `OID${year}${msStr}${month}${randomStr}`;
+// }
 
 // Example Output: OID260127458291
 
-// ✅ Utility: Format date & time (12-hour)
+function generateOrderId() {
+  const ms = Date.now().toString().slice(-4); // 3 digits
+  const random = Math.floor(10 + Math.random() * 90).toString(); // 2 digits
+  return ms + random;
+}
+
 function getOrderDateTime12h() {
   const now = new Date();
   const year = now.getFullYear();
@@ -338,9 +343,9 @@ const AdminSaleFull = () => {
                 <div className="relative group">
                   <input
                     type="text"
-                    value={order.order_id}
+                    value={"OID - " + order.order_id}
                     readOnly
-                    className="w-full bg-slate-50 border border-slate-200 text-slate-600 font-mono text-sm px-4 py-2.5 rounded-lg cursor-not-allowed"
+                    className="w-full bg-slate-50 border border-slate-200 text-slate-700 font-medium font-mono text-sm px-4 py-2.5 rounded-lg cursor-not-allowed"
                   />
                   {/* Subtle "Locked" Icon could go here */}
                 </div>
