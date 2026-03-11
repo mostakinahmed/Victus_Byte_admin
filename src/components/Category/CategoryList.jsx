@@ -16,7 +16,7 @@ const CategoryList = ({ data = [] }) => {
   }, [searchTerm, data]);
 
   return (
-    <div className="bg-white md:max-h-[650px] overflow-y-auto font-sans  border border-slate-200 shadow-sm">
+    <div className="bg-white md:max-h-[700px] overflow-y-auto font-sans  border border-slate-200 shadow-sm">
       {/* --- Minimalist Header --- */}
       <div className="md:px-5  px-2 py-3 border-b border-slate-100 bg-white flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">

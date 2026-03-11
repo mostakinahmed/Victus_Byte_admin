@@ -54,7 +54,7 @@ export default function Navbar({ pageTitle }) {
   </AnimatePresence>;
 
   return (
-    <div className="flex justify-between items-center bg-white border border-slate-200 md:px-6 px-2 md:py-4 py-1.5 sticky top-0 z-[80] transition-all duration-300 mb-3  mt-1">
+    <div className="flex justify-between items-center bg-white border border-slate-300 border-b-2 border-b-[#1976d2] md:px-6 px-2 md:py-3 py-1.5 sticky top-0 z-[80] transition-all duration-300 mb-3  mt-1">
       {/* --- Left Side: Dynamic Page Context --- */}
       <div className="flex items-center gap-3">
         <div className="w-1 h-8 bg-indigo-600 rounded-full hidden lg:block" />
@@ -104,7 +104,7 @@ export default function Navbar({ pageTitle }) {
 
         {/* --- User Identity Block --- */}
         <div
-          className="group flex items-center gap-3 pl-4 border-l border-slate-100 cursor-pointer"
+          className="group flex items-center gap-3 pl-4 border-l border-slate-300 cursor-pointer"
           onClick={toggleAdminPopup}
         >
           <div className="hidden md:flex flex-col items-end text-right">
@@ -223,7 +223,7 @@ export default function Navbar({ pageTitle }) {
               <div className="p-3 bg-slate-50/50 border-t border-slate-100">
                 <button
                   onClick={() => logout()}
-                  className="w-full flex cursor-pointer items-center justify-center gap-2 py-3 text-rose-600 hover:bg-rose-100 rounded-lg text-sm font-bold transition-colors active:scale-95"
+                  className="w-full flex cursor-pointer items-center justify-center gap-2 py-3 text-rose-600 hover:bg-rose-100 bg-rose-50  rounded-lg text-sm font-bold transition-colors active:scale-95"
                 >
                   <FiLogOut size={14} />
                   Logout Session

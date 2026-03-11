@@ -14,7 +14,7 @@ import {
 const SystemPersonnel = () => {
   const { adminData } = useContext(DataContext);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(adminData);
+
 
   // Use live admindata if available, else fallback to empty array
   const personnel = adminData || [];

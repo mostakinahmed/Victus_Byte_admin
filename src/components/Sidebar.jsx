@@ -74,8 +74,11 @@ export default function Sidebar() {
           onClick={() => navigate("/")}
         >
           {/* Brand Color Applied to Desktop Logo Bg */}
-          <div className="p-1 bg-[#1976d2] rounded-xl shadow-[0_0_15px_rgba(25,118,210,0.3)]">
-            <FiLayers size={24} className="text-white" />
+          <div className="p-1 bg-green-600 h-3 w-3 rounded-xl animate-pulse shadow-[0_0_15px_rgba(25,118,210,0.3)]">
+            {/* <img
+              src="https://7vgva7cju0vcfvwf.public.blob.vercel-storage.com/Black%20and%20Purple%20Gradient%20Cyber%20Security%20Poster.png"
+              alt="" className="w-6 h-8"
+            /> */}
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-black uppercase tracking-tighter">
@@ -93,9 +96,9 @@ export default function Sidebar() {
                 key={link.name}
                 to={link.path}
                 onClick={() => setIsMobileExpanded(false)}
-                className={`group flex items-center p-3 rounded-xl transition-all ${
+                className={`group flex items-center px-3 py-2  rounded transition-all ${
                   isActive
-                    ? "bg-[#1976d2] text-white shadow-[0_4px_12px_rgba(25,118,210,0.4)]"
+                    ? "bg-[#1976d2] text-white"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
                 } justify-start`}
               >
@@ -171,7 +174,7 @@ export default function Sidebar() {
         <div
           className={`p-4 border-t border-slate-800 transition-all ${isMobileExpanded ? "block" : "hidden lg:block"}`}
         >
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center gap-2">
+          <div className="bg-slate-950 p-3 rounded border border-slate-800 flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
               Active

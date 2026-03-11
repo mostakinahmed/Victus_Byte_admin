@@ -20,7 +20,7 @@ const CustomerList = () => {
     ) || [];
 
   return (
-    <div className="bg-white rounded shadow-xs border p-5 md:px-4 px-2">
+    <div className="bg-white rounded shadow-xs border p-5  px-2">
       {/* 1. Header + Brand Search */}
       {activeTab === "list" && (
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">

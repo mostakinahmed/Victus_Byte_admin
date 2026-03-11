@@ -71,7 +71,7 @@ export const ApiContext = ({ children }) => {
       setLoading(false);
     }
   };
-  console.log(adminData);
+
 
   // ✅ CRITICAL FIX: Run whenever the cookie changes
   useEffect(() => {

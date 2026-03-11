@@ -58,23 +58,16 @@ const AddCategory = () => {
   };
 
   return (
-    <div className="w-full font-sans animate-in fade-in duration-500">
-      {/* --- COMPACT HEADER --- */}
-      <div className="flex items-center gap-2 mb-4 px-1">
-        <div className="p-1.5 bg-[#1976d2]/10 text-[#1976d2] rounded-lg">
-          <Layers size={16} />
-        </div>
-        <h2 className="text-[11px] font-black text-slate-800 uppercase tracking-widest">
-          New Architecture
-        </h2>
-      </div>
+    <div className="w-full font-normal animate-in fade-in duration-500">
+      {/* --- HEADER --- */}
+      
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        {/* Row 1: ID and Name together if space allows, or stacked for compactness */}
         <div className="grid grid-cols-1 gap-3">
+          
           {/* ID Input */}
           <div className="space-y-1">
-            <label className="flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">
+            <label className="flex items-center gap-2 text-xs font-normal text-black uppercase ml-1">
               <FiHash /> ID
             </label>
             <Input
@@ -84,13 +77,13 @@ const AddCategory = () => {
               onChange={handleChange}
               placeholder="C-101"
               required
-              className="h-10 text-sm rounded placeholder:font-normal border-slate-200 bg-slate-50/50 focus:border-[#1976d2] focus:ring-0 transition-all font-medium"
+              className="h-10 text-sm rounded font-normal border-black bg-white focus:border-[#1976d2] focus:ring-0 transition-all"
             />
           </div>
 
           {/* Name Input */}
           <div className="space-y-1">
-            <label className="flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">
+            <label className="flex items-center gap-2 text-xs font-normal text-black uppercase ml-1">
               <FiTag /> Name
             </label>
             <Input
@@ -100,13 +93,13 @@ const AddCategory = () => {
               onChange={handleChange}
               placeholder="Electronics"
               required
-              className="h-10 text-sm rounded border-slate-200 placeholder:font-normal bg-slate-50/50 focus:border-[#1976d2] focus:ring-0 transition-all font-bold"
+              className="h-10 text-sm rounded border-black font-normal bg-white focus:border-[#1976d2] focus:ring-0 transition-all"
             />
           </div>
 
           {/* Icon URL Input */}
           <div className="space-y-1">
-            <label className="flex items-center gap-2 text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">
+            <label className="flex items-center gap-2 text-xs font-normal text-black uppercase ml-1">
               <FiImage /> Visual URL
             </label>
             <div className="relative group">
@@ -117,9 +110,9 @@ const AddCategory = () => {
                 onChange={handleChange}
                 placeholder="https://..."
                 required
-                className="h-10 text pl-10 rounded border border-slate-200 bg-slate-50 transition-all"
+                className="h-10 text-sm pl-10 rounded border border-black bg-white font-normal transition-all"
               />
-              <div className="absolute left-1.5 top-1/2 -translate-y-1/2 h-6 w-6 bg-white rounded border border-slate-100 flex items-center justify-center overflow-hidden">
+              <div className="absolute left-1.5 top-1/2 -translate-y-1/2 h-6 w-6 bg-white rounded border border-black flex items-center justify-center overflow-hidden">
                 {category.catIcon ? (
                   <img
                     src={category.catIcon}
@@ -127,7 +120,7 @@ const AddCategory = () => {
                     className="h-4 w-4 object-contain"
                   />
                 ) : (
-                  <FiImage className="text-slate-300" size={12} />
+                  <FiImage className="text-black" size={12} />
                 )}
               </div>
             </div>
@@ -138,7 +131,7 @@ const AddCategory = () => {
         <div className="pt-2 flex justify-center">
           <Button
             type="submit"
-            className="w-2/7 h-10 text-[11px] font-black uppercase tracking-widest rounded-lg bg-slate-900 text-white hover:bg-[#1976d2] transition-all active:scale-95 "
+            className="w-2/5 h-10 text-xs font-semibold uppercase rounded-lg bg-black text-white hover:bg-[#1976d2] transition-all active:scale-95"
           >
             Save Entry
           </Button>
