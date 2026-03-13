@@ -279,6 +279,7 @@ const OrderList = () => {
           await updateApi();
           setShowDetails(null);
           setSelectedOrderId(null);
+          handleReset();
         } catch (innerError) {
           console.error(
             "UI Refresh Error (Order was actually saved):",
@@ -663,7 +664,7 @@ const OrderList = () => {
           {/* Header: Reference & Status Pill */}
           <div className="bg-slate-50 border-b border-slate-200 md:px-3 px-2 py-3">
             {showDetails ? (
-              <div   className="flex justify-between items-center">
+              <div className="flex justify-between items-center">
                 <div className="space-y-1">
                   <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
                     Order Detail View
@@ -700,7 +701,10 @@ const OrderList = () => {
           </div>
 
           {showDetails ? (
-            <div ref={detailScrollRef} className="flex-1 overflow-y-auto md:p-3 p-2 mt-2 space-y-3 scrollbar-hide">
+            <div
+              ref={detailScrollRef}
+              className="flex-1 overflow-y-auto md:p-3 p-2 mt-2 space-y-3 scrollbar-hide"
+            >
               {/* 📦 1. Product Info Section - Modern Logistics Style */}
               <section className="space-y-6 -mt-3">
                 <div className="flex items-center justify-between pb-2 border-b-2 border-slate-100">

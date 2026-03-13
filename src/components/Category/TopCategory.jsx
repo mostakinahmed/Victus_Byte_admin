@@ -61,7 +61,7 @@ export const TopCategory = () => {
       </div>
 
       {/* --- COMPACT TABLE --- */}
-      <div className="bg-white rounded border border-slate-200 overflow-hidden ">
+      <div className="bg-white rounded border border-slate-300 overflow-hidden ">
         <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
           <table className="w-full text-left border-collapse">
             <thead className="sticky top-0 bg-slate-50 z-10 border-b border-slate-100">
@@ -90,12 +90,12 @@ export const TopCategory = () => {
                         <span className="text-[13px] font-bold text-slate-700 leading-tight">
                           {item.catName}
                         </span>
-                        {/* <span className="text-[12px] font-bold text-[#1976d2] uppercase">
+                        <span className="text-[12px] font-bold text-[#1976d2] uppercase">
                           {item.catID}
-                        </span> */}
+                        </span>
                       </div>
                     </td>
-                    <td className="px-2 py-2.5">
+                    <td className="px-2 py-2">
                       <div className="flex justify-center">
                         <div className="h-7 w-7 bg-slate-50 rounded-lg border border-slate-100 flex items-center justify-center">
                           <img
@@ -123,17 +123,15 @@ export const TopCategory = () => {
 
       {/* --- COMPACT MODAL --- */}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-[200] p-4">
-          <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="p-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center">
-              <h2 className="text-[10px] font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                <FiLayers className="text-[#1976d2]" /> Select To Feature
-              </h2>
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-[200]">
+          <div className="bg-white w-full max-w-xs rounded-[2rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 mt-4 -mb-2 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center">
+              
               <button
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-slate-600"
+                className="text-slate-500  hover:text-slate-600"
               >
-                <FiX size={18} />
+                <FiX size={24} />
               </button>
             </div>
 
@@ -143,13 +141,13 @@ export const TopCategory = () => {
                 <input
                   type="text"
                   placeholder="Search..."
-                  className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold outline-none focus:border-[#1976d2] transition-all"
+                  className="w-full pl-9 pr-3 py-1.5 bg-slate-100 text-sm  border border-slate-200 rounded-xl uppercase font-bold outline-none focus:border-[#1976d2] transition-all"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
 
-              <div className="h-56 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
+              <div className="h-50 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
                 {categoryData
                   .filter(
                     (p) =>
@@ -160,19 +158,19 @@ export const TopCategory = () => {
                   .map((item) => (
                     <div
                       key={item.catID}
-                      className="p-2.5 bg-slate-50 border border-slate-100 rounded-xl flex justify-between items-center hover:bg-white hover:border-[#1976d2]/30 transition-all"
+                      className="px-4 py-1 bg-slate-50 border border-slate-100 rounded-xl flex justify-between items-center hover:bg-white hover:border-[#1976d2]/30 transition-all"
                     >
                       <div className="flex flex-col">
-                        <span className="text-[10px] font-black text-slate-700 uppercase">
+                        <span className="text-[11px] font-black text-slate-700 uppercase">
                           {item.catName}
                         </span>
-                        <span className="text-[8px] font-mono font-bold text-slate-400">
+                        <span className="text-[11px] font-bold text-slate-500">
                           {item.catID}
                         </span>
                       </div>
                       <button
                         onClick={() => submit(item.catID, true)}
-                        className="px-3 py-1 bg-white border border-slate-200 text-[#1976d2] rounded-lg text-[8px] font-black uppercase hover:bg-[#1976d2] hover:text-white transition-all"
+                        className="px-3 py-1 bg-white border border-slate-300 text-[#1976d2] rounded-lg text-[9px] font-black uppercase hover:bg-[#1976d2] hover:text-white transition-all"
                       >
                         Select
                       </button>
