@@ -14,12 +14,12 @@ import {
   FiPlusCircle,
   FiFileText,
   FiXCircle,
-} from "react-icons/fi"; // Feather search icon
-import { FaSpinner, FaCheckCircle } from "react-icons/fa";
-import axios from "axios";
+} from "react-icons/fi";
+import { FaSpinner } from "react-icons/fa";
 import api from "@/Context Api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+
 const MySwal = withReactContent(Swal);
 
 export default function CheckAndUpdateStock() {
@@ -31,27 +31,37 @@ export default function CheckAndUpdateStock() {
   const [currentSKU, setCurrentSKU] = useState(false);
   const [toggle, setToggle] = useState(true);
   const [success, setSuccess] = useState(false);
+
+  // ✅ Updated FormData to include cost and selling_price
   const [formData, setFormData] = useState({
     skuID: "",
     comment: "",
+    cost: "",
+    selling_price: "",
   });
 
-  //take all from to one state variable
+  // Automatically update selling_price when a product is selected
+  useEffect(() => {
+    if (selectedProduct) {
+      setFormData((prev) => ({
+        ...prev,
+        selling_price: selectedProduct.price.selling,
+      }));
+    }
+  }, [selectedProduct]);
+
   const handleFormDataChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value, // update only the changed field
+      [name]: value,
     }));
   };
 
-  //handle Form Data change
   const handleSearch = () => {
-    // First, try to find by Product ID
     let foundProduct = productData.find((p) => p.pID === searchId);
     let foundStock = null;
 
-    // If not found by Product ID, try to find by SKU ID
     if (!foundProduct) {
       const foundStockItem = stockData.find((stock) =>
         Object.values(stock.SKU).some((sku) => sku.skuID === searchId),
@@ -62,7 +72,6 @@ export default function CheckAndUpdateStock() {
         foundStock = foundStockItem.SKU;
       }
     } else {
-      // Found by Product ID, get stock
       foundStock = stockData.find(
         (stock) => stock.pID === foundProduct.pID,
       ).SKU;
@@ -71,8 +80,6 @@ export default function CheckAndUpdateStock() {
     if (foundProduct && foundStock) {
       setCurrentStock(foundStock);
       setSelectedProduct(foundProduct);
-
-      // Directly find the SKU from the stock we just got
       const selectSKU = Object.values(foundStock).find(
         (s) => s.skuID === searchId,
       );
@@ -84,7 +91,6 @@ export default function CheckAndUpdateStock() {
     }
   };
 
-  //Show SKU DATA - Search
   const handleSelectSKU = (skuID) => {
     const selectSKU = Object.values(currentStock).find(
       (s) => s.skuID === skuID,
@@ -101,75 +107,67 @@ export default function CheckAndUpdateStock() {
     }
   }, [stockData, selectedProduct]);
 
-  //add stock button
+  // ✅ Modified Add Stock Logic
   const addStock = async (e) => {
     if (e) e.preventDefault();
 
-    // 1. Local validation before calling the API
-    if (!selectedProduct?.pID || !formData.skuID) {
+    if (!selectedProduct?.pID || !formData.skuID || !formData.cost) {
       return Swal.fire({
         icon: "warning",
         title: "Missing Information",
-        text: "Please select a product and enter a SKU ID.",
+        text: "SKU ID and Buying Cost are required for asset intake.",
       });
     }
 
     try {
-      // We don't show a 'Loading' popup here for a "Frictionless" feel.
-      // However, you should still use your 'success' state to disable the button.
       setSuccess(true);
 
       const data = {
         pID: selectedProduct.pID,
         skuID: formData.skuID,
-        comment: formData.comment || "Manual Restock",
+        cost: Number(formData.cost),
+        selling_price: Number(formData.selling_price),
+        comment: formData.comment || "Standard Intake",
       };
 
-      // 2. The API Call
       const res = await api.post("/stock/add-stock", data);
 
-      // 3. SILENT SUCCESS
-      // If we reach this line, the API worked.
-      await updateApi(); // Refresh the table so the admin sees the change
-      setFormData({ skuID: "", comment: "" }); // Reset form
-
-      // Note: No 'Success' Swal.fire here as per your request!
+      await updateApi();
+      // Reset form but keep the selling price of the current product for the next intake
+      setFormData({
+        skuID: "",
+        comment: "",
+        cost: "",
+        selling_price: selectedProduct.price.selling,
+      });
     } catch (error) {
       console.error("Error adding stock:", error);
-
-      // 4. LOUD FAILURE
-      // Only show a popup if something actually goes wrong (Access Denied, etc.)
       const status = error.response?.status;
       const errorMsg =
-        error.response?.data?.message || "Check your internet connection.";
-
-      let title = "Update Failed ❌";
-      if (status === 401) title = "Session Expired ";
-      if (status === 403) title = "Access Denied 🚫";
+        error.response?.data?.message || "Check your connection.";
 
       Swal.fire({
         icon: "error",
-        title: title,
+        title: status === 403 ? "Access Denied" : "Update Failed",
         text: errorMsg,
-        confirmButtonColor: "#EF4444", // Tailwind red-500
       });
     } finally {
-      setSuccess(false); // Re-enable the button
+      setSuccess(false);
     }
   };
 
-  //find total, available, sold
   const totalStock = Object.keys(currentStock).length;
   const availableStock = Object.values(currentStock).filter(
     (item) => item.status === true,
   ).length;
 
+  const calculatedProfit = (formData.selling_price || 0) - (formData.cost || 0);
+
   return (
     <div className="md:flex border-t min-h-screen md:mt-3 font-sans">
-      {/* Left Panel: Professional Inventory Lookup */}
+      {/* Left Panel */}
       <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-sm flex flex-col">
-        {/* Header Section */}
-        <div className="md:px-5 px-2 py-4 b border-b border-slate-200 ">
+        <div className="md:px-5 px-2 py-4 border-b border-slate-200">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
             <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
@@ -179,7 +177,6 @@ export default function CheckAndUpdateStock() {
         </div>
 
         <div className="md:p-5 p-2">
-          {/* Search Interaction Group */}
           <div className="md:flex items-end gap-3 mb-6">
             <div className="flex-1 space-y-1.5">
               <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
@@ -192,13 +189,13 @@ export default function CheckAndUpdateStock() {
                   placeholder="Product-ID or SKU-ID..."
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-slate-50 placeholder:text-sm  placeholder:font-normal placeholder:tracking-wider border uppercase border-slate-300 rounded-xl text-md font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                  className="w-full pl-10 pr-4 py-2 bg-slate-50 border uppercase border-slate-300 rounded-xl text-md font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                 />
               </div>
             </div>
             <button
               onClick={handleSearch}
-              className="bg-slate-900 mt-2 md:mt-0 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-600 transition-all active:scale-95 shadow-lg shadow-slate-200 flex items-center gap-2"
+              className="bg-slate-900 mt-2 md:mt-0 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-600 transition-all active:scale-95 flex items-center gap-2"
             >
               <FiZap size={14} /> Search
             </button>
@@ -206,9 +203,8 @@ export default function CheckAndUpdateStock() {
 
           {selectedProduct ? (
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-              {/* Product Details Header & Action */}
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xs font-black line-clamp-1 text-slate-800 uppercase tracking-widest border-l-4 border-indigo-500 pl-3">
+                <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest border-l-4 border-indigo-500 pl-3">
                   Product Profile
                 </h3>
                 <button
@@ -219,109 +215,51 @@ export default function CheckAndUpdateStock() {
                 </button>
               </div>
 
-              {/* Info Container */}
               <div className="space-y-6">
                 <div className="flex gap-6 items-start">
-                  {/* High-End Image Frame */}
                   <div className="relative shrink-0">
                     <img
                       src={selectedProduct.images[0]}
                       alt={selectedProduct.name}
                       className="w-30 h-30 object-contain rounded-2xl border-2 border-slate-50 bg-white shadow-sm p-2"
                     />
-                    <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-white text-[9px] font-black px-2 py-1 rounded shadow-lg border-2 border-white uppercase">
-                      Original
-                    </div>
                   </div>
 
-                  {/* Core Specs */}
                   <div className="flex-1 space-y-3 pt-1">
                     <h2 className="md:text-lg font-medium text-slate-900 leading-tight">
                       {selectedProduct.name}
                     </h2>
-
                     <div className="grid grid-cols-1 gap-2">
-                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                      <div className="flex items-center gap-2 text-xs text-slate-500">
                         <FiHash className="text-slate-300" />
-                        <span className="text-slate-400 font-medium">PID:</span>
                         <span className="font-mono text-slate-800">
                           {selectedProduct.pID}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                      <div className="flex items-center gap-2 text-xs">
                         <FiPackage className="text-slate-300" />
-                        <span className="text-slate-400 font-medium">
-                          Category:
-                        </span>
                         <span className="text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">
                           {selectedProduct.category}
                         </span>
                       </div>
                     </div>
-
-                    {/* Financial Metrics Cards */}
-                    <div className="flex flex-col gap-3 pt-3">
-                      <div className="flex-1 md:p-3 p-2 bg-slate-900 rounded-2xl shadow-md">
-                        <p className="text-[10px] line-clamp-1 font-black text-slate-400 uppercase tracking-widest mb-1">
-                          Selling Price
-                        </p>
-                        <p className="text-lg font-black text-white">
-                          ৳ {selectedProduct.price.selling}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Technical Specifications Section */}
-                <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                  <div className="flex items-center gap-2 mb-3">
-                    <FiActivity className="text-slate-400" />
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                      Hardware Configuration
-                    </p>
-                  </div>
-                  <ul className="grid grid-cols-2 gap-3">
-                    {["8GB RAM", "128GB Storage", "5000mAh Battery"].map(
-                      (spec, i) => (
-                        <li
-                          key={i}
-                          className="text-xs font-bold text-slate-700 flex items-center gap-2"
-                        >
-                          <div className="w-1 h-1 bg-indigo-400 rounded-full" />{" "}
-                          {spec}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-
-                {/* System Metadata */}
-                <div className="flex justify-between items-center pt-4 border-t border-slate-100">
-                  <div className="flex gap-4">
-                    <div className="text-[10px] font-bold text-slate-400 uppercase">
-                      Created{" "}
-                      <span className="text-slate-600 ml-1">2025-10-05</span>
-                    </div>
-                    <div className="text-[10px] font-bold text-slate-400 uppercase">
-                      Last Update{" "}
-                      <span className="text-slate-600 ml-1">2025-10-07</span>
+                    <div className="bg-slate-900 rounded-2xl p-3 shadow-md">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                        Selling Price
+                      </p>
+                      <p className="text-lg font-black text-white">
+                        ৳ {selectedProduct.price.selling}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            /* Empty Selection State */
-            <div className="mt-4 p-12 flex flex-col items-center justify-center bg-slate-50 border border-slate-200 rounded-2xl border-dashed">
-              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-slate-200 shadow-sm mb-4">
-                <FiPackage size={32} />
-              </div>
-              <p className="text-sm font-black text-slate-400 uppercase tracking-widest">
-                Product Info Required
-              </p>
-              <p className="text-[11px] text-slate-400 mt-1">
-                Search via Product ID to populate details
+            <div className="mt-4 p-12 flex flex-col items-center justify-center bg-slate-50 border border-slate-200 rounded-2xl border-dashed text-slate-400">
+              <FiPackage size={32} className="mb-4 opacity-20" />
+              <p className="text-[10px] font-black uppercase tracking-widest">
+                Search Required
               </p>
             </div>
           )}
@@ -329,9 +267,7 @@ export default function CheckAndUpdateStock() {
       </div>
 
       {/* Middle Panel */}
-      {/* 📊 Middle Panel: Professional SKU Ledger */}
-      <div className="md:w-1/2 mt-2 md:mt-0 border-r border-slate-200 bg-white  overflow-hidden shadow-sm flex flex-col h-full">
-        {/* Section Header */}
+      <div className="md:w-1/2 mt-2 md:mt-0 border-r border-slate-200 bg-white flex flex-col h-full overflow-hidden shadow-sm">
         <div className="md:px-5 px-2 py-4 border-b border-slate-200">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
@@ -341,310 +277,244 @@ export default function CheckAndUpdateStock() {
           </div>
         </div>
 
-        {/* 📈 Stat Bar: Modern Flat Look */}
         {currentStock && (
-          <div className="md:px-5 px-2 pt-5 pb-2">
-            <div className="grid grid-cols-3 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-              <div className="md:p-4 p-2 text-center border-r border-slate-100">
-                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
-                  Total
-                </h4>
-                <p className="text-xl font-black text-slate-900">
-                  {totalStock}
-                </p>
-              </div>
-              <div className="md:p-4 p-2 text-center border-r border-slate-100 bg-emerald-50/30">
-                <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">
-                  Available
-                </h4>
-                <p className="text-xl font-black text-emerald-600">
-                  {availableStock}
-                </p>
-              </div>
-              <div className="md:p-4 p-2 text-center bg-rose-50/30">
-                <h4 className="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-1">
-                  Out
-                </h4>
-                <p className="text-xl font-black text-rose-500">
-                  {totalStock - availableStock}
-                </p>
-              </div>
+          <div className="md:px-5 px-2 pt-5 pb-2 grid grid-cols-3 gap-0 border-b border-slate-100">
+            <div className="p-4 text-center border-r">
+              <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                Total
+              </h4>
+              <p className="text-xl font-black text-slate-900">{totalStock}</p>
+            </div>
+            <div className="p-4 text-center border-r bg-emerald-50/30">
+              <h4 className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">
+                Available
+              </h4>
+              <p className="text-xl font-black text-emerald-600">
+                {availableStock}
+              </p>
+            </div>
+            <div className="p-4 text-center bg-rose-50/30 text-rose-500">
+              <h4 className="text-[9px] font-black uppercase tracking-widest">
+                Out
+              </h4>
+              <p className="text-xl font-black">
+                {totalStock - availableStock}
+              </p>
             </div>
           </div>
         )}
 
-        {/* 📋 SKU List Table */}
-        <div className="flex-1 p-5">
-          {!currentStock ? (
-            <div className="h-40 flex flex-col items-center justify-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl text-slate-400">
-              <FiActivity className="mb-2 opacity-50" size={24} />
-              <p className="text-[10px] font-black uppercase tracking-widest">
-                Awaiting Catalog Selection
-              </p>
-            </div>
-          ) : (
-            <div className="h-[600px] overflow-y-auto rounded-xl border border-slate-100 custom-scrollbar">
-              <table className="w-full border-collapse">
-                <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
-                  <tr>
-                    <th className="py-3 px-4 text-left text-[10px] font-black text-slate-600 uppercase tracking-widest">
-                      SKU Reference
-                    </th>
-                    <th className="py-3 px-4 text-right text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                      Availability
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  {Object.values(currentStock)
-                    .reverse()
-                    .map((sku) => {
-                      const isSelected = currentSKU?.skuID === sku.skuID;
-                      return (
-                        <tr
-                          key={sku.skuID}
-                          className={`group cursor-pointer transition-all duration-200 ${
-                            isSelected ? "bg-indigo-50" : "hover:bg-slate-50"
-                          }`}
-                          onClick={() => {
-                            handleSelectSKU(sku.skuID);
-                            setToggle(true);
-                          }}
+        <div className="flex-1 p-5 overflow-y-auto custom-scrollbar">
+          {currentStock ? (
+            <table className="w-full">
+              <thead className="sticky top-0 bg-white border-b">
+                <tr>
+                  <th className="py-3 text-left text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                    SKU ID
+                  </th>
+                  <th className="py-3 text-right text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {Object.values(currentStock)
+                  .reverse()
+                  .map((sku) => (
+                    <tr
+                      key={sku.skuID}
+                      className={`cursor-pointer hover:bg-slate-50 ${currentSKU?.skuID === sku.skuID ? "bg-indigo-50" : ""}`}
+                      onClick={() => {
+                        handleSelectSKU(sku.skuID);
+                        setToggle(true);
+                      }}
+                    >
+                      <td className="py-3 text-sm font-bold text-slate-700">
+                        {sku.skuID}
+                      </td>
+                      <td className="py-3 text-right">
+                        <span
+                          className={`px-2 py-1 rounded-full text-[10px] font-black uppercase ${sku.status ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}
                         >
-                          <td className="py-3 px-4 flex items-center gap-3">
-                            {isSelected && (
-                              <div className="w-1 h-4 bg-indigo-600 rounded-full" />
-                            )}
-                            <span
-                              className={`text-sm font-medium ${
-                                isSelected
-                                  ? "text-indigo-600"
-                                  : "text-slate-600"
-                              }`}
-                            >
-                              {sku.skuID}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 text-right">
-                            <span
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium  tracking-tighter border ${
-                                sku.status
-                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                  : "bg-rose-50 text-rose-700 border-rose-200"
-                              }`}
-                            >
-                              {sku.status ? (
-                                <FiCheckCircle />
-                              ) : (
-                                <FiMinusCircle />
-                              )}
-                              {sku.status ? "In Stock" : "Sold Out"}
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
+                          {sku.status ? "In Stock" : "Sold"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="text-center py-20 opacity-20">
+              <FiActivity size={40} className="mx-auto" />
             </div>
           )}
         </div>
       </div>
 
       {/* Right Panel */}
-      <div className="md:w-1/2 bg-white overflow-hidden shadow-sm border border-slate-200 flex flex-col h-">
-        {/* Dynamic Section Header */}
+      <div className="md:w-1/2 bg-white flex flex-col border border-slate-200 shadow-sm">
         <div
-          className={`md:px-5 px-2 py-4 border-b ${
-            toggle
-              ? "bg-slate-50/50 border-slate-200"
-              : "bg-indigo-50/30 border-indigo-200"
-          }`}
+          className={`md:px-5 px-2 py-4 border-b ${toggle ? "bg-slate-50/50" : "bg-indigo-50/30 border-indigo-200"}`}
         >
           <div className="flex items-center gap-2">
             <div
-              className={`w-1.5 h-6 rounded-full ${
-                toggle ? "bg-slate-400" : "bg-indigo-600"
-              }`}
+              className={`w-1.5 h-6 rounded-full ${toggle ? "bg-slate-400" : "bg-indigo-600"}`}
             ></div>
             <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
-              {toggle ? "Inventory Profile" : "Asset Intake"}
+              {toggle ? "Asset Profile" : "Stock Intake"}
             </h2>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto p-6">
           {toggle ? (
-            <div className="">
-              <div className="md:p-6 p-2">
-                <div className="flex items-center gap-2 mb-6">
-                  <FiFileText className="text-slate-400" />
-                  <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
-                    SKU Ledger Details
-                  </h3>
+            currentSKU ? (
+              <div className="space-y-6">
+                <div className="flex justify-between border-b pb-2">
+                  <span className="text-[10px] font-black text-slate-400 uppercase">
+                    SKU Reference
+                  </span>
+                  <span className="text-sm font-mono font-bold text-indigo-600">
+                    {currentSKU.skuID}
+                  </span>
                 </div>
-
-                {currentSKU ? (
-                  <div className="space-y-6">
-                    {/* Detailed Data Rows */}
-                    <div className="space-y-4">
-                      {[
-                        {
-                          label: "Asset ID",
-                          value: currentSKU.skuID,
-                          mono: true,
-                        },
-                        {
-                          label: "Current Status",
-                          value: currentSKU.status
-                            ? "In Stock / Active"
-                            : "Sold / Inactive",
-                          status: currentSKU.status,
-                        },
-                        {
-                          label: "Linked Order (OID)",
-                          value: currentSKU.OID || "Unlinked / NULL",
-                          highlight: !!currentSKU.OID,
-                        },
-                      ].map((row, i) => (
-                        <div
-                          key={i}
-                          className="flex justify-between items-baseline group"
-                        >
-                          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-tight">
-                            {row.label}
-                          </span>
-                          <div className="flex-1 border-b border-dotted border-slate-200 mx-2 h-1 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                          <span
-                            className={`text-sm font-bold ${
-                              row.mono
-                                ? "font-mono text-indigo-600"
-                                : row.status === true
-                                  ? "text-emerald-600"
-                                  : row.status === false
-                                    ? "text-rose-500"
-                                    : row.highlight
-                                      ? "text-indigo-600"
-                                      : "text-slate-400"
-                            }`}
-                          >
-                            {row.value}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Enhanced Comment Box */}
-                    <div className="mt-8">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
-                        Administrative Notes
-                      </p>
-                      <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
-                        <p className="text-xs font-medium text-slate-600 leading-relaxed italic">
-                          "
-                          {currentSKU.comment ||
-                            "No historical comments recorded for this asset."}
-                          "
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mt-10 flex flex-col items-center justify-center p-12 bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
-                    <FiActivity size={32} className="text-slate-300 mb-2" />
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
-                      Select an SKU to view profile
-                    </p>
-                  </div>
-                )}
+                <div className="flex justify-between border-b pb-2">
+                  <span className="text-[10px] font-black text-slate-400 uppercase">
+                    Unit Cost
+                  </span>
+                  <span className="text-sm font-bold">
+                    ৳ {currentSKU.cost || 0}
+                  </span>
+                </div>
+                <div className="flex justify-between border-b pb-2">
+                  <span className="text-[10px] font-black text-slate-400 uppercase">
+                    Sale Profit
+                  </span>
+                  <span
+                    className={`text-sm font-bold ${currentSKU.profit >= 0 ? "text-emerald-600" : "text-rose-500"}`}
+                  >
+                    ৳ {currentSKU.profit || 0}
+                  </span>
+                </div>
+                <div className="bg-slate-50 p-4 rounded-xl border italic text-xs text-slate-500">
+                  "{currentSKU.comment || "No logs available."}"
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="text-center py-10 text-[10px] font-black uppercase text-slate-300 tracking-widest">
+                Select an SKU to view details
+              </div>
+            )
           ) : (
-            /* ➕ Add Stock Form */
-            <div className="relative md:p-6 p-2 animate-in fade-in slide-in-from-right-4 duration-300">
-              {/* Modern Loader Overlay */}
+            <div className="relative animate-in fade-in slide-in-from-right-4 duration-300">
               {success && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-md z-30 transition-all duration-500">
-                  <div className="bg-white p-8 rounded-3xl shadow-2xl shadow-indigo-200 border border-slate-100 flex flex-col items-center">
-                    <div className="relative">
-                      <FaSpinner className="text-indigo-600 text-5xl animate-spin mb-4" />
-                      <FiPlusCircle className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-indigo-400 text-xl" />
-                    </div>
-                    <p className="text-slate-800 font-black text-sm uppercase tracking-widest">
-                      Processing...
-                    </p>
-                    <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase">
-                      Updating Master Catalog
-                    </p>
-                  </div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-md z-30 rounded-3xl">
+                  <FaSpinner className="text-indigo-600 text-4xl animate-spin mb-2" />
+                  <p className="text-[10px] font-black uppercase tracking-widest">
+                    Processing
+                  </p>
                 </div>
               )}
-
-              <div
-                className={`space-y-6 ${
-                  success ? "blur-sm opacity-50 pointer-events-none" : ""
-                }`}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <FiPlusCircle className="text-indigo-500" />
-                  <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
-                    Intake New Asset
-                  </h3>
+              <form onSubmit={addStock} className="space-y-5">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Asset Reference (SKU-ID)
+                  </label>
+                  <input
+                    type="text"
+                    name="skuID"
+                    value={formData.skuID.toUpperCase()}
+                    onChange={handleFormDataChange}
+                    required
+                    className="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all font-mono"
+                  />
                 </div>
 
-                <form onSubmit={addStock} className="space-y-5">
-                  <div className="space-y-4">
-                    {/* SKU Input */}
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
-                        Asset Reference (SKU-ID)
-                      </label>
-                      <input
-                        type="text"
-                        name="skuID"
-                        value={formData.skuID.toUpperCase()}
-                        onChange={handleFormDataChange}
-                        placeholder="SN2026011501"
-                        required
-                        className="w-full bg-slate-50 uppercase placeholder:text-slate-300 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-mono"
-                      />
-                    </div>
-
-                    {/* Comment Input */}
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
-                        Technical Specifications / Notes
-                      </label>
-                      <textarea
-                        placeholder="Describe variant, condition, or source..."
-                        rows={6}
-                        name="comment"
-                        value={formData.comment}
-                        onChange={handleFormDataChange}
-                        required
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-600 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all leading-relaxed"
-                      ></textarea>
-                    </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Buying Cost (৳)
+                    </label>
+                    <input
+                      type="number"
+                      name="cost"
+                      value={formData.cost}
+                      onChange={handleFormDataChange}
+                      required
+                      className="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:ring-4 focus:ring-rose-500/10 transition-all"
+                    />
                   </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-3 pt-4">
-                    <button
-                      type="button"
-                      onClick={() => setToggle(true)}
-                      className="flex-1 flex items-center justify-center gap-2 bg-white text-rose-500 border border-rose-100 px-5 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-rose-50 transition-all active:scale-95"
-                    >
-                      <FiXCircle size={14} /> Discard
-                    </button>
-                    <button
-                      type="submit"
-                      className="flex-[2] flex items-center justify-center gap-2 bg-indigo-600 text-white md:px-5 py-3 rounded-xl font-black text-[11px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95"
-                    >
-                      <FiCheckCircle size={14} /> Add Stock
-                    </button>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Selling Price (৳)
+                    </label>
+                    <input
+                      type="number"
+                      name="selling_price"
+                      value={formData.selling_price}
+                      onChange={handleFormDataChange}
+                      required
+                      className="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-bold focus:ring-4 focus:ring-emerald-500/10 transition-all"
+                    />
                   </div>
-                </form>
-              </div>
+                </div>
+
+                <div className="bg-slate-900 rounded-xl p-4 flex justify-between items-center text-white border border-slate-800">
+                  <div>
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">
+                      Estimated Profit
+                    </p>
+                    <p
+                      className={`text-lg font-black ${calculatedProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}
+                    >
+                      ৳ {calculatedProfit.toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">
+                      Margin
+                    </p>
+                    <p className="text-xs font-bold">
+                      {formData.selling_price > 0
+                        ? (
+                            (calculatedProfit / formData.selling_price) *
+                            100
+                          ).toFixed(1)
+                        : 0}
+                      %
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Technical Notes
+                  </label>
+                  <textarea
+                    rows={3}
+                    name="comment"
+                    value={formData.comment}
+                    onChange={handleFormDataChange}
+                    className="w-full bg-slate-50 border rounded-xl px-4 py-3 text-sm font-medium outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                  ></textarea>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setToggle(true)}
+                    className="flex-1 bg-white text-rose-500 border border-rose-100 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-50 transition-all"
+                  >
+                    Discard
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-[2] bg-indigo-600 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all"
+                  >
+                    Confirm Intake
+                  </button>
+                </div>
+              </form>
             </div>
           )}
         </div>
