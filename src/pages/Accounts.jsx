@@ -20,51 +20,6 @@ import {
 import Navbar from "@/components/Navbar";
 import { DataContext } from "@/Context Api/ApiContext";
 
-const accountStats = [
-  {
-    title: "Total Revenue",
-    value: "৳1,45,200",
-    icon: TrendingUp,
-    color: "border-emerald-300 bg-emerald-50 text-emerald-700",
-  },
-  {
-    title: "Total Expense",
-    value: "৳32,400",
-    icon: TrendingDown,
-    color: "border-rose-300 bg-rose-50 text-rose-700",
-  },
-  {
-    title: "Net Profit",
-    value: "৳1,12,800",
-    icon: Wallet,
-    color: "border-indigo-300 bg-indigo-50 text-indigo-700",
-  },
-  {
-    title: "Pending COD",
-    value: "৳12,850",
-    icon: Clock,
-    color: "border-amber-300 bg-amber-50 text-amber-700",
-  },
-  {
-    title: "Gateway Fees",
-    value: "৳2,450",
-    icon: Percent,
-    color: "border-slate-300 bg-slate-50 text-slate-700",
-  },
-  {
-    title: "Refunds",
-    value: "৳1,200",
-    icon: RotateCcw,
-    color: "border-orange-300 bg-orange-50 text-orange-700",
-  },
-  {
-    title: "Cash on Hand",
-    value: "৳5,500",
-    icon: Banknote,
-    color: "border-cyan-300 bg-cyan-50 text-cyan-700",
-  },
-];
-
 const expenseCategories = {
   Logistics: [
     "Courier Fees",
@@ -94,6 +49,7 @@ const AccountsDashboard = () => {
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [mainCat, setMainCat] = useState("");
   const [subCat, setSubCat] = useState("");
+  const [totalRevenue, setTotalRevenue] = useState(0);
 
   const [transactions] = useState([
     {
@@ -178,9 +134,12 @@ const AccountsDashboard = () => {
     // 1. Loop through every Order
     orderData.forEach((order) => {
       // 2. Loop through every item in that order
+
+      const numOrder = order.items.length;
+      let rev = 0;
       order.items.forEach((item) => {
         // 3. Find the specific Stock document for this Product (PID)
-        console.log(item);
+        console.log(order);
         const productStock = stockData.find(
           (stock) => stock.pID === item.product_id,
         );
@@ -190,6 +149,13 @@ const AccountsDashboard = () => {
           const soldSKU = productStock.SKU.find(
             (sku) => sku.OID === order.order_id,
           );
+
+          const sellingPrice = Math.round(
+            item.product_price * item.quantity -
+              ((order.coupon?.value || 0) / numOrder +
+                (order.discount || 0) / numOrder),
+          );
+          rev = rev + sellingPrice;
 
           if (soldSKU) {
             // 5. Construct the Master Audit Object
@@ -202,20 +168,72 @@ const AccountsDashboard = () => {
               webPrice: item.product_price, // Original price from product catalog
               discount: order.discount || 0, // Discount from order level
               coupon: order.coupon || 0, // Example coupon logic
-              sellingPrice: item.finalPrice || 0, // Price customer actually paid
+              sellingPrice: sellingPrice || 0, // Price customer actually paid
               cost: soldSKU.cost, // Buying cost from Stock Schema
-              profit: soldSKU.selling_price - soldSKU.cost || 0, // Real Net Profit
+              profit: sellingPrice - soldSKU.cost || 0, // Real Net Profit
               comment: soldSKU.comment,
             });
           }
         }
       });
+
+      setTotalRevenue(rev);
     });
+
+    console.log(totalRevenue);
 
     return masterLedger;
   }, [orderData, stockData]);
 
-  console.log(filteredSalesLedger);
+  //tnet profit
+  const netProfit = filteredSalesLedger
+    .reduce((sum, item) => sum + item.profit, 0)
+    .toLocaleString();
+
+  const accountStats = [
+    {
+      title: "Total Revenue",
+      value: "৳" + totalRevenue,
+      icon: TrendingUp,
+      color: "border-emerald-300 bg-emerald-50 text-emerald-700",
+    },
+    {
+      title: "Total Expense",
+      value: "৳ N",
+      icon: TrendingDown,
+      color: "border-rose-300 bg-rose-50 text-rose-700",
+    },
+    {
+      title: "Net Profit",
+      value: "৳" + netProfit,
+      icon: Wallet,
+      color: "border-indigo-300 bg-indigo-50 text-indigo-700",
+    },
+    {
+      title: "Pending COD",
+      value: "৳ N",
+      icon: Clock,
+      color: "border-amber-300 bg-amber-50 text-amber-700",
+    },
+    {
+      title: "Gateway Fees",
+      value: "৳ N",
+      icon: Percent,
+      color: "border-slate-300 bg-slate-50 text-slate-700",
+    },
+    {
+      title: "Refunds",
+      value: "৳ N",
+      icon: RotateCcw,
+      color: "border-orange-300 bg-orange-50 text-orange-700",
+    },
+    {
+      title: "Cash on Hand",
+      value: "৳ N",
+      icon: Banknote,
+      color: "border-cyan-300 bg-cyan-50 text-cyan-700",
+    },
+  ];
 
   return (
     <div className=" flex flex-col">
@@ -486,8 +504,8 @@ const AccountsDashboard = () => {
 
         <div className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden flex flex-col h-full">
           {/* Header Section */}
-          <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
-            <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
+          <div className="p-4 border-b bg-[#1976d2] flex justify-between items-center">
+            <h3 className="text-xs font-black text-white uppercase tracking-widest">
               Consolidated Sales Ledger
             </h3>
 
@@ -504,7 +522,7 @@ const AccountsDashboard = () => {
           <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full text-left border-collapse min-w-[1200px]">
               <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-200">
+                <tr className="bg-slate-50 border-b border-slate-200">
                   <th className="p-3 text-[12px] font-black text-slate-500 uppercase">
                     OID
                   </th>
@@ -603,19 +621,16 @@ const AccountsDashboard = () => {
           {/* Dynamic Footer Summary */}
           <div className="p-3 border-t bg-slate-50 flex justify-between items-center px-6">
             <div className="flex gap-4">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+              <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">
                 Orders Analyzed: {orderData.length}
               </span>
             </div>
             <div className="text-right">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2">
+              <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest mr-2">
                 Accumulated Net Profit:
               </span>
               <span className="text-sm font-black text-emerald-600">
-                ৳
-                {filteredSalesLedger
-                  .reduce((sum, item) => sum + item.profit, 0)
-                  .toLocaleString()}
+                ৳{netProfit}
               </span>
             </div>
           </div>
