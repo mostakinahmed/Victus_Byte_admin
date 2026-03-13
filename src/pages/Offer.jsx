@@ -93,7 +93,7 @@ const Offer = () => {
 
   return (
     <div className=" mt-13 md:mt-0 min-h-screen font-inter">
-      <Navbar pageTitle={"Offer & Coupon Center"} />
+      <Navbar pageTitle={"Offer & Coupon"} />
 
       {/* <Ticket className="text-orange-500" size={32} /> */}
       {/* TOP SECTION: Create & Active Stats */}
@@ -113,13 +113,13 @@ const Offer = () => {
           >
             {/* Coupon ID */}
             <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+              <label className="text-[11px] font-medium text-slate-600 uppercase tracking-widest ml-1">
                 Coupon ID
               </label>
               <input
                 type="text"
                 placeholder="VICTUS500"
-                className="px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none uppercase text-xs font-bold transition-all placeholder:text-slate-300"
+                className="px-3 py-2.5 border border-slate-400 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none uppercase text-xs font-bold transition-all placeholder:text-slate-300"
                 value={newCoupon.couponID}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, couponID: e.target.value })
@@ -130,13 +130,13 @@ const Offer = () => {
 
             {/* Value */}
             <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+              <label className="text-[11px] font-medium text-slate-600 uppercase tracking-widest ml-1">
                 Value (TK)
               </label>
               <input
                 type="number"
                 placeholder="500"
-                className="px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none text-xs font-bold transition-all placeholder:text-slate-300"
+                className="px-3 py-2.5 border border-slate-400 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none text-xs font-bold transition-all placeholder:text-slate-300"
                 value={newCoupon.value}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, value: e.target.value })
@@ -147,13 +147,13 @@ const Offer = () => {
 
             {/* Min Purchase */}
             <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
+              <label className="text-[11px] font-medium text-slate-600  uppercase tracking-widest ml-1">
                 Min Purchase
               </label>
               <input
                 type="number"
                 placeholder="2000"
-                className="px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none text-xs font-bold transition-all placeholder:text-slate-300"
+                className="px-3 py-2.5 border border-slate-400 rounded-xl bg-slate-50/50 focus:ring-4 focus:ring-[#1976d2]/10 focus:border-[#1976d2] outline-none text-xs font-bold transition-all placeholder:text-slate-300"
                 value={newCoupon.minTK}
                 onChange={(e) =>
                   setNewCoupon({ ...newCoupon, minTK: e.target.value })
@@ -167,7 +167,7 @@ const Offer = () => {
               disabled={loading}
               className="bg-slate-900 cursor-pointer hover:bg-[#1976d2] text-white text-[10px] font-black uppercase tracking-widest h-[42px] rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
             >
-              {loading ? "Deploying..." : "Deploy Offer"}
+              {loading ? "Saving...." : "Save Offer"}
             </button>
           </form>
         </div>
@@ -176,7 +176,7 @@ const Offer = () => {
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-400">
             <ListChecks size={20} /> Active Now
           </h2>
-          <div className="space-y-2 max-h-[164px] overflow-y-auto scroll-auto ">
+          <div className="space-y-2 max-h-[164px] px-7 overflow-y-auto scroll-auto ">
             {coupons
               .filter((c) => c.status)
               .map((c) => (

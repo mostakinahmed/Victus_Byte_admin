@@ -13,7 +13,6 @@ import BackButton from "@/components/BackButton";
 import SalesStatusCards from "@/components/Sales/SalesStatusCards";
 
 export default function Sales() {
-
   const { orderData, adminData } = useContext(DataContext);
   const navigate = useNavigate();
   const detailScrollRef = useRef(null);
@@ -128,54 +127,72 @@ export default function Sales() {
       </div>
 
       {/* Main Professional Table */}
-      <div className="bg-white rounded border border-slate-200 overflow-hidden mx-2 md:mx-0">
-        <div className="overflow-x-auto" ref={detailScrollRef}>
-          <table className="w-full text-left border-collapse whitespace-nowrap">
-            <thead className="bg-slate-50 border-b border-slate-200">
+      <div className="bg-white rounded border pb-2 border-slate-200 mx-2 md:mx-0  overflow-hidden">
+        {/* The container that defines the height and allows vertical scrolling */}
+        <div
+          className="md:h-[650px] overflow-y-auto overflow-x-auto relative"
+          ref={detailScrollRef}
+        >
+          <table className="w-full text-left border-separate border-spacing-0 overflow-x-auto whitespace-nowrap">
+            <thead className="sticky top-0 z-20">
               <tr>
-                <th className="p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                  Ref ID
-                </th>
-                <th className="p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                  Customer Name
-                </th>
-                <th className="p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                  Contact
-                </th>
-                <th className="p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                  Sold By
-                </th>
-                <th className="p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center">
-                  Date
-                </th>
-                <th className="p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center">
-                  Method
-                </th>
-                <th className="p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-right">
-                  Revenue
-                </th>
+                {/* We apply background and border-b to the TH specifically for the sticky effect to look perfect */}
+                {[
+                  "Ref ID",
+                  "Customer Name",
+                  "Contact",
+                  "Sold By",
+                  "Date",
+                  "Method",
+                  "Revenue",
+                ].map((header, index) => (
+                  <th
+                    key={header}
+                    className={`p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider bg-slate-50 border-b border-slate-200 
+              ${index === 4 || index === 5 ? "text-center" : index === 6 ? "text-right" : ""}`}
+                  >
+                    {header}
+                  </th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+
+            <tbody className=" bg-white">
               {[...filteredSales].reverse().map((sale) => (
                 <tr
                   key={sale._id}
                   className="hover:bg-slate-100 transition-colors duration-150"
                 >
-                  <td className="px-4 py-2.5 text-sm font-medium text-indigo-600">
+                  {/* Order ID */}
+                  <td className="px-4 py-3 text-sm font-medium text-indigo-600">
                     #{sale.order_id}
                   </td>
+
+                  {/* Customer Name - Title Case + 12ch Limit */}
                   <td className="px-4 text-sm text-slate-800">
-                    {sale.shipping_address.recipient_name}
+                    <span
+                      className="block"
+                      title={sale.shipping_address.recipient_name}
+                    >
+                      {sale.shipping_address.recipient_name
+                        ?.toLowerCase()
+                        .split(" ")
+                        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                        .join(" ")}
+                    </span>
                   </td>
-                  <td className="px-4 text-sm  text-slate-800">
+
+                  {/* Contact */}
+                  <td className="px-4 text-sm text-slate-800">
                     {sale.shipping_address.phone}
                   </td>
+
+                  {/* Sold By */}
                   <td className="px-4">
                     <div className="flex items-center gap-2">
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white 
-                        ${sale.staffName === "Online" ? "bg-slate-500" : sale.staffRole === "Moderator" ? "bg-amber-500" : "bg-indigo-600"}`}
+                  ${sale.staffName === "Online" ? "bg-slate-500" : sale.staffRole === "Moderator" ? "bg-amber-500" : "bg-indigo-600"}`}
                       >
                         {sale.staffName.charAt(0)}
                       </div>
@@ -186,14 +203,20 @@ export default function Sales() {
                       </span>
                     </div>
                   </td>
+
+                  {/* Date */}
                   <td className="px-4 text-center text-sm text-slate-800">
                     {sale.order_date.split(" ")[0]}
                   </td>
+
+                  {/* Payment Method */}
                   <td className="px-4 text-center">
                     <span className="text-[11px] font-medium text-slate-700 border border-slate-200 px-2 py-0.5 rounded bg-slate-50">
                       {sale.payment.method}
                     </span>
                   </td>
+
+                  {/* Revenue */}
                   <td className="px-4 text-right text-sm font-bold text-slate-900">
                     ৳{sale.total_amount.toLocaleString()}
                   </td>
@@ -201,8 +224,10 @@ export default function Sales() {
               ))}
             </tbody>
           </table>
+
+          {/* Empty State */}
           {filteredSales.length === 0 && (
-            <div className="p-20 text-center text-slate-400 text-sm font-medium uppercase tracking-widest">
+            <div className="p-20 text-center text-slate-400 text-sm font-medium uppercase tracking-widest bg-white">
               No matching sales records found
             </div>
           )}
