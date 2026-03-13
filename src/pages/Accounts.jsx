@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -18,6 +18,7 @@ import {
   HelpCircle,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { DataContext } from "@/Context Api/ApiContext";
 
 const accountStats = [
   {
@@ -88,6 +89,8 @@ const expenseCategories = {
 };
 
 const AccountsDashboard = () => {
+  const { orderData, stockData } = useContext(DataContext);
+
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [mainCat, setMainCat] = useState("");
   const [subCat, setSubCat] = useState("");
@@ -135,8 +138,87 @@ const AccountsDashboard = () => {
     },
   ]);
 
+  const orders = [
+    {
+      oid: "ORD-2026-001",
+      saleDate: "12 Mar 2026",
+      items: [
+        {
+          sku: "VB-G502-09",
+          pid: "P-101",
+          pName: "Logitech G502 Mouse",
+          webPrice: 4500,
+          discount: 300,
+          coupon: 100,
+          sellingPrice: 4100,
+          cost: 3200,
+          profit: 900,
+        },
+        {
+          sku: "VB-KBD-B05",
+          pid: "P-205",
+          pName: "Mechanical Keyboard",
+          webPrice: 8500,
+          discount: 500,
+          coupon: 0,
+          sellingPrice: 8000,
+          cost: 6500,
+          profit: 1500,
+        },
+      ],
+    },
+  ];
+
+  //filteres order to maping profit
+  const filteredSalesLedger = useMemo(() => {
+    if (!orderData || !stockData) return [];
+
+    const masterLedger = [];
+
+    // 1. Loop through every Order
+    orderData.forEach((order) => {
+      // 2. Loop through every item in that order
+      order.items.forEach((item) => {
+        // 3. Find the specific Stock document for this Product (PID)
+        console.log(item);
+        const productStock = stockData.find(
+          (stock) => stock.pID === item.product_id,
+        );
+
+        if (productStock) {
+          // 4. Find the specific SKU inside that stock that was sold with this OID
+          const soldSKU = productStock.SKU.find(
+            (sku) => sku.OID === order.order_id,
+          );
+
+          if (soldSKU) {
+            // 5. Construct the Master Audit Object
+            masterLedger.push({
+              oid: order.order_id,
+              sku: soldSKU.skuID,
+              pid: item.product_id,
+              pName: item.product_name || "Unknown Product",
+              saleDate: order.order_date,
+              webPrice: item.product_price, // Original price from product catalog
+              discount: order.discount || 0, // Discount from order level
+              coupon: order.coupon || 0, // Example coupon logic
+              sellingPrice: item.finalPrice || 0, // Price customer actually paid
+              cost: soldSKU.cost, // Buying cost from Stock Schema
+              profit: soldSKU.selling_price - soldSKU.cost || 0, // Real Net Profit
+              comment: soldSKU.comment,
+            });
+          }
+        }
+      });
+    });
+
+    return masterLedger;
+  }, [orderData, stockData]);
+
+  console.log(filteredSalesLedger);
+
   return (
-    <div className="h-screen flex flex-col">
+    <div className=" flex flex-col">
       {/* ✅ TOP FIXED SECTION */}
       <div className="flex-shrink-0 sticky top-0 z-40 bg-white pb-3">
         <Navbar pageTitle={"Accounts"} />
@@ -164,7 +246,7 @@ const AccountsDashboard = () => {
 
       <div className="flex-1 overflow-y-auto  py-4 md:py-6 space-y-6 custom-scrollbar">
         {/* --- ACTION BAR --- */}
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded border border-slate-200 shadow-sm">
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded border border-slate-200 shadow-xs">
           <div className="flex items-center gap-4">
             <h2 className="text-lg font-bold text-slate-800">
               Financial Ledger
@@ -406,11 +488,155 @@ const AccountsDashboard = () => {
           {/* Header Section */}
           <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
             <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
-              Master Sales Ledger
+              Consolidated Sales Ledger
             </h3>
-            <span className="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded font-black tracking-tighter uppercase">
+
+            <div className="flex items-center gap-2 px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-black uppercase tracking-tighter">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+              </span>
               Live Audit
-            </span>
+            </div>
+          </div>
+
+          {/* Table Area */}
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left border-collapse min-w-[1200px]">
+              <thead>
+                <tr className="bg-slate-50/50 border-b border-slate-200">
+                  <th className="p-3 text-[12px] font-black text-slate-500 uppercase">
+                    OID
+                  </th>
+                  <th className="p-3 text-[12px] font-black text-slate-500 uppercase">
+                    SKU
+                  </th>
+                  <th className="p-3 text-[12px] font-black text-slate-500 uppercase">
+                    PID
+                  </th>
+                  <th className="p-3 text-[12px] font-black text-slate-500 uppercase">
+                    P-Name
+                  </th>
+                  <th className="p-3 text-[12px] font-black text-slate-500 uppercase">
+                    Date
+                  </th>
+                  <th className="p-3 text-center text-[12px] font-black text-slate-400 uppercase">
+                    Web Price
+                  </th>
+                  <th className="p-3 text-center text-[12px] font-black text-rose-400 uppercase">
+                    Discount
+                  </th>
+                  <th className="p-3 text-center text-[12px] font-black text-orange-400 uppercase">
+                    Coupon
+                  </th>
+                  <th className="p-3 text-center text-[12px] font-black text-indigo-600 uppercase">
+                    Selling
+                  </th>
+                  <th className="p-3 text-center text-[12px] font-black text-slate-400 uppercase">
+                    Cost
+                  </th>
+                  <th className="p-3 text-right text-[12px] font-black text-emerald-600 uppercase">
+                    Profit
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredSalesLedger.length > 0 ? (
+                  filteredSalesLedger.map((row, index) => (
+                    <tr
+                      key={`${row.oid}-${row.sku}`}
+                      className="hover:bg-slate-50 transition-colors"
+                    >
+                      <td className="p-3 text-[13px] font-bold text-indigo-600 font-mono">
+                        {row.oid}
+                      </td>
+                      <td className="p-3 text-[13px] font-bold text-slate-600 font-mono">
+                        {row.sku}
+                      </td>
+                      <td className="p-3 text-[13px] font-semibold text-slate-500">
+                        {row.pid}
+                      </td>
+                      <td className="p-3 text-[13px] font-bold text-slate-800 truncate max-w-[150px]">
+                        {row.pName}
+                      </td>
+                      <td className="p-3 text-[13px] font-semibold text-slate-500">
+                        {row.saleDate}
+                      </td>
+                      <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
+                        ৳{row.webPrice}
+                      </td>
+                      <td className="p-3 text-center text-[13px] font-semibold text-rose-500">
+                        ৳{row.discount}
+                      </td>
+                      <td className="p-3 text-center text-[13px] font-semibold text-orange-500">
+                        ৳{row.coupon}
+                      </td>
+                      <td className="p-3 text-center text-[13px] font-black text-indigo-600 bg-indigo-50/20">
+                        ৳{row.sellingPrice}
+                      </td>
+                      <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
+                        ৳{row.cost}
+                      </td>
+                      <td className="p-3 text-right">
+                        <span
+                          className={`px-2 py-0.5 rounded font-black text-[14px] ${row.profit >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}
+                        >
+                          ৳{row.profit}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="11"
+                      className="p-10 text-center text-slate-400 font-black uppercase tracking-widest opacity-30"
+                    >
+                      No Sales Data Found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Dynamic Footer Summary */}
+          <div className="p-3 border-t bg-slate-50 flex justify-between items-center px-6">
+            <div className="flex gap-4">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Orders Analyzed: {orderData.length}
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mr-2">
+                Accumulated Net Profit:
+              </span>
+              <span className="text-sm font-black text-emerald-600">
+                ৳
+                {filteredSalesLedger
+                  .reduce((sum, item) => sum + item.profit, 0)
+                  .toLocaleString()}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden flex flex-col h-full">
+          {/* Header Section */}
+          <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
+            <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">
+              All Sales Details
+            </h3>
+
+            <div className="flex items-center gap-2 px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-black uppercase tracking-tighter">
+              <span className="relative flex h-2 w-2">
+                {/* The Animated Outer Ring */}
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                {/* The Solid Inner Circle */}
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+              </span>
+              Live Audit
+            </div>
           </div>
 
           {/* Table Area */}
@@ -454,44 +680,58 @@ const AccountsDashboard = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {/* Dummy Data Row 1 */}
-                <tr className="hover:bg-slate-50 transition-colors">
-                  <td className="p-3  text-[13px] font-semibold text-indigo-600">
-                    ORD-2026-001
-                  </td>
-                  <td className="p-3 text-[13px] font-semibold text-slate-600">
-                    VB-G502-09
-                  </td>
-                  <td className="p-3 text-[13px] font-semibold text-slate-500">
-                    P-101
-                  </td>
-                  <td className="p-3 text-[13px] font-semibold text-slate-800">
-                    Logitech G502 Mouse
-                  </td>
-                  <td className="p-3 text-[13px] font-semibold text-slate-500">
-                    12 Mar 2026
-                  </td>
-                  <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
-                    ৳4,500
-                  </td>
-                  <td className="p-3 text-center text-[13px] font-semibold text-rose-500">
-                    ৳300
-                  </td>
-                  <td className="p-3 text-center text-[13px] font-semibold text-orange-500">
-                    ৳100
-                  </td>
-                  <td className="p-3 text-center text-[13px] font-semibold text-indigo-600 bg-indigo-50/30">
-                    ৳4,100
-                  </td>
-                  <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
-                    ৳3,200
-                  </td>
-                  <td className="p-3 text-right">
-                    <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-black text-[14px]">
-                      ৳900
-                    </span>
-                  </td>
-                </tr>
+                {orders.map((order) => (
+                  <React.Fragment key={order.oid}>
+                    {order.items.map((item, index) => (
+                      <tr
+                        key={item.sku}
+                        className="hover:bg-slate-50 transition-colors border-t border-slate-100"
+                      >
+                        {/* OID - Only shows prominent color on the first item of the order */}
+                        <td
+                          className={`p-3 text-[13px] font-semibold ${index === 0 ? "text-indigo-600" : "text-slate-400 opacity-50"}`}
+                        >
+                          {order.oid}
+                        </td>
+
+                        <td className="p-3 text-[13px] font-semibold text-slate-600 font-mono uppercase">
+                          {item.sku}
+                        </td>
+                        <td className="p-3 text-[13px] font-semibold text-slate-500">
+                          {item.pid}
+                        </td>
+                        <td className="p-3 text-[13px] font-semibold text-slate-800">
+                          {item.pName}
+                        </td>
+                        <td className="p-3 text-[13px] font-semibold text-slate-500">
+                          {order.saleDate}
+                        </td>
+                        <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
+                          ৳{item.webPrice.toLocaleString()}
+                        </td>
+                        <td className="p-3 text-center text-[13px] font-semibold text-rose-500">
+                          ৳{item.discount.toLocaleString()}
+                        </td>
+                        <td className="p-3 text-center text-[13px] font-semibold text-orange-500">
+                          ৳{item.coupon.toLocaleString()}
+                        </td>
+                        <td className="p-3 text-center text-[13px] font-semibold text-indigo-600 bg-indigo-50/30">
+                          ৳{item.sellingPrice.toLocaleString()}
+                        </td>
+                        <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
+                          ৳{item.cost.toLocaleString()}
+                        </td>
+                        <td className="p-3 text-right">
+                          <span
+                            className={`px-2 py-0.5 rounded font-black text-[14px] ${item.profit >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}
+                          >
+                            ৳{item.profit.toLocaleString()}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ))}
               </tbody>
             </table>
           </div>
