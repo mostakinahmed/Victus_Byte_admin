@@ -50,8 +50,6 @@ export default function CheckAndUpdateStock() {
     }));
   };
 
-
-
   const handleSearch = () => {
     let foundProduct = productData.find((p) => p.pID === searchId);
     let foundStock = null;
@@ -342,24 +340,6 @@ export default function CheckAndUpdateStock() {
                         icon={<FiDollarSign />}
                         color="text-rose-500"
                       />
-                      <FinancialBox
-                        label="Sold Price"
-                        value={currentSKU.selling_price}
-                        icon={<FiTag />}
-                        color="text-indigo-600"
-                      />
-                    </div>
-                    <div
-                      className={`p-4 rounded-2xl flex justify-between items-center ${currentSKU.profit >= 0 ? "bg-emerald-50 border border-emerald-100" : "bg-rose-50 border border-rose-100"}`}
-                    >
-                      <span className="text-[10px] font-black text-slate-500 uppercase">
-                        Net Unit Profit
-                      </span>
-                      <span
-                        className={`text-xl font-black ${currentSKU.profit >= 0 ? "text-emerald-600" : "text-rose-600"}`}
-                      >
-                        ৳ {currentSKU.profit?.toLocaleString() || 0}
-                      </span>
                     </div>
                   </div>
 
@@ -403,6 +383,7 @@ export default function CheckAndUpdateStock() {
                       onChange={handleFormDataChange}
                       placeholder="SN-XXXX"
                       required
+                      maxLength={14}
                       className="w-full bg-slate-50 uppercase border rounded-xl px-4 py-3 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all font-mono"
                     />
                   </div>
