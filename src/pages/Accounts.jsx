@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState, useEffect } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -8,14 +8,7 @@ import {
   RotateCcw,
   Banknote,
   Percent,
-  Truck,
-  Megaphone,
-  Building2,
-  ShoppingBag,
-  Users,
-  Coffee,
   XCircle,
-  HelpCircle,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { DataContext } from "@/Context Api/ApiContext";
@@ -51,20 +44,21 @@ const AccountsDashboard = () => {
   const [subCat, setSubCat] = useState("");
   const [totalRevenue, setTotalRevenue] = useState(0);
 
+  // Mock static data for non-automated stats
   const [transactions] = useState([
     {
       id: 1,
-      date: "2023-10-24 10:30",
+      date: "2026-03-12 10:30",
       type: "Income",
       category: "Product Sale",
       entity: "Mostakin Ahmed",
       method: "bKash",
-      amount: 1250,
+      amount: 4100,
       ref: "#INV-8821",
     },
     {
       id: 2,
-      date: "2023-10-24 11:15",
+      date: "2026-03-13 11:15",
       type: "Expense",
       category: "Ad Spend",
       entity: "Facebook Ads",
@@ -72,134 +66,162 @@ const AccountsDashboard = () => {
       amount: 5000,
       ref: "#EXP-0041",
     },
-    {
-      id: 3,
-      date: "2023-10-23 14:20",
-      type: "Income",
-      category: "Product Sale",
-      entity: "Nayeem Islam",
-      method: "COD",
-      amount: 2100,
-      ref: "#INV-8822",
-    },
-    {
-      id: 4,
-      date: "2023-10-23 16:45",
-      type: "Expense",
-      category: "Courier Fee",
-      entity: "RedX",
-      method: "Cash",
-      amount: 120,
-      ref: "#EXP-0042",
-    },
   ]);
 
-  const orders = [
-    {
-      oid: "ORD-2026-001",
-      saleDate: "12 Mar 2026",
-      items: [
-        {
-          sku: "VB-G502-09",
-          pid: "P-101",
-          pName: "Logitech G502 Mouse",
-          webPrice: 4500,
-          discount: 300,
-          coupon: 100,
-          sellingPrice: 4100,
-          cost: 3200,
-          profit: 900,
-        },
-        {
-          sku: "VB-KBD-B05",
-          pid: "P-205",
-          pName: "Mechanical Keyboard",
-          webPrice: 8500,
-          discount: 500,
-          coupon: 0,
-          sellingPrice: 8000,
-          cost: 6500,
-          profit: 1500,
-        },
-      ],
-    },
-  ];
+  // --- CORE CALCULATION LOGIC ---
+  // const { filteredSalesLedger, revenueAccumulator } = useMemo(() => {
+  //   if (!orderData || !stockData)
+  //     return { filteredSalesLedger: [], revenueAccumulator: 0 };
 
-  //filteres order to maping profit
-  const filteredSalesLedger = useMemo(() => {
-    if (!orderData || !stockData) return [];
+  //   const masterLedger = [];
+  //   let rev = 0;
+
+  //   orderData.forEach((order) => {
+  //     const numItems = order.items?.length || 1;
+
+  //     order.items?.forEach((item) => {
+  //       const productStock = stockData.find(
+  //         (stock) => stock.pID === item.product_id,
+  //       );
+
+  //       if (productStock) {
+  //         const soldSKU = productStock.SKU?.find(
+  //           (sku) => sku.OID === order.order_id,
+  //         );
+
+  //         // Calculate per-unit price: (Item Price) - (Global Discount / Number of Units) - (Coupon / Number of Units)
+  //         const discountShare = (order.discount || 0) / numItems;
+  //         const couponShare = (order.coupon?.value || 0) / numItems;
+  //         const sellingPrice = Math.round(
+  //           item.product_price - (discountShare + couponShare),
+  //         );
+
+  //         // Sum revenue for confirmed/shipped orders
+  //         if (order.status === "Shipped" || order.status === "Confirmed") {
+  //           rev += sellingPrice;
+  //         }
+
+  //         if (soldSKU) {
+  //           masterLedger.push({
+  //             oid: order.order_id,
+  //             sku: soldSKU.skuID,
+  //             pid: item.product_id,
+  //             pName: item.product_name || "Unknown Product",
+  //             saleDate: order.order_date,
+  //             webPrice: item.product_price,
+  //             discount: Math.round(discountShare),
+  //             coupon: Math.round(couponShare),
+  //             sellingPrice: sellingPrice,
+  //             cost: soldSKU.cost,
+  //             profit: sellingPrice - soldSKU.cost,
+  //             comment: soldSKU.comment,
+  //           });
+  //         }
+  //       }
+  //     });
+  //   });
+
+  //   return { filteredSalesLedger: masterLedger, revenueAccumulator: rev };
+  // }, [orderData, stockData]);
+
+  // CORE CALCULATION LOGIC
+  const { filteredSalesLedger, revenueAccumulator } = useMemo(() => {
+    if (!orderData || !stockData)
+      return { filteredSalesLedger: [], revenueAccumulator: 0 };
 
     const masterLedger = [];
+    let rev = 0;
 
-    // 1. Loop through every Order
     orderData.forEach((order) => {
-      // 2. Loop through every item in that order
+      const numItems = order.items?.length || 1;
 
-      const numOrder = order.items.length;
-      let rev = 0;
-      order.items.forEach((item) => {
-        // 3. Find the specific Stock document for this Product (PID)
-        console.log(order);
+      // ✅ Divide ONLY the coupon globally
+      const couponShare = (order.coupon?.value || 0) / numItems;
+
+      order.items?.forEach((item) => {
         const productStock = stockData.find(
           (stock) => stock.pID === item.product_id,
         );
 
         if (productStock) {
-          // 4. Find the specific SKU inside that stock that was sold with this OID
-          const soldSKU = productStock.SKU.find(
+          const soldSKU = productStock.SKU?.find(
             (sku) => sku.OID === order.order_id,
           );
 
+          // ✅ USE THE ITEM'S OWN DISCOUNT
+          // Formula: (Web Price) - (This Item's Discount) - (Coupon Share)
+          const itemDiscount = item.discount || 0;
           const sellingPrice = Math.round(
-            item.product_price * item.quantity -
-              ((order.coupon?.value || 0) / numOrder +
-                (order.discount || 0) / numOrder),
+            item.product_price - (itemDiscount + couponShare),
           );
-          rev = rev + sellingPrice;
+
+          if (order.status === "Shipped" || order.status === "Confirmed") {
+            rev += sellingPrice;
+          }
 
           if (soldSKU) {
-            // 5. Construct the Master Audit Object
             masterLedger.push({
               oid: order.order_id,
               sku: soldSKU.skuID,
               pid: item.product_id,
               pName: item.product_name || "Unknown Product",
               saleDate: order.order_date,
-              webPrice: item.product_price, // Original price from product catalog
-              discount: order.discount || 0, // Discount from order level
-              coupon: order.coupon || 0, // Example coupon logic
-              sellingPrice: sellingPrice || 0, // Price customer actually paid
-              cost: soldSKU.cost, // Buying cost from Stock Schema
-              profit: sellingPrice - soldSKU.cost || 0, // Real Net Profit
+              webPrice: item.product_price,
+              discount: itemDiscount, // Now reflects the actual item discount
+              coupon: Math.round(couponShare),
+              sellingPrice: sellingPrice,
+              cost: soldSKU.cost,
+              profit: sellingPrice - soldSKU.cost,
               comment: soldSKU.comment,
             });
           }
         }
       });
-
-      setTotalRevenue(rev);
     });
 
-    console.log(totalRevenue);
-
-    return masterLedger;
+    return { filteredSalesLedger: masterLedger, revenueAccumulator: rev };
   }, [orderData, stockData]);
 
-  //tnet profit
-  const netProfit = filteredSalesLedger
-    .reduce((sum, item) => sum + item.profit, 0)
-    .toLocaleString();
+  // Safe side-effect to update state for the UI cards
+  useEffect(() => {
+    setTotalRevenue(revenueAccumulator);
+  }, [revenueAccumulator]);
+
+  const netProfit = useMemo(
+    () =>
+      filteredSalesLedger
+        .reduce((sum, item) => sum + item.profit, 0)
+        .toLocaleString(),
+    [filteredSalesLedger],
+  );
+
+  const monthlyNetProfit = useMemo(() => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    return filteredSalesLedger
+      .filter((item) => {
+        const itemDate = new Date(item.saleDate);
+        return (
+          itemDate.getMonth() === currentMonth &&
+          itemDate.getFullYear() === currentYear
+        );
+      })
+      .reduce((sum, item) => sum + item.profit, 0)
+      .toLocaleString();
+  }, [filteredSalesLedger]);
 
   const accountStats = [
     {
       title: "Total Revenue",
-      value: "৳" + totalRevenue,
+      value: "৳" + totalRevenue.toLocaleString(),
       icon: TrendingUp,
       color: "border-emerald-300 bg-emerald-50 text-emerald-700",
     },
     {
       title: "Total Expense",
-      value: "৳ N",
+      value: "৳ 0",
       icon: TrendingDown,
       color: "border-rose-300 bg-rose-50 text-rose-700",
     },
@@ -211,41 +233,39 @@ const AccountsDashboard = () => {
     },
     {
       title: "Pending COD",
-      value: "৳ N",
+      value: "৳ 0",
       icon: Clock,
       color: "border-amber-300 bg-amber-50 text-amber-700",
     },
     {
       title: "Gateway Fees",
-      value: "৳ N",
+      value: "৳ 0",
       icon: Percent,
       color: "border-slate-300 bg-slate-50 text-slate-700",
     },
     {
       title: "Refunds",
-      value: "৳ N",
+      value: "৳ 0",
       icon: RotateCcw,
       color: "border-orange-300 bg-orange-50 text-orange-700",
     },
     {
       title: "Cash on Hand",
-      value: "৳ N",
+      value: "৳ 0",
       icon: Banknote,
       color: "border-cyan-300 bg-cyan-50 text-cyan-700",
     },
   ];
 
   return (
-    <div className=" flex flex-col">
-      {/* ✅ TOP FIXED SECTION */}
+    <div className="flex flex-col mt-11 md:mt-0">
       <div className="flex-shrink-0 sticky top-0 z-40 bg-white pb-3">
         <Navbar pageTitle={"Accounts"} />
-
         <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-2 lg:gap-3">
           {accountStats.map(({ title, value, icon: Icon, color }, idx) => (
             <div
               key={idx}
-              className={`border rounded p-3 md:px-4 flex flex-col justify-between  hover:shadow-md transition ${color}`}
+              className={`border rounded p-3 md:px-4 flex flex-col justify-between hover:shadow-md transition ${color}`}
             >
               <div className="flex items-center justify-between">
                 <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-wider opacity-80">
@@ -253,18 +273,14 @@ const AccountsDashboard = () => {
                 </h4>
                 <Icon className="w-4 h-4 opacity-70" />
               </div>
-
               <p className="text-lg md:text-xl font-black mt-2">{value}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ✅ SCROLLABLE CONTENT SECTION */}
-
-      <div className="flex-1 overflow-y-auto  py-4 md:py-6 space-y-6 custom-scrollbar">
-        {/* --- ACTION BAR --- */}
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded border border-slate-200 shadow-xs">
+      <div className="flex-1 overflow-y-auto py-4 space-y-4 custom-scrollbar">
+        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded border border-slate-300">
           <div className="flex items-center gap-4">
             <h2 className="text-lg font-bold text-slate-800">
               Financial Ledger
@@ -278,7 +294,6 @@ const AccountsDashboard = () => {
               </button>
             </div>
           </div>
-
           <button
             onClick={() => setIsExpenseModalOpen(true)}
             className="w-full md:w-auto flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded font-bold text-sm transition-all shadow-md active:scale-95"
@@ -286,46 +301,30 @@ const AccountsDashboard = () => {
             <TrendingDown size={16} /> Log New Expense
           </button>
         </div>
-        {/* --- THE EXPENSE MODAL --- */}
-        {/* --- MAIN DASHBOARD CONTENT --- */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* LEFT SIDE: Balances & Insights */}
-          <div className="space-y-4">
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="space-y-3">
             <div className="bg-white p-5 rounded border border-slate-200 shadow-sm">
               <h3 className="text-sm font-bold mb-4 uppercase text-slate-500 tracking-wider">
                 Account Balances
               </h3>
               <div className="space-y-4">
-                <BalanceItem
-                  label="bKash Merchant"
-                  amount="45,000"
-                  color="bg-pink-500"
-                />
-                <BalanceItem
-                  label="City Bank"
-                  amount="62,300"
-                  color="bg-blue-600"
-                />
-                <BalanceItem
-                  label="Cash in Hand"
-                  amount="5,500"
-                  color="bg-emerald-500"
-                />
+                <BalanceItem label="bKash Merchant" amount="45,000" />
+                <BalanceItem label="City Bank" amount="62,300" />
+                <BalanceItem label="Cash in Hand" amount="5,500" />
               </div>
             </div>
-
             <div className="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded text-white shadow-lg">
               <h3 className="text-sm opacity-80">
                 Estimated Profit (This Month)
               </h3>
-              <div className="text-3xl font-bold mt-1">৳84,200</div>
+              <div className="text-3xl font-bold mt-1">৳{monthlyNetProfit}</div>
               <div className="mt-4 flex items-center gap-2 text-xs bg-white/20 w-fit px-2 py-1 rounded-full">
-                <ArrowUpRight size={14} /> 24% higher than last month
+                <ArrowUpRight size={14} /> Tracking Healthy
               </div>
             </div>
           </div>
 
-          {/* RIGHT SIDE: Unified Ledger Table */}
           <div className="lg:col-span-2 bg-white rounded border border-slate-200 shadow-sm overflow-hidden flex flex-col h-fit">
             <div className="p-4 border-b bg-slate-50/50 flex justify-between items-center">
               <h3 className="font-bold text-slate-800 uppercase text-xs tracking-widest">
@@ -335,7 +334,6 @@ const AccountsDashboard = () => {
                 Auto-syncing active
               </span>
             </div>
-
             <div className="overflow-auto max-h-[600px] custom-scrollbar">
               <table className="w-full text-left">
                 <thead className="sticky top-0 bg-slate-50 z-10 border-b">
@@ -346,7 +344,6 @@ const AccountsDashboard = () => {
                     <th className="p-4 text-right">Amount</th>
                   </tr>
                 </thead>
-
                 <tbody className="divide-y divide-slate-100">
                   {transactions.map((t) => (
                     <tr
@@ -363,11 +360,7 @@ const AccountsDashboard = () => {
                       </td>
                       <td className="p-4 text-center">
                         <span
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${
-                            t.type === "Income"
-                              ? "bg-emerald-50 border-emerald-100 text-emerald-600"
-                              : "bg-rose-50 border-rose-100 text-rose-600"
-                          }`}
+                          className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${t.type === "Income" ? "bg-emerald-50 border-emerald-100 text-emerald-600" : "bg-rose-50 border-rose-100 text-rose-600"}`}
                         >
                           {t.category}
                         </span>
@@ -388,127 +381,14 @@ const AccountsDashboard = () => {
             </div>
           </div>
         </div>
-        {/* --- EXPENSE MODAL --- */}
-        {isExpenseModalOpen && (
-          <div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all"
-            onClick={(e) => {
-              // Closes modal if you click the dark background (not the modal itself)
-              if (e.target === e.currentTarget) setIsExpenseModalOpen(false);
-            }}
-          >
-            {/* Dark Backdrop */}
-            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
 
-            {/* Modal Content */}
-            <div className="bg-white w-full max-w-md rounded-xl shadow-2xl relative z-10 overflow-hidden border border-slate-200 animate-in fade-in zoom-in duration-200">
-              <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
-                <div className="flex items-center gap-2 text-rose-600">
-                  <TrendingDown size={20} />
-                  <h3 className="font-bold text-slate-800 text-xs uppercase tracking-widest">
-                    Record Business Expense
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setIsExpenseModalOpen(false)}
-                  className="text-slate-400 hover:text-rose-500 transition-colors"
-                >
-                  <XCircle size={24} />
-                </button>
-              </div>
-
-              <div className="p-6 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                      Main Category
-                    </label>
-                    <select
-                      className="w-full p-2.5 border rounded-lg text-sm bg-white outline-rose-500 transition-all"
-                      value={mainCat}
-                      onChange={(e) => {
-                        setMainCat(e.target.value);
-                        setSubCat("");
-                      }}
-                    >
-                      <option value="">Select...</option>
-                      {Object.keys(expenseCategories).map((cat) => (
-                        <option key={cat} value={cat}>
-                          {cat}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                      Sub Category
-                    </label>
-                    <select
-                      className="w-full p-2.5 border rounded-lg text-sm bg-white outline-rose-500 disabled:bg-slate-50"
-                      disabled={!mainCat}
-                      value={subCat}
-                      onChange={(e) => setSubCat(e.target.value)}
-                    >
-                      <option value="">Select...</option>
-                      {mainCat &&
-                        expenseCategories[mainCat].map((sub) => (
-                          <option key={sub} value={sub}>
-                            {sub}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                      Amount (৳)
-                    </label>
-                    <input
-                      type="number"
-                      className="w-full p-2.5 border rounded-lg text-sm font-bold"
-                      placeholder="0.00"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                      Source
-                    </label>
-                    <select className="w-full p-2.5 border rounded-lg text-sm">
-                      <option>Cash</option>
-                      <option>City Bank</option>
-                      <option>bKash Merchant</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                    Expenditure Note
-                  </label>
-                  <textarea
-                    rows="2"
-                    className="w-full p-2.5 border rounded-lg text-sm resize-none"
-                    placeholder="Add details..."
-                  ></textarea>
-                </div>
-
-                <button className="w-full bg-rose-600 text-white py-3.5 rounded-lg font-bold uppercase text-xs tracking-widest hover:bg-rose-700 shadow-lg shadow-rose-100 transition-all active:scale-[0.98]">
-                  Confirm Transaction
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* --- SALES LEDGER TABLE --- */}
         <div className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden flex flex-col h-full">
-          {/* Header Section */}
           <div className="p-4 border-b bg-[#1976d2] flex justify-between items-center">
             <h3 className="text-xs font-black text-white uppercase tracking-widest">
               Consolidated Sales Ledger
             </h3>
-
-            <div className="flex items-center gap-2 px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-black uppercase tracking-tighter">
+            <div className="flex items-center gap-2 px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-black uppercase">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
@@ -516,8 +396,6 @@ const AccountsDashboard = () => {
               Live Audit
             </div>
           </div>
-
-          {/* Table Area */}
           <div className="overflow-x-auto custom-scrollbar">
             <table className="w-full text-left border-collapse min-w-[1200px]">
               <thead>
@@ -558,75 +436,60 @@ const AccountsDashboard = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {filteredSalesLedger.length > 0 ? (
-                  filteredSalesLedger.map((row, index) => (
-                    <tr
-                      key={`${row.oid}-${row.sku}`}
-                      className="hover:bg-slate-50 transition-colors"
-                    >
-                      <td className="p-3 text-[13px] font-bold text-indigo-600 font-mono">
-                        {row.oid}
-                      </td>
-                      <td className="p-3 text-[13px] font-bold text-slate-600 font-mono">
-                        {row.sku}
-                      </td>
-                      <td className="p-3 text-[13px] font-semibold text-slate-500">
-                        {row.pid}
-                      </td>
-                      <td className="p-3 text-[13px] font-bold text-slate-800 truncate max-w-[150px]">
-                        {row.pName}
-                      </td>
-                      <td className="p-3 text-[13px] font-semibold text-slate-500">
-                        {row.saleDate}
-                      </td>
-                      <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
-                        ৳{row.webPrice}
-                      </td>
-                      <td className="p-3 text-center text-[13px] font-semibold text-rose-500">
-                        ৳{row.discount}
-                      </td>
-                      <td className="p-3 text-center text-[13px] font-semibold text-orange-500">
-                        ৳{row.coupon}
-                      </td>
-                      <td className="p-3 text-center text-[13px] font-black text-indigo-600 bg-indigo-50/20">
-                        ৳{row.sellingPrice}
-                      </td>
-                      <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
-                        ৳{row.cost}
-                      </td>
-                      <td className="p-3 text-right">
-                        <span
-                          className={`px-2 py-0.5 rounded font-black text-[14px] ${row.profit >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}
-                        >
-                          ৳{row.profit}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="11"
-                      className="p-10 text-center text-slate-400 font-black uppercase tracking-widest opacity-30"
-                    >
-                      No Sales Data Found
+                {filteredSalesLedger.map((row) => (
+                  <tr
+                    key={`${row.oid}-${row.sku}`}
+                    className="hover:bg-slate-50 transition-colors"
+                  >
+                    <td className="p-3 text-[13px] font-bold text-indigo-600">
+                      {row.oid}
+                    </td>
+                    <td className="p-3 text-[13px] font-bold text-slate-600">
+                      {row.sku}
+                    </td>
+                    <td className="p-3 text-[13px] font-semibold text-slate-500">
+                      {row.pid}
+                    </td>
+                    <td className="p-3 text-[13px] font-bold text-slate-600 truncate max-w-[150px]">
+                      {row.pName}
+                    </td>
+                    <td className="p-3 text-[13px] font-semibold text-slate-500">
+                      {row.saleDate}
+                    </td>
+                    <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
+                      ৳{row.webPrice}
+                    </td>
+                    <td className="p-3 text-center text-[13px] font-semibold text-rose-500">
+                      ৳{row.discount}
+                    </td>
+                    <td className="p-3 text-center text-[13px] font-semibold text-orange-500">
+                      ৳{row.coupon}
+                    </td>
+                    <td className="p-3 text-center text-[13px] font-black text-indigo-600 bg-indigo-50/20">
+                      ৳{row.sellingPrice}
+                    </td>
+                    <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
+                      ৳{row.cost}
+                    </td>
+                    <td className="p-3 text-right">
+                      <span
+                        className={`px-2 py-0.5 rounded font-black text-[14px] ${row.profit >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}
+                      >
+                        ৳{row.profit}
+                      </span>
                     </td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           </div>
-
-          {/* Dynamic Footer Summary */}
           <div className="p-3 border-t bg-slate-50 flex justify-between items-center px-6">
-            <div className="flex gap-4">
-              <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">
-                Orders Analyzed: {orderData.length}
-              </span>
-            </div>
+            <span className="text-[11px] font-black text-slate-500 uppercase">
+              Orders Analyzed: {orderData?.length || 0}
+            </span>
             <div className="text-right">
-              <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest mr-2">
-                Accumulated Net Profit:
+              <span className="text-[11px] font-black text-slate-500 uppercase mr-2">
+                Life-time Net Profit:
               </span>
               <span className="text-sm font-black text-emerald-600">
                 ৳{netProfit}
@@ -635,12 +498,106 @@ const AccountsDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* --- EXPENSE MODAL --- */}
+      {isExpenseModalOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          onClick={(e) =>
+            e.target === e.currentTarget && setIsExpenseModalOpen(false)
+          }
+        >
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+          <div className="bg-white w-full max-w-md rounded-xl shadow-2xl relative z-10 overflow-hidden border border-slate-200">
+            <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
+              <div className="flex items-center gap-2 text-rose-600">
+                <TrendingDown size={20} />
+                <h3 className="font-bold text-slate-800 text-xs uppercase tracking-widest">
+                  Record Expense
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsExpenseModalOpen(false)}
+                className="text-slate-400 hover:text-rose-500"
+              >
+                <XCircle size={24} />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                    Main Category
+                  </label>
+                  <select
+                    className="w-full p-2.5 border rounded-lg text-sm bg-white"
+                    value={mainCat}
+                    onChange={(e) => {
+                      setMainCat(e.target.value);
+                      setSubCat("");
+                    }}
+                  >
+                    <option value="">Select...</option>
+                    {Object.keys(expenseCategories).map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                    Sub Category
+                  </label>
+                  <select
+                    className="w-full p-2.5 border rounded-lg text-sm bg-white"
+                    disabled={!mainCat}
+                    value={subCat}
+                    onChange={(e) => setSubCat(e.target.value)}
+                  >
+                    <option value="">Select...</option>
+                    {mainCat &&
+                      expenseCategories[mainCat].map((sub) => (
+                        <option key={sub} value={sub}>
+                          {sub}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                    Amount (৳)
+                  </label>
+                  <input
+                    type="number"
+                    className="w-full p-2.5 border rounded-lg text-sm font-bold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                    Source
+                  </label>
+                  <select className="w-full p-2.5 border rounded-lg text-sm">
+                    <option>Cash</option>
+                    <option>City Bank</option>
+                  </select>
+                </div>
+              </div>
+              <button className="w-full bg-rose-600 text-white py-3.5 rounded-lg font-bold uppercase text-xs tracking-widest">
+                Confirm Transaction
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 const BalanceItem = ({ label, amount }) => (
-  <div className="flex justify-between py-2 border-b last:border-none">
+  <div className="flex justify-between py-2 border-b last:border-none text-black">
     <span className="text-sm text-slate-600">{label}</span>
     <span className="font-bold text-sm">৳{amount}</span>
   </div>
