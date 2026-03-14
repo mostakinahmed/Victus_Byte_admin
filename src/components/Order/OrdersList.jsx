@@ -41,10 +41,14 @@ const OrderList = () => {
   const [startDate, setStartDate] = useState(null);
   const [showDetails, setShowDetails] = useState(null);
   const [actionBtn, setActionBtn] = useState(null);
+
+  // ✅ LOGIC CHANGE: Keys are now 'idx' (position in array) instead of 'product_id'
   const [skuInputs, setSkuInputs] = useState({});
+  const [imei1Inputs, setImei1Inputs] = useState({});
+  const [skuStatus, setSkuStatus] = useState({});
+
   const [currentOrder, setCurrentOrder] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
-  const [imei1Inputs, setImei1Inputs] = useState({});
   const statuses = [
     "All Orders",
     "Pending",
@@ -103,6 +107,9 @@ const OrderList = () => {
         behavior: "instant", // Use "smooth" if you want a sliding effect
       });
     }
+    // ✅ Clear inputs when switching orders to avoid data ghosting
+    setSkuInputs({});
+    setImei1Inputs({});
   }, [showDetails?.order_id]); // Trigger only when the ID changes
 
   //handle click order
@@ -131,27 +138,25 @@ const OrderList = () => {
     setSelectedOrderId(null);
   };
 
-  // handle SKU input changes
-  const handleSkuChange = (product_id, value) => {
+  // ✅ LOGIC CHANGE: Uses 'idx'
+  const handleSkuChange = (index, value) => {
     setSkuInputs((prev) => ({
       ...prev,
-      [product_id]: value,
+      [index]: value,
     }));
   };
 
   //SKU validation
-  // 1. New state to track validation status per product
-  const [skuStatus, setSkuStatus] = useState({});
+  // ✅ LOGIC CHANGE: Validates based on 'idx' mapping
   useEffect(() => {
     const newStatus = {};
+    if (!showDetails?.items) return;
 
-    Object.keys(skuInputs).forEach((productID) => {
-      const enteredSku = skuInputs[productID]?.toUpperCase().trim();
+    showDetails.items.forEach((item, idx) => {
+      const enteredSku = skuInputs[idx]?.toUpperCase().trim();
 
       if (!enteredSku) {
-        setIsvalid(false);
-        newStatus[productID] = "empty";
-
+        newStatus[idx] = "empty";
         return;
       }
 
@@ -160,7 +165,6 @@ const OrderList = () => {
         stock.SKU?.some((s) => s.skuID === enteredSku),
       );
 
-      setIsvalid(true);
       if (matchedStockItem) {
         // 2. Find the specific SKU object inside that stock item
         const specificSku = matchedStockItem.SKU.find(
@@ -169,18 +173,21 @@ const OrderList = () => {
 
         // 3. Check the "Sold" status
         if (specificSku.status === true) {
-          newStatus[productID] = "valid"; // Exists & Available
-          setIsvalid(true);
+          newStatus[idx] = "valid"; // Exists & Available
         } else {
-          newStatus[productID] = "sold"; // Exists but Sold (status: false)
+          newStatus[idx] = "sold"; // Exists but Sold (status: false)
         }
       } else {
-        newStatus[productID] = "invalid"; // Doesn't exist in system
+        newStatus[idx] = "invalid"; // Doesn't exist in system
       }
     });
 
     setSkuStatus(newStatus);
-  }, [skuInputs, stockData]);
+    const allValid = showDetails.items.every(
+      (_, idx) => newStatus[idx] === "valid",
+    );
+    setIsvalid(allValid);
+  }, [skuInputs, stockData, showDetails]);
 
   //backend handle
   const submitBtn = async (e) => {
@@ -189,33 +196,29 @@ const OrderList = () => {
     let skuArray = [];
 
     if (actionBtn === "Shipped") {
-      // Logic updated to include SKU, IMEI 1, and IMEI 2
-      skuArray = showDetails.items.map((item) => {
-        const pID = item.product_id;
+      // ✅ LOGIC CHANGE: Map inputs using 'idx'
+      skuArray = showDetails.items.map((item, idx) => {
         return {
-          product_id: pID,
-          skuID: (skuInputs[pID] || "").trim(),
-          imei: (imei1Inputs[pID] || "").trim(), // Added IMEI 1
+          ...item, // Preserve existing data like product_comments
+          skuID: (skuInputs[idx] || "").trim(),
+          imei: (imei1Inputs[idx] || "").trim(),
         };
       });
 
       // Simple validation to ensure data is present before shipping
       const isMissingData = skuArray.some((item) => !item.skuID);
       if (isMissingData) {
-        alert("Please enter Serial Number before shipping!");
+        alert("Please enter Serial Number for all items before shipping!");
         return;
       }
 
       // Check for IMEI requirement before proceeding
-      for (const element of data) {
-        if (element.category === "C001") {
-          // corrected 'categiry' typo
-          const isMissingImei = skuArray.some(
-            (item) => !item.imei || item.imei.trim() === "",
-          );
-
-          if (isMissingImei) {
-            alert("Required: Please enter IMEI details for MObile!");
+      for (let i = 0; i < data.length; i++) {
+        if (data[i]?.category === "C001") {
+          if (!skuArray[i].imei || skuArray[i].imei.trim() === "") {
+            alert(
+              `Required: Please enter IMEI details for ${skuArray[i].product_name}!`,
+            );
             return;
           }
         }
@@ -252,7 +255,7 @@ const OrderList = () => {
     } else if (actionBtn === "Shipped") {
       updatedData = {
         status: "Shipped",
-        items: skuArray, // This now contains the product_id, skuID, imei1, and imei2
+        items: skuArray, // This now contains the product_id, skuID, imei
       };
     } else if (actionBtn === "Delivered") {
       updatedData = {
@@ -263,41 +266,28 @@ const OrderList = () => {
       };
     }
 
+    console.log(updatedData);
+
     try {
-      MySwal.fire({
-        title: "Processing...",
-        didOpen: () => MySwal.showLoading(),
-      });
-
       const res = await api.patch(`/order/update/${orderId}`, updatedData);
-      console.log("API Response:", res); // Debug point 1
 
-      // Use optional chaining to prevent crashes if res.data is missing
       if (res.status === 200 || res?.data?.success) {
-        // Move risky UI/Refresh logic into its own safe zone
         try {
           await updateApi();
           setShowDetails(null);
           setSelectedOrderId(null);
           handleReset();
         } catch (innerError) {
-          console.error(
-            "UI Refresh Error (Order was actually saved):",
-            innerError,
-          );
+          console.error("UI Refresh Error:", innerError);
         }
-
         MySwal.close();
       }
     } catch (error) {
-      // CRITICAL: Log the actual error to your console
       console.error("Full Catch Error:", error);
-
       const errorMsg =
         error.response?.data?.message ||
         error.message ||
         "Internal Server Error";
-
       MySwal.fire({
         icon: "error",
         title: "Update Failed",
@@ -305,15 +295,13 @@ const OrderList = () => {
       });
     }
   };
-  // This stores the order data when you click edit
-  const [editingOrder, setEditingOrder] = useState(null);
 
-  // This controls the visibility
+  const [editingOrder, setEditingOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  //edit
+
   const handleOrderEdit = (order) => {
-    setEditingOrder(order); // 1. Pass the data into state
-    setIsModalOpen(true); // 2. Open the modal
+    setEditingOrder(order);
+    setIsModalOpen(true);
   };
 
   const handleUpdateSubmit = async (updatedOrder) => {
@@ -324,12 +312,11 @@ const OrderList = () => {
       );
 
       if (res.data.success) {
-        toast.success("Order Synced Successfully");
         setIsModalOpen(false);
-        fetchOrders(); // Refresh your main list
+        updateApi();
       }
     } catch (err) {
-      toast.error("Failed to update order");
+      console.error(err);
     }
   };
 
@@ -339,8 +326,6 @@ const OrderList = () => {
       <div className="w-full flex flex-col gap-3 lg:flex-row lg:items-center mb-3">
         {/* Professional Status Dropdown */}
         <div className="relative w-full lg:w-56 group">
-          {/* Label - Adds to industry feel */}
-
           <button
             onClick={() => setStatusOpen(!statusOpen)}
             className={`w-full flex justify-between items-center bg-white border rounded px-4 py-2 text-sm font-bold transition-all duration-200 outline-none
@@ -351,7 +336,6 @@ const OrderList = () => {
       }`}
           >
             <div className="flex items-center gap-2">
-              {/* Dynamic Status Dot */}
               <span
                 className={`w-2 h-2 rounded-full ${
                   selectedStatus === "Pending"
@@ -376,7 +360,6 @@ const OrderList = () => {
           {/* Dropdown Menu */}
           {statusOpen && (
             <>
-              {/* Transparent Click-away overlay */}
               <div
                 className="fixed inset-0 z-10"
                 onClick={() => setStatusOpen(false)}
@@ -426,20 +409,15 @@ const OrderList = () => {
 
         {/* Professional Calendar Section */}
         <div className="w-full lg:w-60 relative group">
-          {/* Industry Standard Label */}
-
           <div className="relative">
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
               placeholderText="DD / MM / YYYY"
-              className="w-full pl-4 pr-11 py-2 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded  outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 cursor-pointer placeholder:text-slate-400 placeholder:font-normal"
+              className="w-full pl-4 pr-11 py-2 bg-white border border-slate-300 text-sm font-bold text-slate-700 rounded outline-none transition-all duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 hover:border-slate-300 cursor-pointer placeholder:text-slate-400 placeholder:font-normal"
               dateFormat="dd / MM / yyyy"
-              // This wrapper ensures the calendar popup looks clean
               calendarClassName="border-slate-200 shadow-xl rounded-xl font-sans"
             />
-
-            {/* Calendar Icon - Positioned perfectly within the padded input */}
             <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
               <FiCalendar size={18} />
             </div>
@@ -448,13 +426,10 @@ const OrderList = () => {
 
         {/* Order ID Search */}
         <div className="w-full lg:w-64 relative group">
-          {/* Label - Consistent with Date and Status */}
           <div className="relative">
-            {/* Search Icon */}
             <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors duration-200">
               <FiSearch size={18} />
             </div>
-
             <input
               type="text"
               placeholder="Enter Order ID..."
@@ -469,13 +444,10 @@ const OrderList = () => {
 
         {/* Phone Search */}
         <div className="w-full lg:w-64 relative group">
-          {/* Label - Consistent with Date and Status */}
           <div className="relative">
-            {/* Search Icon */}
             <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors duration-200">
               <FiSearch size={18} />
             </div>
-
             <input
               type="text"
               placeholder="Phone Number..."
@@ -488,8 +460,6 @@ const OrderList = () => {
 
         {/* Professional Reset Button */}
         <div className="w-full lg:w-auto self-end pb-0.5">
-          {" "}
-          {/* Aligns with inputs that have labels */}
           <button
             onClick={handleReset}
             className="w-full lg:w-auto flex items-center justify-center gap-2 px-6 py-2  border border-green-500 bg-green-50 text-slate-700 rounded font-bold text-xs uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all duration-200 active:scale-95 group"
@@ -509,7 +479,6 @@ const OrderList = () => {
         <div className="lg:w-5/6 bg-white rounded md:max-h-165 max-h-90  overflow-auto border border-slate-300  mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
-              {/* Table Header */}
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-200">
                   <th className="px-4 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
@@ -530,7 +499,6 @@ const OrderList = () => {
                 </tr>
               </thead>
 
-              {/* Table Body */}
               <tbody className="divide-y divide-gray-100">
                 {filteredOrders.length > 0 ? (
                   [...filteredOrders].reverse().map((order) => {
@@ -543,7 +511,6 @@ const OrderList = () => {
                           isSelected ? "bg-indigo-50" : "hover:bg-slate-100"
                         }`}
                       >
-                        {/* Order ID with Monospace font */}
                         <td className="px-4 py-2">
                           <div className="flex items-center gap-3">
                             {isSelected && (
@@ -558,21 +525,18 @@ const OrderList = () => {
                           </div>
                         </td>
 
-                        {/* Customer Name */}
                         <td className="px-1 py-2">
                           <span className="text-sm text-slate-800">
                             {order.shipping_address.recipient_name}
                           </span>
                         </td>
 
-                        {/* Date */}
                         <td className="px-1 py-2">
                           <span className="text-xs  text-slate-700">
                             {order.order_date}
                           </span>
                         </td>
 
-                        {/* Modern Status Pills */}
                         <td className="px-4 py-2 text-center">
                           <span
                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium uppercase tracking-wider border ${
@@ -604,7 +568,6 @@ const OrderList = () => {
                           </span>
                         </td>
 
-                        {/* edit */}
                         <td className="px-1 text-center">
                           <button
                             onClick={() => handleOrderEdit(order)}
@@ -632,12 +595,11 @@ const OrderList = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="4" className="py-12 text-center">
-                      <div className="flex flex-col items-center justify-center text-slate-400">
-                        <p className="text-sm font-medium">
-                          No transactions match your filters
-                        </p>
-                      </div>
+                    <td
+                      colSpan="5"
+                      className="py-12 text-center text-slate-400"
+                    >
+                      No transactions match your filters
                     </td>
                   </tr>
                 )}
@@ -646,14 +608,12 @@ const OrderList = () => {
           </div>
         </div>
 
-        {/* //edit */}
-
         {isModalOpen && editingOrder && (
           <OrderEditModal
             order={editingOrder}
             onClose={() => {
               setIsModalOpen(false);
-              setEditingOrder(null); // Clear data on close
+              setEditingOrder(null);
             }}
             onSave={handleUpdateSubmit}
           />
@@ -661,7 +621,6 @@ const OrderList = () => {
 
         {/* right side */}
         <div className="w-full bg-white xl:max-h-166 lg:max-h-140 max-h-150 rounded border border-slate-300  flex flex-col">
-          {/* Header: Reference & Status Pill */}
           <div className="bg-slate-50 border-b border-slate-200 md:px-3 px-2 py-3">
             {showDetails ? (
               <div className="flex justify-between items-center">
@@ -705,7 +664,6 @@ const OrderList = () => {
               ref={detailScrollRef}
               className="flex-1 overflow-y-auto md:p-3 p-2 mt-2 space-y-3 scrollbar-hide"
             >
-              {/* 📦 1. Product Info Section - Modern Logistics Style */}
               <section className="space-y-6 -mt-3">
                 <div className="flex items-center justify-between pb-2 border-b-2 border-slate-100">
                   <div className="flex items-center gap-2">
@@ -728,7 +686,6 @@ const OrderList = () => {
                       className="relative md:pl-6 pl-2 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-slate-200 hover:before:bg-indigo-500 before:rounded-full before:transition-colors transition-all"
                     >
                       <div className="flex flex-col md:flex-row gap-4">
-                        {/* Product Image with subtle shadow */}
                         <div className="relative shrink-0">
                           <img
                             src={data[idx]?.images[0]}
@@ -741,7 +698,6 @@ const OrderList = () => {
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          {/* Header: Name & Price */}
                           <div className="flex justify-between items-start mb-2">
                             <div>
                               <h4 className="text-base font-medium text-slate-800 leading-tight">
@@ -760,9 +716,7 @@ const OrderList = () => {
                             </div>
                           </div>
 
-                          {/* Modern Data Grid for SKU & Comments */}
                           <div className="grid md:grid-cols-2 gap-3 mt-3">
-                            {/* Comment Block */}
                             <div className="p-2.5 rounded bg-indigo-50 border border-indigo-200">
                               <p className="text-[12px] line-clamp-1 font-medium text-indigo-600 uppercase mb-1">
                                 User Specifications
@@ -773,81 +727,71 @@ const OrderList = () => {
                               </p>
                             </div>
 
-                            {/* SKU Block */}
                             <div className="p-2.5 rounded bg-orange-50 border border-slate-300">
                               <div className="flex gap-5">
                                 <p className="text-[12px] font-medium text-slate-600 uppercase tracking mb-1">
                                   Serial Number
                                 </p>
 
-                                {isValid &&
-                                  skuStatus &&
-                                  skuStatus[item.product_id] && (
-                                    <div className="flex items-center gap-2 -mt-2">
-                                      {/* Circular Icon Handshake */}
-                                      <div
-                                        className={`
-        w-8 h-8 flex items-center justify-center rounded-full transition-all duration-500 border
-        ${
-          skuStatus[item.product_id] === "valid"
-            ? "bg-emerald-50 text-emerald-600 border-emerald-100"
-            : skuStatus[item.product_id] === "sold"
-              ? "bg-amber-50 text-amber-600 border-amber-100"
-              : "bg-rose-50 text-rose-600 border-rose-100"
-        }
-      `}
-                                      >
-                                        {skuStatus[item.product_id] ===
-                                        "valid" ? (
-                                          <FiCheckCircle
-                                            size={16}
-                                            className="animate-in fade-in zoom-in duration-300"
-                                          />
-                                        ) : skuStatus[item.product_id] ===
-                                          "sold" ? (
-                                          <FiMinusCircle
-                                            size={16}
-                                            className="animate-in fade-in zoom-in duration-300"
-                                          />
-                                        ) : (
-                                          <FiAlertCircle
-                                            size={16}
-                                            className="animate-in fade-in zoom-in duration-300"
-                                          />
-                                        )}
-                                      </div>
-
-                                      {/* Dynamic Text Label */}
-                                      <p
-                                        className={`text-[10px] font-black uppercase tracking-tight hidden sm:block 
-        ${
-          skuStatus[item.product_id] === "valid"
-            ? "text-emerald-600"
-            : skuStatus[item.product_id] === "sold"
-              ? "text-amber-600"
-              : "text-rose-600"
-        }
-      `}
-                                      >
-                                        {skuStatus[item.product_id] === "valid"
-                                          ? "Ready to Dispatch"
-                                          : skuStatus[item.product_id] ===
-                                              "sold"
-                                            ? "Already Sold"
-                                            : "Invalid SKU"}
-                                      </p>
+                                {isValid && skuStatus && skuStatus[idx] && (
+                                  <div className="flex items-center gap-2 -mt-2">
+                                    <div
+                                      className={`w-8 h-8 flex items-center justify-center rounded-full transition-all duration-500 border
+                                        ${
+                                          skuStatus[idx] === "valid"
+                                            ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                                            : skuStatus[idx] === "sold"
+                                              ? "bg-amber-50 text-amber-600 border-amber-100"
+                                              : "bg-rose-50 text-rose-600 border-rose-100"
+                                        }
+                                      `}
+                                    >
+                                      {skuStatus[idx] === "valid" ? (
+                                        <FiCheckCircle
+                                          size={16}
+                                          className="animate-in fade-in zoom-in duration-300"
+                                        />
+                                      ) : skuStatus[idx] === "sold" ? (
+                                        <FiMinusCircle
+                                          size={16}
+                                          className="animate-in fade-in zoom-in duration-300"
+                                        />
+                                      ) : (
+                                        <FiAlertCircle
+                                          size={16}
+                                          className="animate-in fade-in zoom-in duration-300"
+                                        />
+                                      )}
                                     </div>
-                                  )}
+                                    <p
+                                      className={`text-[10px] font-black uppercase tracking-tight hidden sm:block 
+                                        ${
+                                          skuStatus[idx] === "valid"
+                                            ? "text-emerald-600"
+                                            : skuStatus[idx] === "sold"
+                                              ? "text-amber-600"
+                                              : "text-rose-600"
+                                        }
+                                      `}
+                                    >
+                                      {skuStatus[idx] === "valid"
+                                        ? "Ready to Dispatch"
+                                        : skuStatus[idx] === "sold"
+                                          ? "Already Sold"
+                                          : "Invalid SKU"}
+                                    </p>
+                                  </div>
+                                )}
                               </div>
 
                               {showDetails.status === "Confirmed" ? (
                                 <div className="relative group/input mt-2">
                                   <input
                                     type="text"
-                                    value={skuInputs[item.product_id] || ""}
+                                    value={skuInputs[idx] || ""}
                                     onChange={(e) =>
                                       handleSkuChange(
-                                        item.product_id,
+                                        idx,
                                         e.target.value.toUpperCase(),
                                       )
                                     }
@@ -870,22 +814,20 @@ const OrderList = () => {
                               )}
                             </div>
 
-                            {/* SKU & IMEI Block */}
                             <div className="p-2.5 rounded bg-red-50 border border-slate-300">
                               <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
                                 IMEI Number
                               </p>
                               {showDetails.status === "Confirmed" ? (
                                 <div className="space-y-2">
-                                  {/* IMEI Inputs */}
                                   <div className="flex gap-2">
                                     <input
                                       type="number"
-                                      value={imei1Inputs[item.product_id] || ""}
+                                      value={imei1Inputs[idx] || ""}
                                       onChange={(e) =>
                                         setImei1Inputs({
                                           ...imei1Inputs,
-                                          [item.product_id]: e.target.value,
+                                          [idx]: e.target.value,
                                         })
                                       }
                                       className="w-full text-[15px] tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded  outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
@@ -916,7 +858,6 @@ const OrderList = () => {
                 </div>
               </section>
 
-              {/* 👤 2. Customer Info Section */}
               <section className="space-y-2 mt-7 md:mt-0">
                 <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                   <FiUser className="text-indigo-500" />
@@ -966,7 +907,6 @@ const OrderList = () => {
                 </div>
               </section>
 
-              {/* 🚚 3. Payment & Shipping Summary */}
               <section className="bg-slate-900  rounded md:p-6 p-3 text-white space-y-5">
                 <div className="flex justify-between">
                   <div className="flex items-center gap-2 border-b border-white/10 pb-3">
@@ -1044,7 +984,6 @@ const OrderList = () => {
                 </div>
               </section>
 
-              {/* 🧾 Bottom Buttons */}
               <div className="flex gap-3 pt-4 border-t border-slate-100">
                 <button className="flex-1 flex items-center justify-center gap-2 bg-white text-rose-600 border border-rose-200 text-xs font-black py-3 rounded-xl hover:bg-rose-600 hover:text-white transition-all duration-300 shadow-sm">
                   <FiSlash /> CANCEL ORDER
@@ -1061,7 +1000,6 @@ const OrderList = () => {
               </div>
             </div>
           ) : (
-            /* ⚠️ Empty State */
             <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-slate-50/50">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-slate-300 shadow-sm border border-slate-100 mb-4">
                 <FiPackage size={32} />
@@ -1080,5 +1018,5 @@ const OrderList = () => {
     </div>
   );
 };
-//order
+
 export default OrderList;

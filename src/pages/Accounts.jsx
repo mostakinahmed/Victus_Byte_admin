@@ -134,9 +134,10 @@ const AccountsDashboard = () => {
 
     orderData.forEach((order) => {
       const numItems = order.items?.length || 1;
-
-      // ✅ Divide ONLY the coupon globally
       const couponShare = (order.coupon?.value || 0) / numItems;
+
+      // ✅ Keep track of SKUs already added to this specific order's ledger
+      const usedSkuIDs = new Set();
 
       order.items?.forEach((item) => {
         const productStock = stockData.find(
@@ -144,12 +145,11 @@ const AccountsDashboard = () => {
         );
 
         if (productStock) {
+          // ✅ FIND logic change: Look for SKU matching OID AND NOT already used in this loop
           const soldSKU = productStock.SKU?.find(
-            (sku) => sku.OID === order.order_id,
+            (sku) => sku.OID === order.order_id && !usedSkuIDs.has(sku.skuID),
           );
 
-          // ✅ USE THE ITEM'S OWN DISCOUNT
-          // Formula: (Web Price) - (This Item's Discount) - (Coupon Share)
           const itemDiscount = item.discount || 0;
           const sellingPrice = Math.round(
             item.product_price - (itemDiscount + couponShare),
@@ -160,6 +160,9 @@ const AccountsDashboard = () => {
           }
 
           if (soldSKU) {
+            // ✅ Mark this SKU as "used" so the next duplicate item skips it
+            usedSkuIDs.add(soldSKU.skuID);
+
             masterLedger.push({
               oid: order.order_id,
               sku: soldSKU.skuID,
@@ -167,7 +170,7 @@ const AccountsDashboard = () => {
               pName: item.product_name || "Unknown Product",
               saleDate: order.order_date,
               webPrice: item.product_price,
-              discount: itemDiscount, // Now reflects the actual item discount
+              discount: itemDiscount,
               coupon: Math.round(couponShare),
               sellingPrice: sellingPrice,
               cost: soldSKU.cost,
@@ -182,6 +185,7 @@ const AccountsDashboard = () => {
     return { filteredSalesLedger: masterLedger, revenueAccumulator: rev };
   }, [orderData, stockData]);
 
+  console.log(filteredSalesLedger);
   // Safe side-effect to update state for the UI cards
   useEffect(() => {
     setTotalRevenue(revenueAccumulator);
