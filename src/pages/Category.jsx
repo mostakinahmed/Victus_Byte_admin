@@ -10,7 +10,7 @@ export default function Category() {
   const { categoryData, loading } = useContext(DataContext);
 
   return (
-    <div className="mt-12 md:mt-0  min-h-screen font-sans pb-10">
+    <div className="mt-12 md:mt-0 font-sans">
       <Navbar pageTitle="Category Management" />
 
       {/* --- DASHBOARD HEADER --- */}

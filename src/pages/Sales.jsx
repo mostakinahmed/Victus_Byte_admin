@@ -58,7 +58,7 @@ export default function Sales() {
   }, [filter]);
 
   return (
-    <div className="mt-12 md:mt-0 font-sans min-h-screen pb-10 bg-slate-50/30">
+    <div className="mt-12 md:mt-0 font-sans">
       <Navbar pageTitle="Sales Architecture" />
 
       {/* Dynamic Status Cards */}

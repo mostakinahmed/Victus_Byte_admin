@@ -92,7 +92,7 @@ const Offer = () => {
   };
 
   return (
-    <div className=" mt-13 md:mt-0 min-h-screen font-inter">
+    <div className=" mt-13 md:mt-0  font-inter">
       <Navbar pageTitle={"Offer & Coupon"} />
 
       {/* <Ticket className="text-orange-500" size={32} /> */}
