@@ -263,21 +263,21 @@ const AccountsDashboard = () => {
 
   return (
     <div className="flex flex-col mt-11 md:mt-0">
-      <div className="flex-shrink-0 sticky top-0 z-40 bg-white pb-3">
+      <div className="flex-shrink-0 md:sticky top-0 z-40 bg-white pb-3">
         <Navbar pageTitle={"Accounts"} />
         <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-2 lg:gap-3">
           {accountStats.map(({ title, value, icon: Icon, color }, idx) => (
             <div
               key={idx}
-              className={`border rounded p-3 md:px-4 flex flex-col justify-between hover:shadow-md transition ${color}`}
+              className={`border rounded px-3 py-2 md:px-4 flex flex-col justify-between hover:shadow-md transition ${color}`}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between -mb-2">
                 <h4 className="text-[10px] md:text-xs font-bold uppercase tracking-wider opacity-80">
                   {title}
                 </h4>
                 <Icon className="w-4 h-4 opacity-70" />
               </div>
-              <p className="text-lg md:text-xl font-black mt-2">{value}</p>
+              <p className="text-lg md:text-lg font-black mt-2">{value}</p>
             </div>
           ))}
         </div>

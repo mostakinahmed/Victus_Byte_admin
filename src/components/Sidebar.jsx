@@ -31,11 +31,11 @@ export default function Sidebar() {
     { name: "Orders", path: "/orders", icon: <FiShoppingCart /> },
     { name: "Stock", path: "/stock", icon: <FiArchive /> },
     { name: "Sales", path: "/sales", icon: <FiTrendingUp /> },
+    { name: "Courier", path: "/courier", icon: <FiFileText /> },
     { name: "Accounts", path: "/accounts", icon: <FiUser /> },
-    { name: "Offer/Coupon", path: "/offer", icon: <FiUser /> },
     { name: "Users", path: "/users", icon: <FiUsers /> },
     { name: "Tools", path: "/tools", icon: <FiFileText /> },
-    { name: "Courier", path: "/courier", icon: <FiFileText /> },
+    { name: "Offer/Coupon", path: "/offer", icon: <FiUser /> },
   ];
 
   return (
@@ -66,7 +66,7 @@ export default function Sidebar() {
       {/* --- SIDEBAR --- */}
       <div
         className={`fixed top-0 left-0 h-screen font-sans bg-slate-900 text-white flex flex-col transition-all duration-300 z-[100] border-r border-slate-800 
-        ${isMobileExpanded ? "w-64 translate-x-0" : "w-0 -translate-x-full lg:translate-x-0 lg:w-64"} lg:sticky md:mt-16 mt-12 lg:mt-0 overflow-hidden`}
+        ${isMobileExpanded ? "w-64 translate-x-0" : "w-0 -translate-x-full lg:translate-x-0 lg:w-60"} lg:sticky md:mt-16 mt-12 lg:mt-0 overflow-hidden`}
       >
         {/* --- BRAND IDENTITY (Desktop) --- */}
         <div
@@ -88,7 +88,7 @@ export default function Sidebar() {
         </div>
 
         {/* --- NAVIGATION --- */}
-        <nav className="flex-1 px-3 mt-5 lg:mt-4 md:space-y-2  overflow-y-auto no-scrollbar">
+        <nav className="flex-1 px-4 mt-5 lg:mt-4 md:space-y-2  overflow-y-auto no-scrollbar">
           {links.map((link) => {
             const isActive = location.pathname === link.path;
             return (
@@ -96,7 +96,7 @@ export default function Sidebar() {
                 key={link.name}
                 to={link.path}
                 onClick={() => setIsMobileExpanded(false)}
-                className={`group flex items-center px-3 py-2  rounded transition-all ${
+                className={`group flex items-center px-3 py-2.5  rounded transition-all ${
                   isActive
                     ? "bg-[#1976d2] text-white"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
