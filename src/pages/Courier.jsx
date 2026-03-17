@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Package,
   Truck,
+  Send,
   Clock,
   CheckCircle,
   RefreshCcw,
@@ -14,8 +15,11 @@ import {
   Receipt,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import LogisticsModal from "@/components/Courier/LogisticsModal";
 
 const TripleSyncDashboard = () => {
+  const [isLogisticsOpen, setIsLogisticsOpen] = useState(false);
+
   const [orders] = useState([
     {
       order_id: "475891",
@@ -77,6 +81,8 @@ const TripleSyncDashboard = () => {
     return { codCharge, organicMoney };
   };
 
+  // 1. Create the state
+
   return (
     <div className="bg-[#F1F5F9] font-sans mt-12 md:mt-0">
       <Navbar pageTitle={"Courier Management"} />
@@ -124,6 +130,57 @@ const TripleSyncDashboard = () => {
 
         {/* 2. BIG FINANCIAL STATUS CARDS (One Row - Compact Design) */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-2 lg:gap-3">
+          <button
+            onClick={() => setIsLogisticsOpen(true)}
+            className="w-full cursor-pointer  bg-[#1976d2] border rounded p-3 border-indigo-400 transition-all duration-300 group outline-none"
+          >
+            <div className="flex items-center justify-between gap-4">
+              {/* Compact Icon Box */}
+              <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-slate-600 group-hover:bg-slate-800 group-hover:text-white transition-all duration-500 shrink-0">
+                <Truck
+                  size={24}
+                  className="group-hover:rotate-[-12deg] transition-transform"
+                />
+              </div>
+
+              {/* Center Info - Now Horizontal */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-baseline gap-2">
+                  <h3 className="text-2xl font-black text-white tracking-tighter">
+                    14
+                  </h3>
+                  <p className="text-[10px] font-black text-white uppercase tracking-widest truncate">
+                    Orders Ready{" "}
+                    <span className="  text-indigo-500 group-hover:translate-x-1 transition-transform inline-block">
+                      →
+                    </span>
+                  </p>
+                </div>
+
+                {/* Slim Progress Bar */}
+                <div className="mt-1.5 w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-black rounded-full transition-all duration-1000 ease-out"
+                    style={{ width: "70%" }}
+                  />
+                </div>
+              </div>
+
+              {/* Action Status - Pulsing Dot Only */}
+              <div className="flex flex-col items-end shrink-0">
+                <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-all">
+                  <Send size={14} />
+                </div>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
+                  <span className="text-[8px] font-black text-slate-400 uppercase tracking-tighter">
+                    Sync
+                  </span>
+                </div>
+              </div>
+            </div>
+          </button>
+
           <BigFinanceCard
             title="Gross Volume"
             value="৳1,48,520"
@@ -138,13 +195,7 @@ const TripleSyncDashboard = () => {
             color="bg-white border-slate-200"
             textColor="text-red-600"
           />
-          <BigFinanceCard
-            title="COD Fees"
-            value="৳1,485"
-            icon={AlertCircle}
-            color="bg-white border-slate-200"
-            textColor="text-amber-600"
-          />
+
           <BigFinanceCard
             title="Pending COD"
             value="৳14,200"
@@ -161,6 +212,8 @@ const TripleSyncDashboard = () => {
             isHighlight
           />
         </div>
+
+        {/* --- LOGISTICS COMMAND LAUNCHER --- */}
 
         {/* 3. TRIPLE PORTION TABLE */}
         <div className="bg-white rounded border border-slate-200 overflow-hidden shadow-xs">
@@ -276,6 +329,12 @@ const TripleSyncDashboard = () => {
             </table>
           </div>
         </div>
+
+        <LogisticsModal
+          isOpen={isLogisticsOpen}
+          onClose={() => setIsLogisticsOpen(false)}
+          orders={orders} // Changed from orderData to orders to match your state
+        />
       </div>
     </div>
   );
