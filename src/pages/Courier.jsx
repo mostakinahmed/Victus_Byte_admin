@@ -306,11 +306,11 @@ const BigFinanceCard = ({
   isHighlight,
 }) => (
   <div
-    className={`border ${color} p-4 rounded flex items-center justify-between shadow-xs h-18`}
+    className={`border ${color} p-4 rounded flex items-center justify-between  h-18`}
   >
     <div>
       <h4
-        className={`text-[10px] font-black uppercase tracking-widest leading-none ${isHighlight ? "text-emerald-100" : "text-slate-400"}`}
+        className={`text-[10px] font-black uppercase tracking-widest leading-none ${isHighlight ? "text-emerald-100" : "text-slate-500"}`}
       >
         {title}
       </h4>

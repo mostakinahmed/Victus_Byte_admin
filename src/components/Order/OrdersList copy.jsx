@@ -53,7 +53,7 @@ const OrderList = () => {
     "All Orders",
     "Pending",
     "Confirmed",
-
+    "Shipped",
     "Completed",
     "Cancelled",
   ];
@@ -107,7 +107,7 @@ const OrderList = () => {
         behavior: "instant", // Use "smooth" if you want a sliding effect
       });
     }
-    // Clear inputs when switching orders to avoid data ghosting
+    // ✅ Clear inputs when switching orders to avoid data ghosting
     setSkuInputs({});
     setImei1Inputs({});
   }, [showDetails?.order_id]); // Trigger only when the ID changes
@@ -118,8 +118,14 @@ const OrderList = () => {
 
     if (order.status === "Pending") {
       setActionBtn("Confirmed");
+    } else if (order.status === "Confirmed") {
+      setActionBtn("Shipped");
+    } else if (order.status === "Shipped") {
+      setActionBtn("Delivered");
+    } else if (order.status === "Delivered") {
+      setActionBtn("Completed");
     } else {
-      setActionBtn("Courier Stage");
+      setActionBtn(null);
     }
   };
 
@@ -141,6 +147,7 @@ const OrderList = () => {
   };
 
   //SKU validation
+  // ✅ LOGIC CHANGE: Validates based on 'idx' mapping
   useEffect(() => {
     const newStatus = {};
     if (!showDetails?.items) return;
@@ -188,7 +195,7 @@ const OrderList = () => {
 
     let skuArray = [];
 
-    if (actionBtn === "Confirmed") {
+    if (actionBtn === "Shipped") {
       // LOGIC CHANGE: Map inputs using 'idx'
       skuArray = showDetails.items.map((item, idx) => {
         return {
@@ -244,9 +251,22 @@ const OrderList = () => {
     if (actionBtn === "Confirmed") {
       updatedData = {
         status: "Confirmed",
+      };
+    } else if (actionBtn === "Shipped") {
+      updatedData = {
+        status: "Shipped",
         items: skuArray, // This now contains the product_id, skuID, imei
       };
+    } else if (actionBtn === "Delivered") {
+      updatedData = {
+        status: "Completed",
+        payment: {
+          status: "Paid",
+        },
+      };
     }
+
+
 
     try {
       const res = await api.patch(`/order/update/${orderId}`, updatedData);
@@ -299,8 +319,6 @@ const OrderList = () => {
       console.error(err);
     }
   };
-
-  //current product cat find
 
   return (
     <div className="bg-white md:p-0 p-1 md:mt-3 font-sans ">
@@ -586,11 +604,13 @@ const OrderList = () => {
                   </tr>
                 )}
               </tbody>
+
+
             </table>
           </div>
         </div>
 
-        {isModalOpen && editingOrder && (
+        {isModalOpen && editingOrzder && (
           <OrderEditModal
             order={editingOrder}
             onClose={() => {
@@ -646,80 +666,79 @@ const OrderList = () => {
               ref={detailScrollRef}
               className="flex-1 overflow-y-auto md:p-3 p-2 mt-2 space-y-3 scrollbar-hide"
             >
-              <div className="md:flex gap-10">
-                <section className="space-y-6 w-full -mt-2">
-                  <div className="flex items-center justify-between pb-2 border-b-2 border-slate-100">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 mt-2 md:mt-0 bg-indigo-600 rounded-lg shadow-sm shadow-indigo-200">
-                        <FiPackage className="text-white" size={14} />
-                      </div>
-                      <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
-                        Inventory Manifest
-                      </h3>
+              <section className="space-y-6 -mt-3">
+                <div className="flex items-center justify-between pb-2 border-b-2 border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 mt-2 md:mt-0 bg-indigo-600 rounded-lg shadow-sm shadow-indigo-200">
+                      <FiPackage className="text-white" size={14} />
                     </div>
-                    <span className="text-[11px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded">
-                      {showDetails.items.length}
-                    </span>
+                    <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">
+                      Inventory Manifest
+                    </h3>
                   </div>
+                  <span className="text-[11px] font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded">
+                    {showDetails.items.length}
+                  </span>
+                </div>
 
-                  <div className="space-y-4">
-                    {showDetails.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="relative md:pl-6 pl-2 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-slate-200 hover:before:bg-indigo-500 before:rounded-full before:transition-colors transition-all"
-                      >
-                        <div className="flex flex-col md:flex-row gap-4">
-                          <div className="relative shrink-0">
-                            <img
-                              src={data[idx]?.images[0]}
-                              alt="prod"
-                              className="w-24 h-24 object-contain rounded border border-slate-200 bg-white  p-1"
-                            />
-                            <div className="absolute -top-2 -right-2 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-md border-2 border-white">
-                              x{item.quantity || 1}
+                <div className="space-y-4">
+                  {showDetails.items.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="relative md:pl-6 pl-2 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[3px] before:bg-slate-200 hover:before:bg-indigo-500 before:rounded-full before:transition-colors transition-all"
+                    >
+                      <div className="flex flex-col md:flex-row gap-4">
+                        <div className="relative shrink-0">
+                          <img
+                            src={data[idx]?.images[0]}
+                            alt="prod"
+                            className="w-24 h-24 object-contain rounded border border-slate-200 bg-white  p-1"
+                          />
+                          <div className="absolute -top-2 -right-2 bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-md border-2 border-white">
+                            x{item.quantity || 1}
+                          </div>
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <h4 className="text-base font-medium text-slate-800 leading-tight">
+                                {item.product_name}
+                              </h4>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="text-[13px] font-medium text-slate-700  px-1.5 py-0.5 ">
+                                  ID: {item.product_id}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-lg font-black text-slate-900 leading-none">
+                                ৳{item.product_price}
+                              </p>
                             </div>
                           </div>
 
-                          <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-start mb-2">
-                              <div>
-                                <h4 className="text-base font-medium text-slate-800 leading-tight">
-                                  {item.product_name}
-                                </h4>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <span className="text-[13px] font-medium text-slate-700  px-1.5 py-0.5 ">
-                                    ID: {item.product_id}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="text-right">
-                                <p className="text-lg font-black text-slate-900 leading-none">
-                                  ৳{item.product_price}
-                                </p>
-                              </div>
+                          <div className="grid md:grid-cols-2 gap-3 mt-3">
+                            <div className="p-2.5 rounded bg-indigo-50 border border-indigo-200">
+                              <p className="text-[12px] line-clamp-1 font-medium text-indigo-600 uppercase mb-1">
+                                User Specifications
+                              </p>
+                              <p className="text-[13px] font-medium text-indigo-900">
+                                {item.product_comments ||
+                                  "No specifics provided"}
+                              </p>
                             </div>
 
-                            <div className="grid md:grid-cols-2 gap-3 mt-3">
-                              <div className="p-2.5 rounded bg-indigo-50 border border-indigo-200">
-                                <p className="text-[12px] line-clamp-1 font-medium text-indigo-600 uppercase mb-1">
-                                  User Specifications
+                            <div className="p-2.5 rounded bg-orange-50 border border-slate-300">
+                              <div className="flex gap-5">
+                                <p className="text-[12px] font-medium text-slate-600 uppercase tracking mb-1">
+                                  Serial Number
                                 </p>
-                                <p className="text-[13px] font-medium text-indigo-900">
-                                  {item.product_comments ||
-                                    "No specifics provided"}
-                                </p>
-                              </div>
 
-                              <div className="p-2.5 rounded bg-orange-50 border border-slate-300">
-                                <div className="flex gap-5">
-                                  <p className="text-[12px] font-medium text-slate-600 uppercase tracking mb-1">
-                                    Serial Number
-                                  </p>
-
-                                  {isValid && skuStatus && skuStatus[idx] && (
-                                    <div className="flex items-center gap-2 -mt-2">
-                                      <div
-                                        className={`w-8 h-8 flex items-center justify-center rounded-full transition-all duration-500 border
+                                {isValid && skuStatus && skuStatus[idx] && (
+                                  <div className="flex items-center gap-2 -mt-2">
+                                    <div
+                                      className={`w-8 h-8 flex items-center justify-center rounded-full transition-all duration-500 border
                                         ${
                                           skuStatus[idx] === "valid"
                                             ? "bg-emerald-50 text-emerald-600 border-emerald-100"
@@ -728,26 +747,26 @@ const OrderList = () => {
                                               : "bg-rose-50 text-rose-600 border-rose-100"
                                         }
                                       `}
-                                      >
-                                        {skuStatus[idx] === "valid" ? (
-                                          <FiCheckCircle
-                                            size={16}
-                                            className="animate-in fade-in zoom-in duration-300"
-                                          />
-                                        ) : skuStatus[idx] === "sold" ? (
-                                          <FiMinusCircle
-                                            size={16}
-                                            className="animate-in fade-in zoom-in duration-300"
-                                          />
-                                        ) : (
-                                          <FiAlertCircle
-                                            size={16}
-                                            className="animate-in fade-in zoom-in duration-300"
-                                          />
-                                        )}
-                                      </div>
-                                      <p
-                                        className={`text-[10px] font-black uppercase tracking-tight hidden sm:block 
+                                    >
+                                      {skuStatus[idx] === "valid" ? (
+                                        <FiCheckCircle
+                                          size={16}
+                                          className="animate-in fade-in zoom-in duration-300"
+                                        />
+                                      ) : skuStatus[idx] === "sold" ? (
+                                        <FiMinusCircle
+                                          size={16}
+                                          className="animate-in fade-in zoom-in duration-300"
+                                        />
+                                      ) : (
+                                        <FiAlertCircle
+                                          size={16}
+                                          className="animate-in fade-in zoom-in duration-300"
+                                        />
+                                      )}
+                                    </div>
+                                    <p
+                                      className={`text-[10px] font-black uppercase tracking-tight hidden sm:block 
                                         ${
                                           skuStatus[idx] === "valid"
                                             ? "text-emerald-600"
@@ -756,140 +775,139 @@ const OrderList = () => {
                                               : "text-rose-600"
                                         }
                                       `}
-                                      >
-                                        {skuStatus[idx] === "valid"
-                                          ? "Ready to Dispatch"
-                                          : skuStatus[idx] === "sold"
-                                            ? "Already Sold"
-                                            : "Invalid SKU"}
-                                      </p>
-                                    </div>
+                                    >
+                                      {skuStatus[idx] === "valid"
+                                        ? "Ready to Dispatch"
+                                        : skuStatus[idx] === "sold"
+                                          ? "Already Sold"
+                                          : "Invalid SKU"}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+
+                              {showDetails.status === "Pending" ? (
+                                <div className="relative group/input mt-2">
+                                  <input
+                                    type="text"
+                                    value={skuInputs[idx] || ""}
+                                    onChange={(e) =>
+                                      handleSkuChange(
+                                        idx,
+                                        e.target.value.toUpperCase(),
+                                      )
+                                    }
+                                    className="w-full text-[15px] uppercase tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded shad outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                  />
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-1.5">
+                                  {item.skuID ? (
+                                    <span className="text-[14px] font-mono font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">
+                                      {item.skuID}
+                                    </span>
+                                  ) : (
+                                    <span className="text-[10px] font-bold text-rose-400 flex items-center gap-1 uppercase tracking-tighter">
+                                      <div className="w-1 h-1 bg-rose-400 rounded-full animate-pulse" />{" "}
+                                      Pending SKU
+                                    </span>
                                   )}
                                 </div>
+                              )}
+                            </div>
 
-                                {showDetails.status === "Pending" ? (
-                                  <div className="relative group/input mt-2">
+                            <div className="p-2.5 rounded bg-red-50 border border-slate-300">
+                              <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
+                                IMEI Number
+                              </p>
+                              {showDetails.status === "Pending" ? (
+                                <div className="space-y-2">
+                                  <div className="flex gap-2">
                                     <input
-                                      type="text"
-                                      value={skuInputs[idx] || ""}
+                                      type="number"
+                                      value={imei1Inputs[idx] || ""}
                                       onChange={(e) =>
-                                        handleSkuChange(
-                                          idx,
-                                          e.target.value.toUpperCase(),
-                                        )
+                                        setImei1Inputs({
+                                          ...imei1Inputs,
+                                          [idx]: e.target.value,
+                                        })
                                       }
-                                      className="w-full text-[15px] uppercase tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded shad outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                      className="w-full text-[15px] tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded  outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
+                                      placeholder="Only for mobile."
                                     />
                                   </div>
-                                ) : (
-                                  <div className="flex items-center gap-1.5">
-                                    {item.skuID ? (
-                                      <span className="text-[14px] font-mono font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded">
-                                        {item.skuID}
-                                      </span>
-                                    ) : (
-                                      <span className="text-[10px] font-bold text-rose-400 flex items-center gap-1 uppercase tracking-tighter">
-                                        <div className="w-1 h-1 bg-rose-400 rounded-full animate-pulse" />{" "}
-                                        Pending SKU
-                                      </span>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-
-                              <div className="p-2.5 rounded bg-red-50 border border-slate-300">
-                                <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
-                                  IMEI Number
-                                </p>
-                                {showDetails.status === "Pending" ? (
-                                  <div className="space-y-2">
-                                    <div className="flex gap-2">
-                                      <input
-                                        type="number"
-                                        value={imei1Inputs[idx] || ""}
-                                        onChange={(e) =>
-                                          setImei1Inputs({
-                                            ...imei1Inputs,
-                                            [idx]: e.target.value,
-                                          })
-                                        }
-                                        className="w-full text-[15px] tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded  outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
-                                        placeholder="Only for mobile."
-                                      />
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center gap-1.5">
-                                    {item.imei ? (
-                                      <span className="text-[14px] font-mono font-black bg-amber-200 text-emerald-700 px-2 py-0.5 rounded">
-                                        #{item.imei}
-                                      </span>
-                                    ) : (
-                                      <span className="text-[10px] font-bold text-rose-400 flex items-center gap-1 uppercase tracking-tighter">
-                                        <div className="w-1 h-1 bg-rose-400 rounded-full animate-pulse" />{" "}
-                                        Pending IMEI
-                                      </span>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-1.5">
+                                  {item.imei ? (
+                                    <span className="text-[14px] font-mono font-black bg-amber-200 text-emerald-700 px-2 py-0.5 rounded">
+                                      #{item.imei}
+                                    </span>
+                                  ) : (
+                                    <span className="text-[10px] font-bold text-rose-400 flex items-center gap-1 uppercase tracking-tighter">
+                                      <div className="w-1 h-1 bg-rose-400 rounded-full animate-pulse" />{" "}
+                                      Pending IMEI
+                                    </span>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </section>
+                    </div>
+                  ))}
+                </div>
+              </section>
 
-                <section className="space-y-2 min-w-1/4 md:-mt-3 mt-2">
-                  <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                    <FiUser className="text-indigo-500" />
-                    <h3 className="text-xs mt-2 font-black text-slate-800 uppercase tracking-widest">
-                      Customer Details
-                    </h3>
-                  </div>
-                  <div className=" gap-4">
-                    <div className="space-y-4">
-                      <div>
-                        <p className="text-[12px] font-medium text-slate-700 uppercase  mb-1">
-                          Customer ID
-                        </p>
-                        <p className="text-[12px] font-medium uppercase">
-                          {showDetails.customer_id || "Guest / Unregistered"}
-                        </p>
-                      </div>
-                      <div className="mb-3">
-                        <p className="text-[12px] font-medium text-slate-700 uppercase mb-1">
-                          Contact Phone
-                        </p>
-                        <p className="md:text-[16px] font-bold text-slate-900 bg-emerald-300 px-2  rounded w-fit flex items-center gap-1">
-                          <FiPhone size={17} />{" "}
-                          {showDetails.shipping_address.phone}
-                        </p>
-                      </div>
+              <section className="space-y-2 mt-7 md:mt-0">
+                <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                  <FiUser className="text-indigo-500" />
+                  <h3 className="text-xs mt-4 font-black text-slate-800 uppercase tracking-widest">
+                    Customer Details
+                  </h3>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-[12px] font-medium text-slate-700 uppercase  mb-1">
+                        Customer ID
+                      </p>
+                      <p className="text-[12px] font-medium uppercase">
+                        {showDetails.customer_id || "Guest / Unregistered"}
+                      </p>
                     </div>
-                    <div className="space-y-4 ">
-                      <div>
-                        <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
-                          Full Name
-                        </p>
-                        <p className="text-sm font-medium">
-                          {showDetails.shipping_address.recipient_name}
-                        </p>
-                      </div>
-                      <div className="">
-                        <p className="text-[12px] font-medium text-slate-600 uppercase  mb-1">
-                          Email Address
-                        </p>
-                        <p className="text-sm font-medium flex items-center gap-1">
-                          <FiMail size={12} />{" "}
-                          {showDetails.shipping_address.email || "N/A"}
-                        </p>
-                      </div>
+                    <div>
+                      <p className="text-[12px] font-medium text-slate-700 uppercase mb-1">
+                        Contact Phone
+                      </p>
+                      <p className="md:text-[18px] font-bold text-slate-900 bg-emerald-300 px-2 py-1 rounded w-fit flex items-center gap-1">
+                        <FiPhone size={17} />{" "}
+                        {showDetails.shipping_address.phone}
+                      </p>
                     </div>
                   </div>
-                </section>
-              </div>
+                  <div className="space-y-4 text-right">
+                    <div>
+                      <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
+                        Full Name
+                      </p>
+                      <p className="text-sm font-medium">
+                        {showDetails.shipping_address.recipient_name}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[12px] font-medium text-slate-600 uppercase  mb-1">
+                        Email Address
+                      </p>
+                      <p className="text-sm font-medium flex items-center justify-end gap-1">
+                        <FiMail size={12} />{" "}
+                        {showDetails.shipping_address.email || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
 
               <section className="bg-slate-900  rounded md:p-6 p-3 text-white space-y-5">
                 <div className="flex justify-between">
@@ -972,13 +990,13 @@ const OrderList = () => {
                 <button className="flex-1 flex items-center justify-center gap-2 bg-white text-rose-600 border border-rose-200 text-xs font-black py-3 rounded-xl hover:bg-rose-600 hover:text-white transition-all duration-300 shadow-sm">
                   <FiSlash /> CANCEL ORDER
                 </button>
-                {showDetails?.status === "Pending" && (
+                {actionBtn && (
                   <button
                     type="button"
                     onClick={submitBtn}
                     className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white text-xs font-black py-3 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all active:scale-95 uppercase tracking-widest"
                   >
-                    <FiCheckCircle size={16} /> CONFIRM ORDER
+                    <FiCheckCircle /> {actionBtn}
                   </button>
                 )}
               </div>
