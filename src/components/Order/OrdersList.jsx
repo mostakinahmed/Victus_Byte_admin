@@ -602,7 +602,7 @@ const OrderList = () => {
               setIsModalOpen(false);
               setEditingOrder(null);
             }}
-            onSave={handleUpdateSubmit}
+            // onSave={handleUpdateSubmit}
           />
         )}
 

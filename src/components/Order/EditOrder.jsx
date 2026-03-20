@@ -1,3 +1,4 @@
+import api from "@/Context Api/api";
 import React, { useState } from "react";
 import {
   FiX,
@@ -9,7 +10,7 @@ import {
   FiHash,
 } from "react-icons/fi";
 
-const OrderEditModal = ({ order, onClose, onSave }) => {
+const OrderEditModal = ({ order, onClose }) => {
   const [formData, setFormData] = useState({ ...order });
 
   const handleNestedChange = (section, field, value) => {
@@ -25,6 +26,40 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
     setFormData({ ...formData, items: updatedItems });
   };
 
+  // Update API logic for the 8 specific fields
+  const submitBtn = async (e) => {
+    e.preventDefault();
+
+    const updatePayload = {
+      // Shipping Address (4 fields)
+      "shipping_address.recipient_name":
+        formData.shipping_address.recipient_name,
+      "shipping_address.phone": formData.shipping_address.phone,
+      "shipping_address.email": formData.shipping_address.email,
+      "shipping_address.address_line1": formData.shipping_address.address_line1,
+
+      // Courier (4 fields)
+      "courier.delivery_charge": formData.courier.delivery_charge,
+      "courier.delivery_status": formData.courier.delivery_status,
+      "courier.payment_status": formData.courier.payment_status,
+      "courier.payment_method": formData.courier.payment_method,
+    };
+
+    try {
+      const res = await api.post(
+        `/order/edit-order/${formData.order_id}`,
+        updatePayload,
+      );
+
+      if (res.data.success) {
+        toast.success("Victus Byte: Database Synced");
+        onClose();
+      }
+    } catch (error) {
+      toast.error("Update Failed");
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-[150] flex items-center justify-center p-0 sm:p-4">
       <div
@@ -34,38 +69,35 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
 
       <div className="relative bg-white w-full max-w-5xl h-full sm:h-auto max-h-screen sm:max-h-[90vh]  rounded shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300">
         {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 sticky top-0 z-10">
+        <div className="p-4 sm:p-6 border-b border-slate-200 flex justify-between items-center bg-slate-100 sticky top-0 z-10">
           <div className="min-w-0">
             <h2 className="text-lg sm:text-xl font-black text-slate-800 uppercase tracking-tighter truncate">
               Update{" "}
-              <span className="text-indigo-600">#{formData.order_id}</span>
+              <span className="text-[#1976d2]">#{formData.order_id}</span>
             </h2>
-            <p className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">
-              Victus Byte Command Center
-            </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2.5 bg-white border border-slate-300 rounded-xl text-slate-600 hover:text-rose-500 transition-colors"
+            className="p-2.5 bg-white border cursor-pointer border-slate-300 rounded-xl text-slate-600 hover:text-rose-500 transition-colors"
           >
             <FiX size={20} />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 sm:px-8 space-y-8 custom-scrollbar pb-32 sm:pb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+        <div className="flex-1 overflow-y-auto p-4 sm:px-8 space-y-4 custom-scrollbar pb-32 sm:pb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* 1. SHIPPING & RECIPIENT */}
             <div className="space-y-4">
-              <h3 className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.2em] flex items-center gap-2">
+              <h3 className="text-[11px] font-black text-[#1976d2] uppercase tracking-[0.2em] flex items-center gap-2">
                 <FiTruck /> Shipping & Recipient
               </h3>
-              <div className="grid grid-cols-1 gap-3 bg-slate-200 md:p-5 p-2 rounded border border-slate-100">
+              <div className="grid grid-cols-1 gap-3 bg-slate-100 md:p-5 p-2 rounded border border-slate-100">
                 <div className="space-y-1">
                   <label className="text-[10px] font-black text-slate-400 uppercase ml-1">
                     Recipient Name
                   </label>
                   <input
-                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none"
+                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none"
                     value={formData.shipping_address.recipient_name}
                     onChange={(e) =>
                       handleNestedChange(
@@ -78,7 +110,7 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <input
-                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none"
+                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none"
                     placeholder="Phone"
                     value={formData.shipping_address.phone}
                     onChange={(e) =>
@@ -90,7 +122,7 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
                     }
                   />
                   <input
-                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none"
+                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none"
                     placeholder="Email"
                     value={formData.shipping_address.email}
                     onChange={(e) =>
@@ -104,7 +136,7 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
                 </div>
                 <textarea
                   rows="2"
-                  className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-bold outline-none resize-none"
+                  className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none resize-none"
                   value={formData.shipping_address.address_line1}
                   onChange={(e) =>
                     handleNestedChange(
@@ -122,9 +154,9 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
               <h3 className="text-[11px] font-black text-emerald-600 uppercase tracking-[0.2em] flex items-center gap-2">
                 <FiCreditCard /> Logistics & Finance
               </h3>
-              <div className="md:p-6 p-3 bg-slate-900 rounded text-white space-y-4 shadow-xl">
+              <div className="md:p-4 p-3 bg-slate-900 rounded text-white space-y-4 shadow-xl">
                 {/* Editable Delivery Charge */}
-                <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/10">
+                <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-xl border border-white/10">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                     Delivery Charge
                   </span>
@@ -187,11 +219,11 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
                     Payment Status
                   </span>
                   <select
-                    value={formData.courier.cash_status}
+                    value={formData.courier.payment_status}
                     onChange={(e) =>
                       handleNestedChange(
                         "courier",
-                        "cash_status",
+                        "payment_status",
                         e.target.value,
                       )
                     }
@@ -241,7 +273,7 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
                       Bank Transfer
                     </option>
                     <option className="bg-slate-900" value="Cash">
-                       Cash
+                      Cash
                     </option>
                   </select>
                 </div>
@@ -250,14 +282,14 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
           </div>
 
           {/* 3. ITEMS */}
-          <div className="space-y-4">
+          <div className="space-y-4 md:mt-7 mt-6 ">
             <h3 className="text-[11px] font-black text-orange-500 uppercase tracking-[0.2em] flex items-center gap-2">
               <FiPackage /> Product Specification
             </h3>
-            <div className="overflow-x-auto rounded-[24px] border border-slate-100 bg-white shadow-sm">
+            <div className="overflow-x-auto rounded border border-slate-100 bg-white shadow-sm">
               <table className="w-full text-left min-w-[800px]">
-                <thead className="bg-slate-50">
-                  <tr className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <thead className="bg-[#1976d2]">
+                  <tr className="text-[11px] font-black text-white uppercase tracking-widest">
                     <th className="p-4">Product</th>
                     <th className="p-4">SKU / Serial</th>
                     <th className="p-4">IMEI Hub</th>
@@ -271,7 +303,7 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
                       <td className="p-4">
                         <div className="flex items-center gap-2">
                           <FiLock className="text-slate-300" size={10} />
-                          <p className="font-bold text-slate-800 text-xs truncate max-w-[150px]">
+                          <p className="font-bold text-slate-800 text-xs truncate max-w-[160px]">
                             {item.product_name}
                           </p>
                         </div>
@@ -333,8 +365,8 @@ const OrderEditModal = ({ order, onClose, onSave }) => {
             </p>
           </div>
           <button
-            onClick={() => onSave(formData)}
-            className="flex items-center gap-2 bg-slate-900 text-white px-10 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-indigo-600 transition-all active:scale-95"
+            onClick={submitBtn}
+            className="flex items-center gap-2 bg-slate-900 text-white px-10 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-[#1976d2] transition-all active:scale-95"
           >
             <FiSave size={16} /> Save Changes
           </button>
