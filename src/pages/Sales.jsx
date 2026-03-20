@@ -57,6 +57,8 @@ export default function Sales() {
     }
   }, [filter]);
 
+
+
   return (
     <div className="mt-12 md:mt-0 font-sans">
       <Navbar pageTitle="Sales Architecture" />
@@ -212,7 +214,7 @@ export default function Sales() {
                   {/* Payment Method */}
                   <td className="px-4 text-center">
                     <span className="text-[11px] font-medium text-slate-700 border border-slate-200 px-2 py-0.5 rounded bg-slate-50">
-                      {sale.payment.method}
+                      {sale.courier.payment_method}
                     </span>
                   </td>
 
