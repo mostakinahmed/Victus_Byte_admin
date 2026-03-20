@@ -69,7 +69,8 @@ const OrderList = () => {
   // Filter orders based on status, date, and search
   const filteredOrders = orderData.filter((order) => {
     const statusMatch =
-      selectedStatus === "All Orders" || order.status === selectedStatus;
+      selectedStatus === "All Orders" ||
+      order.courier.delivery_status === selectedStatus;
 
     const dateMatch = startDate
       ? new Date(order.order_date).toDateString() === startDate.toDateString()
@@ -116,7 +117,7 @@ const OrderList = () => {
   const handleClickOrder = (order) => {
     setShowDetails(order);
 
-    if (order.status === "Pending") {
+    if (order.courier.delivery_status === "Pending") {
       setActionBtn("Confirmed");
     } else {
       setActionBtn("Courier Stage");
@@ -252,8 +253,8 @@ const OrderList = () => {
       const res = await api.patch(`/order/update/${orderId}`, updatedData);
 
       if (res.status === 200 || res?.data?.success) {
+        updateApi();
         try {
-          await updateApi();
           setShowDetails(null);
           setSelectedOrderId(null);
           handleReset();
@@ -522,31 +523,35 @@ const OrderList = () => {
                         <td className="px-4 py-2 text-center">
                           <span
                             className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium uppercase tracking-wider border ${
-                              order.status === "Pending"
+                              order.courier.delivery_status === "Pending"
                                 ? "bg-amber-50 text-amber-700 border-amber-200"
-                                : order.status === "Confirmed"
+                                : order.courier.delivery_status === "Confirmed"
                                   ? "bg-blue-50 text-blue-700 border-blue-200"
-                                  : order.status === "Shipped"
+                                  : order.courier.delivery_status === "Shipped"
                                     ? "bg-indigo-50 text-indigo-700 border-indigo-200"
-                                    : order.status === "Delivered"
+                                    : order.courier.delivery_status ===
+                                        "Delivered"
                                       ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                       : "bg-rose-50 text-rose-700 border-rose-200"
                             }`}
                           >
                             <span
                               className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-                                order.status === "Pending"
+                                order.courier.delivery_status === "Pending"
                                   ? "bg-amber-400"
-                                  : order.status === "Confirmed"
+                                  : order.courier.delivery_status ===
+                                      "Confirmed"
                                     ? "bg-blue-400"
-                                    : order.status === "Shipped"
+                                    : order.courier.delivery_status ===
+                                        "Shipped"
                                       ? "bg-indigo-400"
-                                      : order.status === "Delivered"
+                                      : order.courier.delivery_status ===
+                                          "Delivered"
                                         ? "bg-emerald-400"
                                         : "bg-rose-400"
                               }`}
                             />
-                            {order.status}
+                            {order.courier.delivery_status}
                           </span>
                         </td>
 
@@ -619,18 +624,19 @@ const OrderList = () => {
                 <div className="flex flex-col items-end gap-1">
                   <span
                     className={`px-3 py-1 rounded-full text-[13px] font-black uppercase tracking-wider border  ${
-                      showDetails.status === "Pending"
+                      showDetails.courier.delivery_status === "Pending"
                         ? "bg-amber-50 text-amber-600 border-amber-400"
-                        : showDetails.status === "Confirmed"
+                        : showDetails.courier.delivery_status === "Confirmed"
                           ? "bg-blue-50 text-blue-600 border-blue-400"
-                          : showDetails.status === "Shipped"
+                          : showDetails.courier.delivery_status === "Shipped"
                             ? "bg-purple-50 text-purple-600 border-purple-400"
-                            : showDetails.status === "Delivered"
+                            : showDetails.courier.delivery_status ===
+                                "Delivered"
                               ? "bg-emerald-50 text-emerald-600 border-emerald-400"
                               : "bg-rose-50 text-rose-600 border-rose-200"
                     }`}
                   >
-                    {showDetails.status}
+                    {showDetails.courier.delivery_status}
                   </span>
                 </div>
               </div>
@@ -767,7 +773,8 @@ const OrderList = () => {
                                   )}
                                 </div>
 
-                                {showDetails.status === "Pending" ? (
+                                {showDetails.courier.delivery_status ===
+                                "Pending" ? (
                                   <div className="relative group/input mt-2">
                                     <input
                                       type="text"
@@ -801,7 +808,8 @@ const OrderList = () => {
                                 <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
                                   IMEI Number
                                 </p>
-                                {showDetails.status === "Pending" ? (
+                                {showDetails.courier.delivery_status ===
+                                "Pending" ? (
                                   <div className="space-y-2">
                                     <div className="flex gap-2">
                                       <input
@@ -921,7 +929,7 @@ const OrderList = () => {
                         Shipping Cost
                       </p>
                       <p className="text-sm font-bold text-white">
-                        ৳{showDetails.shipping_cost}
+                        ৳{showDetails.courier.delivery_charge}
                       </p>
                     </div>
                   </div>
@@ -932,8 +940,9 @@ const OrderList = () => {
                         Payment Info
                       </p>
                       <p className="text-sm font-bold text-indigo-300 uppercase">
-                        {showDetails.payment.method} /{" "}
-                        {showDetails.payment.status}
+                        {showDetails.courier.del_type}-
+                        {showDetails.courier.payment_method} -
+                        {showDetails.courier.payment_status}
                       </p>
                     </div>
                     <div className="text-right">
@@ -972,7 +981,7 @@ const OrderList = () => {
                 <button className="flex-1 flex items-center justify-center gap-2 bg-white text-rose-600 border border-rose-200 text-xs font-black py-3 rounded-xl hover:bg-rose-600 hover:text-white transition-all duration-300 shadow-sm">
                   <FiSlash /> CANCEL ORDER
                 </button>
-                {showDetails?.status === "Pending" && (
+                {showDetails?.courier.delivery_status === "Pending" && (
                   <button
                     type="button"
                     onClick={submitBtn}
