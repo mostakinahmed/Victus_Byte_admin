@@ -1,5 +1,6 @@
 import api from "@/Context Api/api";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import {
   FiX,
   FiPackage,
@@ -10,8 +11,10 @@ import {
   FiHash,
 } from "react-icons/fi";
 
-const OrderEditModal = ({ order, onClose }) => {
+const OrderEditModal = ({ order, onClose, updateAPI }) => {
   const [formData, setFormData] = useState({ ...order });
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleNestedChange = (section, field, value) => {
     setFormData((prev) => ({
@@ -26,9 +29,11 @@ const OrderEditModal = ({ order, onClose }) => {
     setFormData({ ...formData, items: updatedItems });
   };
 
-  // Update API logic for the 8 specific fields
   const submitBtn = async (e) => {
     e.preventDefault();
+    if (isProcessing) return;
+
+    setIsProcessing(true);
 
     const updatePayload = {
       // Shipping Address (4 fields)
@@ -52,22 +57,30 @@ const OrderEditModal = ({ order, onClose }) => {
       );
 
       if (res.data.success) {
+        updateAPI();
+        setShowSuccess(true);
         toast.success("Victus Byte: Database Synced");
-        onClose();
+
+        // Wait 2 seconds then close
+        setTimeout(() => {
+          onClose();
+        }, 1000);
       }
     } catch (error) {
       toast.error("Update Failed");
+      setIsProcessing(false);
     }
   };
 
   return (
     <div className="fixed inset-0 z-[150] flex items-center justify-center p-0 sm:p-4">
+      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      <div className="relative bg-white w-full max-w-5xl h-full sm:h-auto max-h-screen sm:max-h-[90vh]  rounded shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300">
+      <div className="relative bg-white w-full max-w-5xl h-full sm:h-auto max-h-screen sm:max-h-[90vh] rounded shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300 font-sans">
         {/* Header */}
         <div className="p-4 sm:p-6 border-b border-slate-200 flex justify-between items-center bg-slate-100 sticky top-0 z-10">
           <div className="min-w-0">
@@ -84,8 +97,9 @@ const OrderEditModal = ({ order, onClose }) => {
           </button>
         </div>
 
+        {/* Scrollable Form */}
         <div className="flex-1 overflow-y-auto p-4 sm:px-8 space-y-4 custom-scrollbar pb-32 sm:pb-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-2">
             {/* 1. SHIPPING & RECIPIENT */}
             <div className="space-y-4">
               <h3 className="text-[11px] font-black text-[#1976d2] uppercase tracking-[0.2em] flex items-center gap-2">
@@ -97,7 +111,7 @@ const OrderEditModal = ({ order, onClose }) => {
                     Recipient Name
                   </label>
                   <input
-                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none"
+                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-[#1976d2]"
                     value={formData.shipping_address.recipient_name}
                     onChange={(e) =>
                       handleNestedChange(
@@ -110,7 +124,7 @@ const OrderEditModal = ({ order, onClose }) => {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <input
-                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none"
+                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-[#1976d2]"
                     placeholder="Phone"
                     value={formData.shipping_address.phone}
                     onChange={(e) =>
@@ -122,7 +136,7 @@ const OrderEditModal = ({ order, onClose }) => {
                     }
                   />
                   <input
-                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none"
+                    className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:border-[#1976d2]"
                     placeholder="Email"
                     value={formData.shipping_address.email}
                     onChange={(e) =>
@@ -136,7 +150,7 @@ const OrderEditModal = ({ order, onClose }) => {
                 </div>
                 <textarea
                   rows="2"
-                  className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none resize-none"
+                  className="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none resize-none focus:border-[#1976d2]"
                   value={formData.shipping_address.address_line1}
                   onChange={(e) =>
                     handleNestedChange(
@@ -155,7 +169,7 @@ const OrderEditModal = ({ order, onClose }) => {
                 <FiCreditCard /> Logistics & Finance
               </h3>
               <div className="md:p-4 p-3 bg-slate-900 rounded text-white space-y-4 shadow-xl">
-                {/* Editable Delivery Charge */}
+                {/* Delivery Charge */}
                 <div className="flex justify-between items-center bg-white/5 px-3 py-2 rounded-xl border border-white/10">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                     Delivery Charge
@@ -213,7 +227,7 @@ const OrderEditModal = ({ order, onClose }) => {
                   </select>
                 </div>
 
-                {/* Cash Status Dropdown */}
+                {/* Payment Status Dropdown */}
                 <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/10">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                     Payment Status
@@ -241,7 +255,7 @@ const OrderEditModal = ({ order, onClose }) => {
                   </select>
                 </div>
 
-                {/* Payout Method Dropdown */}
+                {/* Payment Method Dropdown */}
                 <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/10">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                     Payment Method
@@ -281,8 +295,8 @@ const OrderEditModal = ({ order, onClose }) => {
             </div>
           </div>
 
-          {/* 3. ITEMS */}
-          <div className="space-y-4 md:mt-7 mt-6 ">
+          {/* 3. ITEMS (REFERENCE TABLE) */}
+          <div className="space-y-4 md:mt-7 mt-6">
             <h3 className="text-[11px] font-black text-orange-500 uppercase tracking-[0.2em] flex items-center gap-2">
               <FiPackage /> Product Specification
             </h3>
@@ -315,7 +329,7 @@ const OrderEditModal = ({ order, onClose }) => {
                             size={10}
                           />
                           <input
-                            className="w-full pl-6 pr-2 py-2 bg-indigo-50/50 border border-indigo-100 rounded-lg text-[12px]  font-bold text-indigo-700 outline-none"
+                            className="w-full pl-6 pr-2 py-2 bg-indigo-50/50 border border-indigo-100 rounded-lg text-[12px] font-bold text-indigo-700 outline-none"
                             value={item.skuID}
                             onChange={(e) =>
                               updateItem(idx, "skuID", e.target.value)
@@ -357,19 +371,61 @@ const OrderEditModal = ({ order, onClose }) => {
         {/* Footer */}
         <div className="p-4 sm:p-6 bg-white border-t border-slate-100 flex justify-between items-center sticky bottom-0">
           <div className="text-left">
-            <p className="text-[10px] font-black text-slate-400 uppercase">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
               Final Total
             </p>
-            <p className="text-xl font-black text-slate-900 italic">
+            <p className="text-xl font-black text-slate-900 italic leading-none">
               ৳{formData.total_amount}
             </p>
           </div>
-          <button
-            onClick={submitBtn}
-            className="flex items-center gap-2 bg-slate-900 text-white px-10 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-[#1976d2] transition-all active:scale-95"
-          >
-            <FiSave size={16} /> Save Changes
-          </button>
+
+          <div className="flex items-center gap-5">
+            {/* Success Feedback Left of Button */}
+            {showSuccess && (
+              <span className="text-[11px] font-black text-emerald-600 uppercase tracking-widest animate-pulse">
+                ✓ Successfully Synced
+              </span>
+            )}
+
+            <button
+              onClick={submitBtn}
+              disabled={isProcessing}
+              className={`flex items-center gap-2 px-10 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all active:scale-95 ${
+                isProcessing
+                  ? "bg-slate-400 cursor-not-allowed text-white"
+                  : "bg-slate-900 text-white hover:bg-[#1976d2] cursor-pointer"
+              }`}
+            >
+              {isProcessing ? (
+                <span className="flex items-center gap-2">
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      fill="none"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Processing...
+                </span>
+              ) : (
+                <>
+                  <FiSave size={16} /> Save Changes
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

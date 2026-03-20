@@ -602,6 +602,7 @@ const OrderList = () => {
               setIsModalOpen(false);
               setEditingOrder(null);
             }}
+            updateAPI={updateApi}
             // onSave={handleUpdateSubmit}
           />
         )}

@@ -306,9 +306,9 @@ const AccountsDashboard = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="space-y-3">
-            <div className="bg-white p-5 rounded border border-slate-200 shadow-sm">
+    
+          <div className="space-y-3 flex justify-between">
+            <div className="bg-white w-1/4 p-5 rounded border border-slate-200 shadow-sm">
               <h3 className="text-sm font-bold mb-4 uppercase text-slate-500 tracking-wider">
                 Account Balances
               </h3>
@@ -318,7 +318,8 @@ const AccountsDashboard = () => {
                 <BalanceItem label="Cash in Hand" amount="5,500" />
               </div>
             </div>
-            <div className="bg-gradient-to-br from-indigo-600 to-violet-700 p-5 rounded text-white shadow-lg">
+
+            <div className="bg-gradient-to-br w-1/4 from-indigo-600 to-violet-700 p-5 rounded text-white shadow-lg">
               <h3 className="text-sm opacity-80">
                 Estimated Profit (This Month)
               </h3>
@@ -329,62 +330,8 @@ const AccountsDashboard = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-2 bg-white rounded border border-slate-200 shadow-sm overflow-hidden flex flex-col h-fit">
-            <div className="p-4 border-b bg-slate-50/50 flex justify-between items-center">
-              <h3 className="font-bold text-slate-800 uppercase text-xs tracking-widest">
-                Recent Transactions
-              </h3>
-              <span className="text-[10px] text-slate-400 font-medium italic">
-                Auto-syncing active
-              </span>
-            </div>
-            <div className="overflow-auto max-h-[600px] custom-scrollbar">
-              <table className="w-full text-left">
-                <thead className="sticky top-0 bg-slate-50 z-10 border-b">
-                  <tr className="text-[10px] uppercase text-slate-500 font-bold">
-                    <th className="p-4">Details</th>
-                    <th className="p-4 text-center">Category</th>
-                    <th className="p-4 text-center">Method</th>
-                    <th className="p-4 text-right">Amount</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {transactions.map((t) => (
-                    <tr
-                      key={t.id}
-                      className="hover:bg-slate-50 transition-colors"
-                    >
-                      <td className="p-4">
-                        <div className="font-bold text-sm text-slate-800">
-                          {t.entity}
-                        </div>
-                        <div className="text-[10px] text-slate-400 font-mono uppercase tracking-tighter">
-                          {t.ref} • {t.date}
-                        </div>
-                      </td>
-                      <td className="p-4 text-center">
-                        <span
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${t.type === "Income" ? "bg-emerald-50 border-emerald-100 text-emerald-600" : "bg-rose-50 border-rose-100 text-rose-600"}`}
-                        >
-                          {t.category}
-                        </span>
-                      </td>
-                      <td className="p-4 text-center text-xs font-semibold text-slate-600">
-                        {t.method}
-                      </td>
-                      <td
-                        className={`p-4 text-right font-black ${t.type === "Income" ? "text-emerald-600" : "text-rose-600"}`}
-                      >
-                        {t.type === "Income" ? "+" : "-"} ৳
-                        {t.amount.toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        
+      
 
         {/* --- SALES LEDGER TABLE --- */}
         <div className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden flex flex-col h-full">
@@ -434,6 +381,9 @@ const AccountsDashboard = () => {
                   <th className="p-3 text-center text-[12px] font-black text-slate-400 uppercase">
                     Cost
                   </th>
+                  <th className="p-3 text-center text-[12px] font-black text-slate-400 uppercase">
+                    Payment
+                  </th>
                   <th className="p-3 text-right text-[12px] font-black text-emerald-600 uppercase">
                     Profit
                   </th>
@@ -475,6 +425,11 @@ const AccountsDashboard = () => {
                     <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
                       ৳{row.cost}
                     </td>
+
+                    <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
+                      N/A
+                    </td>
+
                     <td className="p-3 text-right">
                       <span
                         className={`px-2 py-0.5 rounded font-black text-[14px] ${row.profit >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}

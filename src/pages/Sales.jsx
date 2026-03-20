@@ -5,6 +5,7 @@ import {
   FiRefreshCcw,
   FiPlus,
   FiUser,
+  FiEdit3,
   FiClock,
 } from "react-icons/fi";
 import { DataContext } from "@/Context Api/ApiContext";
@@ -56,8 +57,6 @@ export default function Sales() {
       detailScrollRef.current.scrollTo({ top: 0, behavior: "instant" });
     }
   }, [filter]);
-
-
 
   return (
     <div className="mt-12 md:mt-0 font-sans">
@@ -138,20 +137,22 @@ export default function Sales() {
           <table className="w-full text-left border-separate border-spacing-0 overflow-x-auto whitespace-nowrap">
             <thead className="sticky top-0 z-20">
               <tr>
-                {/* We apply background and border-b to the TH specifically for the sticky effect to look perfect */}
                 {[
                   "Ref ID",
                   "Customer Name",
                   "Contact",
                   "Sold By",
                   "Date",
+                  "Delivery",
+                  "Type",
                   "Method",
+                  "Status",
                   "Revenue",
                 ].map((header, index) => (
                   <th
                     key={header}
-                    className={`p-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider bg-slate-50 border-b border-slate-200 
-              ${index === 4 || index === 5 ? "text-center" : index === 6 ? "text-right" : ""}`}
+                    className={`p-4 text-[11px] font-black text-slate-500 uppercase tracking-widest bg-slate-50 border-b border-slate-200 
+          ${index === 0 ? "text-left" : index === 9 ? "text-right" : "text-center"}`}
                   >
                     {header}
                   </th>
@@ -159,74 +160,114 @@ export default function Sales() {
               </tr>
             </thead>
 
-            <tbody className=" bg-white">
+            <tbody className="bg-white">
               {[...filteredSales].reverse().map((sale) => (
                 <tr
                   key={sale._id}
-                  className="hover:bg-slate-100 transition-colors duration-150"
+                  className="hover:bg-indigo-50 group border-b-8 border-slate-100"
                 >
-                  {/* Order ID */}
-                  <td className="px-4 py-3 text-sm font-medium text-indigo-600">
-                    #{sale.order_id}
+                  {/* 1. Ref ID (Left) */}
+                  <td className="pl-4 py-4 text-sm font-black text-[#1976d2]">
+                    <div className="flex items-center gap-2">
+                      <span>#{sale.order_id}</span>
+                    </div>
                   </td>
 
-                  {/* Customer Name - Title Case + 12ch Limit */}
-                  <td className="px-4 text-sm text-slate-800">
+                  {/* 2. Customer Name (Center) */}
+                  <td className="px-4 text-sm text-slate-800 font-bold">
                     <span
-                      className="block"
+                      className="block truncate max-w-[140px] mx-auto"
                       title={sale.shipping_address.recipient_name}
                     >
-                      {sale.shipping_address.recipient_name
-                        ?.toLowerCase()
-                        .split(" ")
-                        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                        .join(" ")}
+                      {sale.shipping_address.recipient_name?.toUpperCase()}
                     </span>
                   </td>
 
-                  {/* Contact */}
-                  <td className="px-4 text-sm text-slate-800">
+                  {/* 3. Contact (Center) */}
+                  <td className="px-4 text-center text-sm text-slate-600 font-bold">
                     {sale.shipping_address.phone}
                   </td>
 
-                  {/* Sold By */}
-                  <td className="px-4">
-                    <div className="flex items-center gap-2">
+                  {/* 4. Sold By (Center) */}
+                  <td className="px-4 text-center">
+                    <div className="flex items-center justify-center gap-2">
                       <div
-                        className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white 
-                  ${sale.staffName === "Online" ? "bg-slate-500" : sale.staffRole === "Moderator" ? "bg-amber-500" : "bg-indigo-600"}`}
+                        className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black text-white shadow-sm
+              ${sale.staffName === "Online" ? "bg-slate-400" : "bg-[#1976d2]"}`}
                       >
-                        {sale.staffName.charAt(0)}
+                        {sale.staffName?.charAt(0) || "U"}
                       </div>
-                      <span
-                        className={`text-sm ${sale.staffName === "Online" ? "text-slate-500 italic" : "text-slate-800"}`}
-                      >
+                      <span className="text-[11px] font-black text-slate-700 uppercase tracking-tighter">
                         {sale.staffName}
                       </span>
                     </div>
                   </td>
 
-                  {/* Date */}
-                  <td className="px-4 text-center text-sm text-slate-800">
-                    {sale.order_date.split(" ")[0]}
+                  {/* 5. Date (Center) */}
+                  <td className="px-4 text-center text-[11px] font-black text-slate-500">
+                    {sale.order_date?.split(" ")[0]}
                   </td>
 
-                  {/* Payment Method */}
+                  {/* 6. Delivery Status (Center + Branded Colors) */}
                   <td className="px-4 text-center">
-                    <span className="text-[11px] font-medium text-slate-700 border border-slate-200 px-2 py-0.5 rounded bg-slate-50">
-                      {sale.courier.payment_method}
+                    <span
+                      className={`text-[11px] font-black uppercase px-2 py-1 rounded border 
+            ${
+              sale.courier.delivery_status === "Delivered"
+                ? "bg-emerald-50 border-emerald-200 text-emerald-600"
+                : sale.courier.delivery_status === "Cancelled"
+                  ? "bg-rose-50 border-rose-200 text-rose-600"
+                  : "bg-indigo-50 border-indigo-100 text-[#1976d2]"
+            }`}
+                    >
+                      {sale.courier.delivery_status}
                     </span>
                   </td>
 
-                  {/* Revenue */}
-                  <td className="px-4 text-right text-sm font-bold text-slate-900">
-                    ৳{sale.total_amount.toLocaleString()}
+                  {/* 7. Del Type (Center) */}
+                  <td className="px-4 text-center">
+                    <span className="text-[11px] font-black text-slate-500 uppercase border border-slate-200 px-2 py-1 rounded-full bg-white">
+                      {sale.courier.del_type || "REG"}
+                    </span>
+                  </td>
+
+                  {/* 8. Payout Method (Center) */}
+                  <td className="px-4 text-center">
+                    <span
+                      className={`text-[11px] font-black px-2 py-0.5 rounded
+            ${
+              sale.courier.payment_method === "bKash"
+                ? "text-pink-600 bg-pink-50"
+                : sale.courier.payment_method === "Nagad"
+                  ? "text-orange-600 bg-orange-50"
+                  : "text-slate-500 bg-slate-100"
+            }`}
+                    >
+                      {sale.courier.payment_method || "N/A"}
+                    </span>
+                  </td>
+
+                  {/* 9. Payment Status (Center) */}
+                  <td className="px-4 text-center">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <span
+                        className={`text-[10px] font-black uppercase px-3 py-1 rounded-full
+              ${sale.courier.payment_status === "Paid" ? "bg-emerald-500 text-white" : "bg-amber-400 text- animate-pulse"}`}
+                      >
+                        {sale.courier.payment_status}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* 10. Revenue (Right) */}
+                  <td className="px-4 text-right text-sm font-black text-slate-900 bg-slate-50/50 border-l border-slate-100">
+                    <span className="text-[#1976d2] mr-0.5">৳</span>
+                    {sale.total_amount?.toLocaleString()}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-
           {/* Empty State */}
           {filteredSales.length === 0 && (
             <div className="p-20 text-center text-slate-400 text-sm font-medium uppercase tracking-widest bg-white">
