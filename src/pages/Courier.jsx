@@ -316,7 +316,7 @@ const TripleSyncDashboard = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 border-r border-slate-200 font-bold text-slate-700 text-xs uppercase">
-                        {o.customer}
+                        {o.shipping_address.recipient_name}
                       </td>
                       <td className="px-6 py-4 text-xs font-bold  uppercase">
                         #{o.courier.consignment_id}
