@@ -10,61 +10,7 @@ import {
   FiMapPin,
 } from "react-icons/fi";
 
-const dummyOrders = [
-  {
-    order_id: "475891",
-    order_date: "2026-03-17",
-    customer: "Mamun or Rashid",
-    total_amount: 44570,
-    status: "Confirmed",
-    shipping_address: {
-      phone: "01712345678",
-      address_line1: "House 12, Road 4, Dhanmondi, Dhaka City",
-    },
-    courier: {
-      delivery_charge: 70, // Inside Dhaka
-      cod_percent: 1,
-      cash_status: "Pending",
-      consignment_id: "N/A",
-    },
-  },
-  {
-    order_id: "475895",
-    order_date: "2026-03-17",
-    customer: "Ariful Islam",
-    total_amount: 12500,
-    status: "Confirmed",
-    shipping_address: {
-      phone: "01887654321",
-      address_line1: "Miah Bari, Sonagazi, Feni",
-    },
-    courier: {
-      delivery_charge: 130, // Outside Dhaka
-      cod_percent: 1,
-      cash_status: "Pending",
-      consignment_id: "N/A",
-    },
-  },
-  {
-    order_id: "475899",
-    order_date: "2026-03-17",
-    customer: "Sultana Razia",
-    total_amount: 8900,
-    status: "Confirmed",
-    shipping_address: {
-      phone: "01911223344",
-      address_line1: "Sector 7, Uttara, Dhaka City",
-    },
-    courier: {
-      delivery_charge: 70,
-      cod_percent: 1,
-      cash_status: "Pending",
-      consignment_id: "N/A",
-    },
-  },
-];
-
-const LogisticsModal = ({ isOpen, onClose, orders, onSendToCourier }) => {
+const LogisticsModal = ({ isOpen, onClose, onSendToCourier }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingId, setLoadingId] = useState(null);
   const { orderData, updateApi } = useContext(DataContext);
@@ -183,7 +129,6 @@ const LogisticsModal = ({ isOpen, onClose, orders, onSendToCourier }) => {
                       {/* Order Identity */}
                       <td className="px-6 py-3">
                         <div className="flex items-center gap-3">
-                          
                           <div>
                             <p className="text-sm font-black text-slate-800 tracking-tight leading-none mb-1">
                               #{order.order_id}
@@ -223,7 +168,6 @@ const LogisticsModal = ({ isOpen, onClose, orders, onSendToCourier }) => {
                         <p className="text-sm font-black text-slate-900">
                           ৳{order.total_amount?.toLocaleString()}
                         </p>
-                       
                       </td>
 
                       {/* Courier Fees */}
@@ -232,7 +176,6 @@ const LogisticsModal = ({ isOpen, onClose, orders, onSendToCourier }) => {
                           <span className="text-[11px] font-black bg-rose-50 text-rose-600 px-2 py-1 rounded border border-rose-100">
                             ৳{order.courier.delivery_charge}
                           </span>
-                        
                         </div>
                       </td>
 

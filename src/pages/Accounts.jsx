@@ -156,7 +156,7 @@ const AccountsDashboard = () => {
               item.product_price - (itemDiscount + couponShare),
             );
 
-            if (order.status === "Shipped" || order.status === "Confirmed") {
+            if (order.courier.payment_status === "Paid") {
               rev += sellingPrice;
             }
 
@@ -310,8 +310,8 @@ const AccountsDashboard = () => {
         </div>
 
         <div className=" flex justify-between">
-          <div className="bg-white w-1/4 p-5 rounded border border-slate-200 shadow-sm">
-            <h3 className="text-sm font-bold mb-4 uppercase text-slate-500 tracking-wider">
+          <div className="bg-white w-1/4 px-5 pt-2 rounded border border-slate-200 shadow-xs">
+            <h3 className="text-sm font-bold border-b uppercase text-slate-500 tracking-wider">
               Account Balances
             </h3>
             <div className="space-y-1">
@@ -445,7 +445,10 @@ const AccountsDashboard = () => {
                       </span>
                     </td>
                     <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
-                      <span className="px-3 p-1 bg-amber-600 text-white rounded-2xl"> {row.courier.payment_method}</span>
+                      <span className="px-3 p-1 bg-amber-600 text-white rounded-2xl">
+                        {" "}
+                        {row.courier.payment_method}
+                      </span>
                     </td>
                     <td className="p-3 text-center  border-r text-[13px] font-semibold text-slate-600">
                       <span className="px-3 bg-slate-800 p-1 text-white rounded-2xl">

@@ -90,7 +90,11 @@ export default function Sidebar() {
         {/* --- NAVIGATION --- */}
         <nav className="flex-1 px-4 mt-5 lg:mt-4 md:space-y-3  overflow-y-auto no-scrollbar">
           {links.map((link) => {
-            const isActive = location.pathname === link.path;
+            const isActive =
+              link.path === "/"
+                ? location.pathname === "/"
+                : location.pathname.startsWith(link.path);
+
             return (
               <Link
                 key={link.name}
@@ -119,10 +123,10 @@ export default function Sidebar() {
           })}
 
           {/* --- SERVICES CLICKABLE DROPDOWN --- */}
-          <div className="relative mt-4 border border-slate-700 rounded-2xl">
+          <div className="relative mt-5 border border-slate-700 rounded">
             <button
               onClick={() => setIsServicesOpen(!isServicesOpen)}
-              className={`flex items-center p-3 bg-slate-800/30 text-slate-400 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all w-full justify-start px-4`}
+              className={`flex items-center px-4 py-2 bg-slate-800/30 text-slate-400 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all w-full justify-start`}
             >
               <div className="flex items-center gap-2">
                 <FiFileText
@@ -150,7 +154,7 @@ export default function Sidebar() {
                     window.open("https://image.victusbyte.com/");
                     setIsServicesOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 bg-slate-800 hover:text-[#1976d2] rounded-2xl"
+                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 bg-slate-800 hover:text-[#1976d2] rounded"
                 >
                   Images Upload
                 </button>
@@ -161,7 +165,7 @@ export default function Sidebar() {
                     );
                     setIsServicesOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer bg-slate-800 tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 hover:text-[#1976d2] rounded-2xl "
+                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer bg-slate-800 tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 hover:text-[#1976d2] rounded "
                 >
                   E-mail Service
                 </button>

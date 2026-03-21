@@ -145,7 +145,7 @@ const SystemPersonnel = () => {
                 System Administrators{" "}
                 <span className="text-slate-900 ml-2">({admins.length})</span>
               </h2>
-              <div className="flex-1 h-[1px] bg-slate-200"></div>
+              <div className="flex-1 h-[1px] bg-slate-300"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
               {admins.map((user) => (
@@ -168,7 +168,7 @@ const SystemPersonnel = () => {
                   ({moderators.length})
                 </span>
               </h2>
-              <div className="flex-1 h-[1px] bg-slate-200"></div>
+              <div className="flex-1 h-[1px] bg-slate-300"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
               {moderators.map((user) => (

@@ -118,7 +118,7 @@ export default function Navbar({ pageTitle }) {
 
           <div className="relative">
             <img
-              className="w-10 h-10 lg:w-11 lg:h-11 rounded-2xl border-2 border-slate-100 group-hover:border-indigo-500 transition-all object-cover shadow-sm"
+              className="w-10 h-10 lg:w-11 lg:h-11 rounded-2xl border border-slate-300 group-hover:border-indigo-500 transition-all object-cover"
               src={
                 user.images ||
                 "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"

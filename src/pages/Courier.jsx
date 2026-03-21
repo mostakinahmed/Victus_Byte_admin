@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Package,
   Truck,
@@ -14,68 +14,31 @@ import {
   TrendingUp,
   Receipt,
 } from "lucide-react";
+// Icons (Lucide or Feather)
+import {
+  FiSend,
+  FiTruck,
+  FiEdit3,
+  FiMapPin,
+  FiPackage,
+  FiCreditCard,
+  FiSave,
+  FiX,
+  FiHash,
+  FiLock,
+} from "react-icons/fi";
 import Navbar from "@/components/Navbar";
 import LogisticsModal from "@/components/Courier/LogisticsModal";
 import { DataContext } from "@/Context Api/ApiContext";
+import OrderEditModal from "../components/Order/EditOrder";
 
 const TripleSyncDashboard = () => {
   const [isLogisticsOpen, setIsLogisticsOpen] = useState(false);
   const { orderData, updateApi } = useContext(DataContext);
-
-  const [orders] = useState([
-    {
-      order_id: "475891",
-      order_date: "2026-03-14",
-      total_amount: 44570,
-      customer: "Mamun or Rashid",
-      courier: {
-        consignment_id: "6DB921",
-        status: "Shipped",
-        cash_status: "Pending",
-        delivery_charge: 130,
-        cod_percent: 1,
-      },
-    },
-    {
-      order_id: "475891",
-      order_date: "2026-03-14",
-      total_amount: 44570,
-      customer: "Mamun or Rashid",
-      courier: {
-        consignment_id: "6DB921",
-        status: "Shipped",
-        cash_status: "Pending",
-        delivery_charge: 130,
-        cod_percent: 1,
-      },
-    },
-    {
-      order_id: "475891",
-      order_date: "2026-03-14",
-      total_amount: 44570,
-      customer: "Mamun or Rashid",
-      courier: {
-        consignment_id: "6DB921",
-        status: "Shipped",
-        cash_status: "Pending",
-        delivery_charge: 130,
-        cod_percent: 1,
-      },
-    },
-    {
-      order_id: "475891",
-      order_date: "2026-03-14",
-      total_amount: 44570,
-      customer: "Mamun or Rashid",
-      courier: {
-        consignment_id: "6DB921",
-        status: "Shipped",
-        cash_status: "Pending",
-        delivery_charge: 130,
-        cod_percent: 1,
-      },
-    },
-  ]);
+  const [trig, setTrig] = useState(1);
+  const [data, setData] = useState([]);
+  const [editingOrder, setEditingOrder] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const calculateFinance = (total, delCharge, codPerc) => {
     const codCharge = total * (codPerc / 100);
@@ -83,6 +46,29 @@ const TripleSyncDashboard = () => {
     return { codCharge, organicMoney };
   };
 
+  //filter data
+  useEffect(() => {
+    // Use let because we are assigning the result of the filter
+    let filtData = [];
+
+    if (trig === 1) {
+      // Standardizing to lowercase for safer matching
+      filtData = orderData.filter(
+        (o) => o.courier?.name?.toLowerCase() === "steadfast",
+      );
+    } else {
+      filtData = orderData.filter(
+        (o) => o.courier?.name?.toLowerCase() === "self",
+      );
+    }
+
+    setData(filtData);
+  }, [trig, orderData]); // Added orderData so the view updates after an Edit
+
+  const handleOrderEdit = (order) => {
+    setEditingOrder(order);
+    setIsModalOpen(true);
+  };
   return (
     <div className="bg-[#F1F5F9] font-sans mt-12 md:mt-0">
       <Navbar pageTitle={"Courier Management"} />
@@ -213,15 +199,43 @@ const TripleSyncDashboard = () => {
           />
         </div>
 
-        {/* --- LOGISTICS COMMAND LAUNCHER --- */}
-
         {/* 3. TRIPLE PORTION TABLE */}
-        <div className="bg-white rounded border border-slate-200 overflow-hidden shadow-xs">
-          <div className="px-5 py-3 border-b border-slate-100 flex justify-between items-center">
-            <h2 className="text-sm font-black uppercase tracking-widest text-slate-400">
-              All Order Matrix
-            </h2>
-            <button className="text-slate-400 hover:text-orange-600 transition">
+        <div className="bg-white rounded  overflow-hidden shadow-xs">
+          <div className="md:pr-5  border-b border-slate-100 flex justify-between items-center">
+            <div className="flex bg-slate-100  rounded gap-2 md:w-1/5 w-full mb-4 border border-slate-200 shadow-inner">
+              {/* Steadfast Dispatch Button */}
+              <button
+                onClick={() => setTrig(1)}
+                className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 text-[10px] font-black uppercase tracking-widest transition-all duration-200 rounded cursor-pointer
+      ${
+        trig === 1
+          ? "bg-[#1976d2] text-white shadow-lg shadow-indigo-200 scale-[1.02]"
+          : "text-slate-600 hover:bg-white hover:text-[#1976d2]"
+      }`}
+              >
+                <FiSend
+                  size={12}
+                  className={trig === 1 ? "animate-pulse" : ""}
+                />
+                <span>Steadfast</span>
+              </button>
+
+              {/* Self Delivery Button */}
+              <button
+                onClick={() => setTrig(2)} // Updated to 2 so you can toggle between states
+                className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 text-[10px] font-black uppercase tracking-widest transition-all duration-200 rounded cursor-pointer
+      ${
+        trig === 2
+          ? "bg-slate-800 text-white shadow-lg shadow-slate-300 scale-[1.02]"
+          : "text-slate-600 hover:bg-white hover:text-slate-800"
+      }`}
+              >
+                <FiTruck size={12} />
+                <span>Self Delivery</span>
+              </button>
+            </div>
+
+            <button className="text-slate-400 hover:text-orange-600 transition px-8">
               <RefreshCcw size={18} />
             </button>
           </div>
@@ -243,8 +257,8 @@ const TripleSyncDashboard = () => {
                     2. Courier Details
                   </th>
                   <th
-                    colSpan="5"
-                    className="px-6 py-4 text-center bg-emerald-200 text-emerald-700"
+                    colSpan={trig === 1 ? 5 : 6}
+                    className="px-6 py-4 text-center w-full bg-emerald-200 text-emerald-700"
                   >
                     3. Financial Breakdown (Money)
                   </th>
@@ -269,13 +283,20 @@ const TripleSyncDashboard = () => {
                   <th className="px-6 py-4 bg-emerald-50/20 text-red-500">
                     COD Fee (1%)
                   </th>
+
+                  {trig === 2 && (
+                    <th className="px-6 py-4 bg-emerald-50/20 text-blue-600">
+                      Update
+                    </th>
+                  )}
+
                   <th className="px-6 py-4 bg-emerald-600 text-white text-center">
                     Organic Money
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200  ">
-                {orders.map((o) => {
+                {data.map((o) => {
                   const fin = calculateFinance(
                     o.total_amount,
                     o.courier.delivery_charge,
@@ -284,7 +305,7 @@ const TripleSyncDashboard = () => {
                   return (
                     <tr
                       key={o.order_id}
-                      className="hover:bg-slate-100 transition-colors text-sm"
+                      className="hover:bg-slate-50 transition-colors text-sm"
                     >
                       <td className="px-6 py-4 font-bold text-slate-900">
                         #{o.order_id}
@@ -300,16 +321,35 @@ const TripleSyncDashboard = () => {
                       <td className="px-6 py-4 text-xs font-bold  uppercase">
                         #{o.courier.consignment_id}
                       </td>
+
+                      {/* 1. Delivery Status Badge */}
                       <td className="px-6 py-4 border-r border-slate-200 text-center">
-                        <span className="px-2 py-1.5 rounded bg-blue-50 text-blue-600 text-[10px] font-black uppercase border border-blue-100">
-                          {o.courier.status}
+                        <span
+                          className={`px-2 py-1.5 rounded text-[10px] font-black uppercase border transition-colors duration-200
+    ${
+      o.courier.delivery_status === "Delivered"
+        ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+        : "bg-blue-50 text-blue-600 border-blue-100"
+    }`}
+                        >
+                          {o.courier.delivery_status}
                         </span>
                       </td>
+
+                      {/* 2. Payment Status Badge */}
                       <td className="px-6 py-4 border-r border-slate-200 text-center">
-                        <span className="px-2 py-1.5 rounded bg-blue-50 text-blue-600 text-[10px] font-black uppercase border border-blue-100">
-                          {o.courier.cash_status}
+                        <span
+                          className={`px-2 py-1.5 rounded text-[10px] font-black uppercase border transition-colors duration-200
+    ${
+      o.courier.payment_status === "Paid"
+        ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+        : "bg-blue-50 text-blue-600 border-blue-100"
+    }`}
+                        >
+                          {o.courier.payment_status}
                         </span>
                       </td>
+
                       <td className="px-6 py-4 font-bold text-slate-800 text-xs bg-emerald-50/10">
                         ৳{o.total_amount.toLocaleString()}
                       </td>
@@ -319,6 +359,22 @@ const TripleSyncDashboard = () => {
                       <td className="px-6 py-4 font-bold text-red-500 text-xs bg-emerald-50/10">
                         -৳{fin.codCharge.toFixed(0)}
                       </td>
+                      {trig == 2 && (
+                        <td className="px-6 py-4 bg-slate-50/30  group">
+                          <div className="flex items-center justify-center mr-4">
+                            <button
+                              onClick={() => handleOrderEdit(o)}
+                              className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-gray-100 text-slate-400 hover:text-[#1976d2] hover:border-[#1976d2] hover:shadow-lg hover:shadow-indigo-100 hover:bg-slate-200 cursor-pointer "
+                              title="Edit Transaction"
+                            >
+                              {/* Background Hover Glow */}
+                              <div className="absolute inset-0 rounded-xl bg-[#1976d2]/0 group-hover:bg-[#1976d2]/5 transition-colors" />
+
+                              <FiEdit3 size={19} className="relative z-10" />
+                            </button>
+                          </div>
+                        </td>
+                      )}
                       <td className="px-6 py-4 bg-emerald-600 text-white text-center font-black ">
                         ৳{fin.organicMoney.toLocaleString()}
                       </td>
@@ -330,10 +386,21 @@ const TripleSyncDashboard = () => {
           </div>
         </div>
 
+        {isModalOpen && editingOrder && (
+          <OrderEditModal
+            order={editingOrder}
+            onClose={() => {
+              setIsModalOpen(false);
+              setEditingOrder(null);
+            }}
+            updateAPI={updateApi}
+            // onSave={handleUpdateSubmit}
+          />
+        )}
+
         <LogisticsModal
           isOpen={isLogisticsOpen}
           onClose={() => setIsLogisticsOpen(false)}
-          orders={orders} // Changed from orderData to orders to match your state
         />
       </div>
     </div>
