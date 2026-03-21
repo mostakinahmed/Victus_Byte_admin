@@ -19,7 +19,7 @@ const LogisticsModal = ({ isOpen, onClose, onSendToCourier }) => {
 
   // Filter only Confirmed orders and handle search
   const displayOrders =
-    orders?.filter(
+    orderData?.filter(
       (order) =>
         order.status === "Confirmed" &&
         (order.order_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -100,9 +100,9 @@ const LogisticsModal = ({ isOpen, onClose, onSendToCourier }) => {
         </div>
 
         {/* --- TABLE CONTAINER --- */}
-        <div className="flex-1 overflow-auto py-3">
-          <div className="bg-white border border-slate-200 rounded overflow-hidden">
-            <table className="w-full text-left border-collapse whitespace-nowrap">
+        <div className="flex-1 bg-white overflow-auto py-3">
+          <div className=" border border-slate-200 rounded ">
+            <table className="w-full text-left   overflow-x-auto whitespace-nowrap">
               {/* Table Head */}
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-black uppercase tracking-[0.15em] text-slate-500">
@@ -124,7 +124,7 @@ const LogisticsModal = ({ isOpen, onClose, onSendToCourier }) => {
                   .map((order) => (
                     <tr
                       key={order.order_id}
-                      className="hover:bg-slate-100 transition-colors group border-b border-slate-100"
+                      className="hover:bg-slate-100 border-b"
                     >
                       {/* Order Identity */}
                       <td className="px-6 py-3">
