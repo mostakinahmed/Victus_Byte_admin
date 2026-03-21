@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Package,
   Truck,
@@ -16,9 +16,11 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import LogisticsModal from "@/components/Courier/LogisticsModal";
+import { DataContext } from "@/Context Api/ApiContext";
 
 const TripleSyncDashboard = () => {
   const [isLogisticsOpen, setIsLogisticsOpen] = useState(false);
+  const { orderData, updateApi } = useContext(DataContext);
 
   const [orders] = useState([
     {
@@ -80,8 +82,6 @@ const TripleSyncDashboard = () => {
     const organicMoney = total - delCharge - codCharge;
     return { codCharge, organicMoney };
   };
-
-  // 1. Create the state
 
   return (
     <div className="bg-[#F1F5F9] font-sans mt-12 md:mt-0">
@@ -240,7 +240,7 @@ const TripleSyncDashboard = () => {
                     colSpan="2"
                     className="px-6 py-4 border-r border-slate-200 text-center"
                   >
-                    2. Pathao Logistics
+                    2. Courier Details
                   </th>
                   <th
                     colSpan="5"

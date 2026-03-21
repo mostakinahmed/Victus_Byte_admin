@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { DataContext } from "@/Context Api/ApiContext";
+import React, { useContext, useState } from "react";
 import {
   FiX,
   FiSearch,
@@ -66,6 +67,7 @@ const dummyOrders = [
 const LogisticsModal = ({ isOpen, onClose, orders, onSendToCourier }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingId, setLoadingId] = useState(null);
+  const { orderData, updateApi } = useContext(DataContext);
 
   if (!isOpen) return null;
 
@@ -163,115 +165,111 @@ const LogisticsModal = ({ isOpen, onClose, orders, onSendToCourier }) => {
                   <th className="px-6 py-4">Full Address</th>
                   <th className="px-6 py-4 text-center">COD Amount</th>
                   <th className="px-6 py-4 text-center">Delivery</th>
-                  <th className="px-6 py-4 text-right">Action</th>
+                  <th className="px-6 py-4 text-center">Action</th>
                 </tr>
               </thead>
 
               {/* Table Body */}
-              <tbody className="divide-y divide-slate-100">
-                {[
-                  {
-                    id: "475891",
-                    date: "17 Mar",
-                    customer: "Mamun or Rashid",
-                    phone: "01712345678",
-                    address: "House 12, Road 4, Dhanmondi, Dhaka City",
-                    cod: 44570,
-                    charge: 70,
-                  },
-                  {
-                    id: "475895",
-                    date: "17 Mar",
-                    customer: "Ariful Islam",
-                    phone: "01887654321",
-                    address: "Miah Bari, Sonagazi, Feni",
-                    cod: 12500,
-                    charge: 130,
-                  },
-                  {
-                    id: "475899",
-                    date: "17 Mar",
-                    customer: "Sultana Razia",
-                    phone: "01911223344",
-                    address: "Sector 7, Uttara, Dhaka City",
-                    cod: 8900,
-                    charge: 70,
-                  },
-                ].map((order) => (
-                  <tr
-                    key={order.id}
-                    className="hover:bg-slate-100 transition-colors group"
-                  >
-                    {/* Order Identity */}
-                    <td className="px-6 py-1">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-black text-[10px]">
-                          #VB
+              <tbody className="divide-y divide-slate-200">
+                {orderData
+                  .filter(
+                    (order) => order.courier.delivery_status === "Confirmed",
+                  ) // Only show Confirmed orders
+                  .map((order) => (
+                    <tr
+                      key={order.order_id}
+                      className="hover:bg-slate-100 transition-colors group border-b border-slate-100"
+                    >
+                      {/* Order Identity */}
+                      <td className="px-6 py-3">
+                        <div className="flex items-center gap-3">
+                          
+                          <div>
+                            <p className="text-sm font-black text-slate-800 tracking-tight leading-none mb-1">
+                              #{order.order_id}
+                            </p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                              {order.order_date.split(" ")[0]}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-sm font-black text-slate-800 tracking-tight">
-                            #{order.id}
-                          </p>
-                          <p className="text-[10px] font-bold text-slate-500 uppercase">
-                            {order.date}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Customer Info */}
-                    <td className="px-6 py-1">
-                      <p className="text-sm font-bold text-slate-700">
-                        {order.customer}
-                      </p>
-                      <p className="text-[11px] font-medium text-indigo-500">
-                        {order.phone}
-                      </p>
-                    </td>
-
-                    {/* Shipping Location */}
-                    <td className="px-6 py-1">
-                      <div className="flex items-start gap-2 max-w-[280px]">
-                        <FiMapPin
-                          size={14}
-                          className="text-slate-300 mt-0.5 shrink-0"
-                        />
-                        <p className="text-[13px] font-medium text-slate-500 leading-relaxed whitespace-normal line-clamp-2">
-                          {order.address}
+                      {/* Customer Info */}
+                      <td className="px-6 py-3">
+                        <p className="text-sm font-bold text-slate-700 leading-none mb-1">
+                          {order.shipping_address.recipient_name}
                         </p>
-                      </div>
-                    </td>
+                        <p className="text-[11px] font-black text-[#1976d2] ">
+                          {order.shipping_address.phone}
+                        </p>
+                      </td>
 
-                    {/* COD Amount */}
-                    <td className="px-6 py-1 text-center">
-                      <p className="text-sm font-black text-slate-900">
-                        ৳{order.cod.toLocaleString()}
-                      </p>
-                    </td>
+                      {/* Shipping Location */}
+                      <td className="px-6 py-3">
+                        <div className="flex items-start gap-2 max-w-[280px]">
+                          <FiMapPin
+                            size={12}
+                            className="text-slate-300 mt-0.5 shrink-0"
+                          />
+                          <p className="text-[12px] font-medium text-slate-500 leading-tight whitespace-normal line-clamp-2">
+                            {order.shipping_address.address_line1}
+                          </p>
+                        </div>
+                      </td>
 
-                    {/* Courier Fees */}
-                    <td className="px-6 py-1 text-center">
-                      <div className="inline-flex flex-col items-center">
-                        <span className="text-[10px] font-black bg-rose-50 text-rose-600 px-2 py-0.5 rounded border border-rose-100">
-                          -৳{order.charge}
-                        </span>
-                      </div>
-                    </td>
+                      {/* COD Amount */}
+                      <td className="px-6 py-3 text-center">
+                        <p className="text-sm font-black text-slate-900">
+                          ৳{order.total_amount?.toLocaleString()}
+                        </p>
+                       
+                      </td>
 
-                    {/* Single Dispatch Button */}
-                    <td className="px-6 py-3 text-right">
-                      <button className="bg-slate-900 text-white px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 active:scale-95 transition-all shadow-md shadow-slate-200 flex items-center gap-2 ml-auto">
-                        <fiSend size={12} /> Send Steadfast
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      {/* Courier Fees */}
+                      <td className="px-6 py-3 text-center">
+                        <div className="inline-flex flex-col items-center">
+                          <span className="text-[11px] font-black bg-rose-50 text-rose-600 px-2 py-1 rounded border border-rose-100">
+                            ৳{order.courier.delivery_charge}
+                          </span>
+                        
+                        </div>
+                      </td>
+
+                      {/* --- COMPACT ACTION ROW --- */}
+                      <td className="px-6 py-3 text-right">
+                        <div className="flex items-center justify-end gap-3">
+                          {/* Steadfast Button */}
+                          <button
+                            onClick={() => handleSteadfastDispatch(order)}
+                            className="group h-8 bg-[#1976d2] hover:bg-indigo-700 text-white px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-sm flex items-center gap-2 border border-white/10 cursor-pointer"
+                          >
+                            <FiSend
+                              size={11}
+                              className="group-hover:translate-x-0.5 transition-transform"
+                            />
+                            <span>Steadfast</span>
+                          </button>
+
+                          {/* Self Delivery Button */}
+                          <button
+                            onClick={() => handleSelfDispatch(order)}
+                            className="group h-8 bg-slate-800 hover:bg-slate-900 text-white px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 border border-slate-700 flex items-center gap-2 cursor-pointer"
+                          >
+                            <FiTruck
+                              size={11}
+                              className="group-hover:text-indigo-400"
+                            />
+                            <span>Self</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
         </div>
-
-      
       </div>
     </div>
   );

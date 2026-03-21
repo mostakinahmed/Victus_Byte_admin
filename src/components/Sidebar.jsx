@@ -88,7 +88,7 @@ export default function Sidebar() {
         </div>
 
         {/* --- NAVIGATION --- */}
-        <nav className="flex-1 px-4 mt-5 lg:mt-4 md:space-y-2  overflow-y-auto no-scrollbar">
+        <nav className="flex-1 px-4 mt-5 lg:mt-4 md:space-y-3  overflow-y-auto no-scrollbar">
           {links.map((link) => {
             const isActive = location.pathname === link.path;
             return (
@@ -96,7 +96,7 @@ export default function Sidebar() {
                 key={link.name}
                 to={link.path}
                 onClick={() => setIsMobileExpanded(false)}
-                className={`group flex items-center px-3 py-2.5  rounded transition-all ${
+                className={`group flex items-center px-3 py-2  rounded transition-all ${
                   isActive
                     ? "bg-[#1976d2] text-white"
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"

@@ -139,47 +139,50 @@ const AccountsDashboard = () => {
       // ✅ Keep track of SKUs already added to this specific order's ledger
       const usedSkuIDs = new Set();
 
-      order.items?.forEach((item) => {
-        const productStock = stockData.find(
-          (stock) => stock.pID === item.product_id,
-        );
-
-        if (productStock) {
-          // ✅ FIND logic change: Look for SKU matching OID AND NOT already used in this loop
-          const soldSKU = productStock.SKU?.find(
-            (sku) => sku.OID === order.order_id && !usedSkuIDs.has(sku.skuID),
+      if (order.courier.payment_status === "Paid") {
+        order.items?.forEach((item) => {
+          const productStock = stockData.find(
+            (stock) => stock.pID === item.product_id,
           );
 
-          const itemDiscount = item.discount || 0;
-          const sellingPrice = Math.round(
-            item.product_price - (itemDiscount + couponShare),
-          );
+          if (productStock) {
+            // ✅ FIND logic change: Look for SKU matching OID AND NOT already used in this loop
+            const soldSKU = productStock.SKU?.find(
+              (sku) => sku.OID === order.order_id && !usedSkuIDs.has(sku.skuID),
+            );
 
-          if (order.status === "Shipped" || order.status === "Confirmed") {
-            rev += sellingPrice;
+            const itemDiscount = item.discount || 0;
+            const sellingPrice = Math.round(
+              item.product_price - (itemDiscount + couponShare),
+            );
+
+            if (order.status === "Shipped" || order.status === "Confirmed") {
+              rev += sellingPrice;
+            }
+
+            if (soldSKU) {
+              // ✅ Mark this SKU as "used" so the next duplicate item skips it
+              usedSkuIDs.add(soldSKU.skuID);
+
+              masterLedger.push({
+                oid: order.order_id,
+                sku: soldSKU.skuID,
+                pid: item.product_id,
+                pName: item.product_name || "Unknown Product",
+                saleDate: order.order_date,
+                webPrice: item.product_price,
+                discount: itemDiscount,
+                coupon: Math.round(couponShare),
+                sellingPrice: sellingPrice,
+                cost: soldSKU.cost,
+                profit: sellingPrice - soldSKU.cost,
+                comment: soldSKU.comment,
+                courier: order.courier,
+              });
+            }
           }
-
-          if (soldSKU) {
-            // ✅ Mark this SKU as "used" so the next duplicate item skips it
-            usedSkuIDs.add(soldSKU.skuID);
-
-            masterLedger.push({
-              oid: order.order_id,
-              sku: soldSKU.skuID,
-              pid: item.product_id,
-              pName: item.product_name || "Unknown Product",
-              saleDate: order.order_date,
-              webPrice: item.product_price,
-              discount: itemDiscount,
-              coupon: Math.round(couponShare),
-              sellingPrice: sellingPrice,
-              cost: soldSKU.cost,
-              profit: sellingPrice - soldSKU.cost,
-              comment: soldSKU.comment,
-            });
-          }
-        }
-      });
+        });
+      }
     });
 
     return { filteredSalesLedger: masterLedger, revenueAccumulator: rev };
@@ -306,32 +309,28 @@ const AccountsDashboard = () => {
           </button>
         </div>
 
-    
-          <div className="space-y-3 flex justify-between">
-            <div className="bg-white w-1/4 p-5 rounded border border-slate-200 shadow-sm">
-              <h3 className="text-sm font-bold mb-4 uppercase text-slate-500 tracking-wider">
-                Account Balances
-              </h3>
-              <div className="space-y-4">
-                <BalanceItem label="bKash Merchant" amount="45,000" />
-                <BalanceItem label="City Bank" amount="62,300" />
-                <BalanceItem label="Cash in Hand" amount="5,500" />
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br w-1/4 from-indigo-600 to-violet-700 p-5 rounded text-white shadow-lg">
-              <h3 className="text-sm opacity-80">
-                Estimated Profit (This Month)
-              </h3>
-              <div className="text-3xl font-bold mt-1">৳{monthlyNetProfit}</div>
-              <div className="mt-4 flex items-center gap-2 text-xs bg-white/20 w-fit px-2 py-1 rounded-full">
-                <ArrowUpRight size={14} /> Tracking Healthy
-              </div>
+        <div className=" flex justify-between">
+          <div className="bg-white w-1/4 p-5 rounded border border-slate-200 shadow-sm">
+            <h3 className="text-sm font-bold mb-4 uppercase text-slate-500 tracking-wider">
+              Account Balances
+            </h3>
+            <div className="space-y-1">
+              <BalanceItem label="bKash Merchant" amount="45,000" />
+              <BalanceItem label="City Bank" amount="62,300" />
+              <BalanceItem label="Cash in Hand" amount="5,500" />
             </div>
           </div>
 
-        
-      
+          <div className="bg-gradient-to-br w-1/4 from-indigo-600 to-violet-700 p-5 rounded text-white shadow-lg">
+            <h3 className="text-sm opacity-80">
+              Estimated Profit (This Month)
+            </h3>
+            <div className="text-3xl font-bold mt-1">৳{monthlyNetProfit}</div>
+            <div className="mt-4 flex items-center gap-2 text-xs bg-white/20 w-fit px-2 py-1 rounded-full">
+              <ArrowUpRight size={14} /> Tracking Healthy
+            </div>
+          </div>
+        </div>
 
         {/* --- SALES LEDGER TABLE --- */}
         <div className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden flex flex-col h-full">
@@ -372,17 +371,25 @@ const AccountsDashboard = () => {
                   <th className="p-3 text-center text-[12px] font-black text-rose-400 uppercase">
                     Discount
                   </th>
+                  <th className="p-3 text-center text-[12px] font-black text-rose-400 uppercase"></th>
                   <th className="p-3 text-center text-[12px] font-black text-orange-400 uppercase">
                     Coupon
                   </th>
                   <th className="p-3 text-center text-[12px] font-black text-indigo-600 uppercase">
                     Selling
                   </th>
+                  <th className=" text-center text-[17px] font-black text-indigo-600 uppercase"></th>
                   <th className="p-3 text-center text-[12px] font-black text-slate-400 uppercase">
                     Cost
                   </th>
-                  <th className="p-3 text-center text-[12px] font-black text-slate-400 uppercase">
-                    Payment
+                  <th className="p-3 text-center text-[12px] font-black text-orange-600 uppercase">
+                    Pay. Status
+                  </th>
+                  <th className="p-3 text-center text-[12px] font-black text-orange-600  uppercase">
+                    Pay. Method
+                  </th>
+                  <th className="p-3 text-center text-[12px] font-black text-orange-600  uppercase">
+                    Status
                   </th>
                   <th className="p-3 text-right text-[12px] font-black text-emerald-600 uppercase">
                     Profit
@@ -413,28 +420,45 @@ const AccountsDashboard = () => {
                     <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
                       ৳{row.webPrice}
                     </td>
-                    <td className="p-3 text-center text-[13px] font-semibold text-rose-500">
+                    <td className="p-3 text-center border-l text-[13px] font-semibold text-rose-500">
                       ৳{row.discount}
+                    </td>
+                    <td className="p-3 text-center text-[17px] font-semibold text-rose-500">
+                      +
                     </td>
                     <td className="p-3 text-center text-[13px] font-semibold text-orange-500">
                       ৳{row.coupon}
                     </td>
-                    <td className="p-3 text-center text-[13px] font-black text-indigo-600 bg-indigo-50/20">
+                    <td className="p-3 text-center border-l text-[13px] font-black text-indigo-600 bg-indigo-50/20">
                       ৳{row.sellingPrice}
+                    </td>
+                    <td className="p-3 text-center text-[17px] font-black text-indigo-600 bg-indigo-50/20">
+                      -
                     </td>
                     <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
                       ৳{row.cost}
                     </td>
 
+                    <td className="p-3 border-l text-center text-[13px]  text-white  ">
+                      <span className="bg-green-600 p-1 px-3 font-bold  rounded-2xl">
+                        {row.courier.payment_status}
+                      </span>
+                    </td>
                     <td className="p-3 text-center text-[13px] font-semibold text-slate-600">
-                      N/A
+                      <span className="px-3 p-1 bg-amber-600 text-white rounded-2xl"> {row.courier.payment_method}</span>
+                    </td>
+                    <td className="p-3 text-center  border-r text-[13px] font-semibold text-slate-600">
+                      <span className="px-3 bg-slate-800 p-1 text-white rounded-2xl">
+                        {" "}
+                        {row.courier.delivery_status}
+                      </span>
                     </td>
 
                     <td className="p-3 text-right">
                       <span
-                        className={`px-2 py-0.5 rounded font-black text-[14px] ${row.profit >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}
+                        className={`px-3 p-1 rounded font-black text-[15px] ${row.profit >= 0 ? "bg-emerald-200 text-emerald-800" : "bg-rose-100 text-rose-700"}`}
                       >
-                        ৳{row.profit}
+                        ৳ {row.profit}
                       </span>
                     </td>
                   </tr>
