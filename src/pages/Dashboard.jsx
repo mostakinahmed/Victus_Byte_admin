@@ -27,6 +27,7 @@ export default function Dashboard() {
 
         // Successfully setting the data
         setStations(response.data);
+        
         setLoading(false);
       } catch (err) {
         console.error(

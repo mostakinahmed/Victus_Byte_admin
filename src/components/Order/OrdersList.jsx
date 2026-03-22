@@ -25,10 +25,12 @@ import {
   FiMail,
   FiHash,
   FiClock,
+  FiX,
   FiAlertCircle,
 } from "react-icons/fi";
 import api from "@/Context Api/api";
 import OrderEditModal from "./EditOrder";
+import Invoice from "../Tools/Invoice";
 
 const OrderList = () => {
   const { productData, orderData, updateApi, stockData } =
@@ -141,7 +143,6 @@ const OrderList = () => {
     }));
   };
 
-  //SKU validation
   useEffect(() => {
     const newStatus = {};
     if (!showDetails?.items) return;
@@ -285,20 +286,12 @@ const OrderList = () => {
     setIsModalOpen(true);
   };
 
-  const handleUpdateSubmit = async (updatedOrder) => {
-    try {
-      const res = await api.put(
-        `/order/update/${updatedOrder._id}`,
-        updatedOrder,
-      );
+  // ... existing states
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
 
-      if (res.data.success) {
-        setIsModalOpen(false);
-        updateApi();
-      }
-    } catch (err) {
-      console.error(err);
-    }
+  // Updated Handler
+  const handleGenerateReceipt = (order) => {
+    setSelectedInvoice(order);
   };
 
   //current product cat find
@@ -459,7 +452,7 @@ const OrderList = () => {
       {/* Orders Table */}
       <div className="md:flex gap-3 ">
         {/* Left Side: Order Table */}
-        <div className="lg:w-5/8 bg-white rounded md:max-h-165 max-h-90  overflow-auto border border-slate-300  mb-5 lg:mb-0">
+        <div className="lg:w-5/7 bg-white rounded md:max-h-165 max-h-90  overflow-auto border border-slate-300  mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
             <table className="min-w-full table-auto text-left border-collapse ">
               <thead>
@@ -476,6 +469,10 @@ const OrderList = () => {
                   <th className="px-3 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-wider text-center">
                     Fulfillment Status
                   </th>
+                  <th className="px-2 pr-5 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-[0.1em] text-center">
+                    Invoice
+                  </th>
+
                   <th className="px-2 pr-5 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-[0.1em] text-center">
                     Edit
                   </th>
@@ -554,7 +551,29 @@ const OrderList = () => {
                             {order.courier.delivery_status}
                           </span>
                         </td>
-
+                        <td className="px-1 text-center">
+                          <button
+                            onClick={() => handleGenerateReceipt(order)}
+                            className="p-2 text-slate-400 cursor-pointer hover:text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors duration-200 group"
+                            title="Generate Receipt"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              {/* Receipt/Invoice Icon */}
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                              />
+                            </svg>
+                          </button>
+                        </td>
                         <td className="px-1 text-center">
                           <button
                             onClick={() => handleOrderEdit(order)}
@@ -605,6 +624,33 @@ const OrderList = () => {
             updateAPI={updateApi}
             // onSave={handleUpdateSubmit}
           />
+        )}
+
+        {/* RECEIPT MODAL */}
+        {selectedInvoice && (
+          <div className="fixed inset-0 z-[300] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 print:p-0 print:bg-white">
+            <div className="bg-white rounded-2xl shadow-2xl relative max-w-4xl w-full max-h-[90vh] overflow-y-auto print:max-h-full print:shadow-none print:rounded-none">
+              {/* Header Action Bar - Hidden during print */}
+              <div className="sticky top-0 bg-white border-b border-slate-100 p-4 flex justify-between items-center z-10 print:hidden">
+                <h3 className="font-black uppercase tracking-widest text-slate-800 text-sm">
+                  Document Preview
+                </h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setSelectedInvoice(null)}
+                    className="p-2 hover:bg-slate-100 rounded-full text-slate-500 cursor-pointer"
+                  >
+                    <FiX size={20} />
+                  </button>
+                </div>
+              </div>
+
+              {/* THE ACTUAL INVOICE COMPONENT */}
+              <div className="p-4 md:p-8">
+                <Invoice order={selectedInvoice} close={setSelectedInvoice} />
+              </div>
+            </div>
+          </div>
         )}
 
         {/* right side */}
