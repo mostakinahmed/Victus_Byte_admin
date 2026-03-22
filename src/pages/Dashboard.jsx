@@ -3,8 +3,46 @@ import FuzzyText from "@/components/FuzzyText";
 import Navbar from "../components/Navbar";
 import SmsBalanceCard from "@/components/SmsBalanceCard";
 import SmsMonitor from "@/components/SmsMonitor";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Dashboard() {
+  const [stations, setStations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchStations = async () => {1
+      try {
+        const response = await axios.get(
+          "https://portal.packzy.com/api/v1/police_stations",
+          {
+            headers: {
+              "Api-Key": "gmao1fp9rnox99dypl04ncaa9prloriw", // Replace with real key
+              "Secret-Key": "1h0hytifi9ikwcgfpalhqaee", // Replace with real key
+              "Content-Type": "application/json",
+            },
+          },
+        );
+
+        // Successfully setting the data
+        setStations(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error(
+          "Steadfast API Error:",
+          err.response?.data || err.message,
+        );
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchStations();
+  }, []);
+
+  console.log(stations);
+
   return (
     <div className="  pb-10 mt-12 md:mt-0">
       <Navbar pageTitle="System Overview" />
