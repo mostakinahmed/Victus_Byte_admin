@@ -14,14 +14,11 @@ export default function Invoice({ order, close }) {
   );
 
   // Financial Calculations for UI and PDF Consistency
-  const totalDiscount = order.items.reduce(
+  let totalDiscount = order.items.reduce(
     (sum, item) => sum + (Number(item.discount) || 0),
     0,
   );
-
-  const shipping = Number(order.shipping_cost || 0);
-  const discount = Number(order.discount || 0);
-  const total = subtotal + shipping - discount;
+  totalDiscount = totalDiscount + order.coupon?.value || 0;
 
   const handleDownload = () => {
     const doc = new jsPDF({
@@ -262,7 +259,7 @@ export default function Invoice({ order, close }) {
             </div>
             <div className="flex justify-between text-lg font-black text-[#FF751F] pt-3 border-t border-slate-100">
               <span>TOTAL:</span>
-              <span className="font-mono italic">৳{total.toFixed(2)}</span>
+              <span className="font-mono italic">৳{order.total_amount}</span>
             </div>
           </div>
         </div>
