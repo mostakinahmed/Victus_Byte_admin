@@ -467,7 +467,7 @@ const OrderList = () => {
                     Placement Date
                   </th>
                   <th className="px-3 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-wider text-center">
-                    Fulfillment Status
+                    Delivery Status
                   </th>
                   <th className="px-2 pr-5 py-2 text-[11px] font-bold text-slate-600 uppercase tracking-[0.1em] text-center">
                     Invoice

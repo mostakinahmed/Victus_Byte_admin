@@ -203,7 +203,7 @@ const LogisticsModal = ({ isOpen, onClose, onSendToCourier }) => {
                               size={11}
                               className="group-hover:text-indigo-400"
                             />
-                            <span>Self</span>
+                            <span>ByteXpress</span>
                           </button>
                         </div>
                       </td>

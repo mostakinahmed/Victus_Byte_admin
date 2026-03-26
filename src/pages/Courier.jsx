@@ -58,7 +58,7 @@ const TripleSyncDashboard = () => {
       );
     } else {
       filtData = orderData.filter(
-        (o) => o.courier?.name?.toLowerCase() === "self",
+        (o) => o.courier?.name === "ByteXpress",
       );
     }
 
@@ -231,7 +231,7 @@ const TripleSyncDashboard = () => {
       }`}
               >
                 <FiTruck size={12} />
-                <span>Self Delivery</span>
+                <span>ByteXpress</span>
               </button>
             </div>
 
@@ -360,11 +360,11 @@ const TripleSyncDashboard = () => {
                         -৳{fin.codCharge.toFixed(0)}
                       </td>
                       {trig == 2 && (
-                        <td className="px-6 py-4 bg-slate-50/30  group">
+                        <td className="px-6 py-2 group">
                           <div className="flex items-center justify-center mr-4">
                             <button
                               onClick={() => handleOrderEdit(o)}
-                              className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-gray-100 text-slate-400 hover:text-[#1976d2] hover:border-[#1976d2] hover:shadow-lg hover:shadow-indigo-100 hover:bg-slate-200 cursor-pointer "
+                              className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-slate-200 text-slate-500 hover:text-[#1976d2] hover:border-[#1976d2] hover:shadow-lg hover:shadow-indigo-100 hover:bg-slate-200 cursor-pointer "
                               title="Edit Transaction"
                             >
                               {/* Background Hover Glow */}
