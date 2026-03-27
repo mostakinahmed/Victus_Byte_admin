@@ -16,122 +16,26 @@ import {
 
 import Navbar from "@/components/Navbar";
 import { DataContext } from "@/Context Api/ApiContext";
-
-const expenseCategories = {
-  Logistics: [
-    "Courier Fees",
-    "Packaging Materials",
-    "Return Shipping (RTO)",
-    "Warehouse Labor",
-  ],
-  Marketing: [
-    "Facebook Ads",
-    "Google Ads",
-    "Influencer Payment",
-    "Product Photography",
-  ],
-  Operations: [
-    "Office Rent",
-    "Utility Bills (Net/Elec)",
-    "Software/SaaS",
-    "Stationery",
-  ],
-  Sourcing: ["Product Purchase", "Import Duty", "Factory Transport"],
-  Miscellaneous: ["Tea/Snacks", "Rickshaw/Uber", "Others"],
-};
+import FinancialLedger from "@/components/Accounts/Financialedger";
+import axios from "axios";
 
 const AccountsDashboard = () => {
-  const { orderData, stockData } = useContext(DataContext);
+  const { orderData, stockData, updateApi, transactonData } =
+    useContext(DataContext);
 
-  // Modal visibility states
-  const [isInvestmentModalOpen, setIsInvestmentModalOpen] = useState(false);
-  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
-  const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
-
-  const [mainCat, setMainCat] = useState("");
-  const [subCat, setSubCat] = useState("");
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
+  const [transactions, setTransactions] = useState([]);
 
-  // Mock static data for non-automated stats
-  const [transactions] = useState([
-    {
-      id: 1,
-      date: "2026-03-12 10:30",
-      type: "Income",
-      category: "Product Sale",
-      entity: "Mostakin Ahmed",
-      method: "bKash",
-      amount: 4100,
-      ref: "#INV-8821",
-    },
-    {
-      id: 2,
-      date: "2026-03-13 11:15",
-      type: "Expense",
-      category: "Ad Spend",
-      entity: "Facebook Ads",
-      method: "City Bank",
-      amount: 5000,
-      ref: "#EXP-0041",
-    },
-  ]);
-
-  // --- CORE CALCULATION LOGIC ---
-  // const { filteredSalesLedger, revenueAccumulator } = useMemo(() => {
-  //   if (!orderData || !stockData)
-  //     return { filteredSalesLedger: [], revenueAccumulator: 0 };
-
-  //   const masterLedger = [];
-  //   let rev = 0;
-
-  //   orderData.forEach((order) => {
-  //     const numItems = order.items?.length || 1;
-
-  //     order.items?.forEach((item) => {
-  //       const productStock = stockData.find(
-  //         (stock) => stock.pID === item.product_id,
-  //       );
-
-  //       if (productStock) {
-  //         const soldSKU = productStock.SKU?.find(
-  //           (sku) => sku.OID === order.order_id,
-  //         );
-
-  //         // Calculate per-unit price: (Item Price) - (Global Discount / Number of Units) - (Coupon / Number of Units)
-  //         const discountShare = (order.discount || 0) / numItems;
-  //         const couponShare = (order.coupon?.value || 0) / numItems;
-  //         const sellingPrice = Math.round(
-  //           item.product_price - (discountShare + couponShare),
-  //         );
-
-  //         // Sum revenue for confirmed/shipped orders
-  //         if (order.status === "Shipped" || order.status === "Confirmed") {
-  //           rev += sellingPrice;
-  //         }
-
-  //         if (soldSKU) {
-  //           masterLedger.push({
-  //             oid: order.order_id,
-  //             sku: soldSKU.skuID,
-  //             pid: item.product_id,
-  //             pName: item.product_name || "Unknown Product",
-  //             saleDate: order.order_date,
-  //             webPrice: item.product_price,
-  //             discount: Math.round(discountShare),
-  //             coupon: Math.round(couponShare),
-  //             sellingPrice: sellingPrice,
-  //             cost: soldSKU.cost,
-  //             profit: sellingPrice - soldSKU.cost,
-  //             comment: soldSKU.comment,
-  //           });
-  //         }
-  //       }
-  //     });
-  //   });
-
-  //   return { filteredSalesLedger: masterLedger, revenueAccumulator: rev };
-  // }, [orderData, stockData]);
+  // 1. Create the Refresh Function
+  const handleRefresh = () => {
+    // If your Context API has a function to re-fetch data, call it here:
+    if (updateApi) {
+      updateApi();
+    } else {
+      console.log("Refreshing data from server...");
+    }
+  };
 
   // CORE CALCULATION LOGIC
   const { filteredSalesLedger, revenueAccumulator } = useMemo(() => {
@@ -268,6 +172,19 @@ const AccountsDashboard = () => {
     }, 0);
   }, [orderData]);
 
+  // --- FETCH SUMMARY DATA ---
+
+  //total invested money
+  const totalInvestment = useMemo(() => {
+    // 1. Safety check: if transactions is empty or not an array, return 0
+    if (!transactonData || !Array.isArray(transactonData)) return 0;
+
+    // 2. Filter for investments and sum the amounts
+    return transactonData
+      .filter((item) => item.type === "investment")
+      .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+  }, [transactonData]);
+
   const monthlyNetProfit = useMemo(() => {
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -358,7 +275,7 @@ const AccountsDashboard = () => {
           <div class="max-w-4xl p-4 bg-white border border-slate-200 rounded font-sans">
             <div class="flex items-center justify-between pb-3 mb-1 border-b border-slate-100">
               <div>
-                <h2 class="text-xs font-bold tracking-widest text-slate-400 uppercase">
+                <h2 class="text-xs font-bold tracking-widest text-slate-500 uppercase">
                   Total Capital
                 </h2>
                 <p class="text-2xl font-extrabold text-slate-900 leading-none mt-1.5">
@@ -413,7 +330,7 @@ const AccountsDashboard = () => {
                 <span class="text-[10px] font-bold uppercase text-slate-500">
                   Equity Capital
                 </span>
-                <p class="mt-1 text-xl font-bold text-indigo-700">৳0.00</p>
+                <p class="mt-1 text-xl font-bold text-indigo-700">৳{totalInvestment}</p>
               </div>
             </div>
           </div>
@@ -518,177 +435,7 @@ const AccountsDashboard = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded border border-slate-300">
-          <div className="flex items-center md:gap-4">
-            <h2 className="text-lg font-bold mr-1 text-slate-800">
-              Financial Ledger
-            </h2>
-            <div className="flex gap-2">
-              <button className="px-3 py-1 text-xs font-medium bg-slate-100 rounded hover:bg-slate-200 transition-colors">
-                This Month
-              </button>
-              <button className="px-3 py-1 text-xs font-medium bg-white border border-slate-200 rounded hover:bg-slate-50 transition-colors">
-                Export PDF
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row w-full md:w-auto gap-6">
-            {/* 1. Invested Money (Capital Inflow) */}
-            <button
-              onClick={() => setIsInvestmentModalOpen(true)}
-              className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-2 rounded font-bold text-sm transition-all shadow-sm active:scale-95"
-            >
-              <PlusCircle size={16} /> Add Investment
-            </button>
-
-            {/* 2. Purchase Product Cost (Productive Cost / COGS) */}
-            <button
-              onClick={() => setIsPurchaseModalOpen(true)}
-              className="flex items-center justify-center gap-2 bg-[#1976d2] hover:bg-blue-700 text-white px-6 py-2 rounded font-bold text-sm transition-all shadow-sm active:scale-95"
-            >
-              <ShoppingCart size={16} /> Product Purchase
-            </button>
-
-            {/* 3. Non-Productive Expense (OPEX) */}
-            <button
-              onClick={() => setIsExpenseModalOpen(true)}
-              className="flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded font-bold text-sm transition-all shadow-sm active:scale-95"
-            >
-              <TrendingDown size={16} /> Log New Expense
-            </button>
-          </div>
-        </div>
-
-        {isInvestmentModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-              <div className="bg-emerald-600 p-4 flex justify-between items-center text-white">
-                <h3 className="font-bold flex items-center gap-2">
-                  <PlusCircle size={20} /> Add Investment Money
-                </h3>
-                <button
-                  onClick={() => setIsInvestmentModalOpen(false)}
-                  className="hover:bg-emerald-700 p-1 rounded"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <form className="p-6 space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                    Investor Name / Source
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Owner Capital"
-                    className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                    Investment Amount (৳)
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="0.00"
-                    className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 outline-none font-mono text-lg"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                    Date
-                  </label>
-                  <input
-                    type="date"
-                    className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 outline-none"
-                    defaultValue={new Date().toISOString().split("T")[0]}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition-colors mt-2"
-                >
-                  Confirm Investment
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {isPurchaseModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-              <div className="bg-[#1976d2] p-4 flex justify-between items-center text-white">
-                <h3 className="font-bold flex items-center gap-2">
-                  <ShoppingCart size={20} /> Product Purchase Cost
-                </h3>
-                <button
-                  onClick={() => setIsPurchaseModalOpen(false)}
-                  className="hover:bg-blue-700 p-1 rounded"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <form className="p-6 space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                    Supplier / Product Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Samsung Galaxy S24 Batch"
-                    className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                      Unit Cost (৳)
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="0"
-                      className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                      Quantity
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="1"
-                      className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1">
-                    Total Bill (৳)
-                  </label>
-                  <input
-                    type="number"
-                    disabled
-                    className="w-full p-2 bg-slate-100 border border-slate-300 rounded font-bold text-blue-700"
-                    placeholder="Auto-calculated"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-[#1976d2] hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors mt-2"
-                >
-                  Log Purchase Cost
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
+        <FinancialLedger onRefresh={handleRefresh} />
         {/* --- SALES LEDGER TABLE --- */}
         <div className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden flex flex-col h-full">
           <div className="p-4 border-b bg-[#1976d2] flex justify-between items-center">
@@ -841,100 +588,6 @@ const AccountsDashboard = () => {
           </div>
         </div>
       </div>
-
-      {/* --- EXPENSE MODAL --- */}
-      {isExpenseModalOpen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          onClick={(e) =>
-            e.target === e.currentTarget && setIsExpenseModalOpen(false)
-          }
-        >
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
-          <div className="bg-white w-full max-w-md rounded-xl shadow-2xl relative z-10 overflow-hidden border border-slate-200">
-            <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
-              <div className="flex items-center gap-2 text-rose-600">
-                <TrendingDown size={20} />
-                <h3 className="font-bold text-slate-800 text-xs uppercase tracking-widest">
-                  Record Expense
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsExpenseModalOpen(false)}
-                className="text-slate-400 hover:text-rose-500"
-              >
-                <XCircle size={24} />
-              </button>
-            </div>
-            <div className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                    Main Category
-                  </label>
-                  <select
-                    className="w-full p-2.5 border rounded-lg text-sm bg-white"
-                    value={mainCat}
-                    onChange={(e) => {
-                      setMainCat(e.target.value);
-                      setSubCat("");
-                    }}
-                  >
-                    <option value="">Select...</option>
-                    {Object.keys(expenseCategories).map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                    Sub Category
-                  </label>
-                  <select
-                    className="w-full p-2.5 border rounded-lg text-sm bg-white"
-                    disabled={!mainCat}
-                    value={subCat}
-                    onChange={(e) => setSubCat(e.target.value)}
-                  >
-                    <option value="">Select...</option>
-                    {mainCat &&
-                      expenseCategories[mainCat].map((sub) => (
-                        <option key={sub} value={sub}>
-                          {sub}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                    Amount (৳)
-                  </label>
-                  <input
-                    type="number"
-                    className="w-full p-2.5 border rounded-lg text-sm font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                    Source
-                  </label>
-                  <select className="w-full p-2.5 border rounded-lg text-sm">
-                    <option>Cash</option>
-                    <option>City Bank</option>
-                  </select>
-                </div>
-              </div>
-              <button className="w-full bg-rose-600 text-white py-3.5 rounded-lg font-bold uppercase text-xs tracking-widest">
-                Confirm Transaction
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
