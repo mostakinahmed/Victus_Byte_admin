@@ -341,7 +341,7 @@ const FinancialLedger = ({ onRefresh }) => {
       {/* --- SUMMARY MODAL --- */}
       {isSummaryModalOpen && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl w-full max-w-5xl h-[80vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200">
+          <div className="bg-white rounded-2xl w-full max-w-5xl h-[70vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200">
             {/* Header */}
             <div className="p-4 bg-slate-800 text-white flex justify-between items-center">
               <div className="flex items-center gap-3">

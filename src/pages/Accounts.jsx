@@ -261,52 +261,6 @@ const AccountsDashboard = () => {
       .toLocaleString();
   }, [filteredSalesLedger]);
 
-  const accountStats = [
-    {
-      title: "Total Revenue",
-      value: "৳" + totalRevenue.toLocaleString(),
-      icon: TrendingUp,
-      color: "border-emerald-300 bg-emerald-50 text-emerald-700",
-    },
-    {
-      title: "Total Expense",
-      value: "৳ 0",
-      icon: TrendingDown,
-      color: "border-rose-300 bg-rose-50 text-rose-700",
-    },
-    {
-      title: "Accounts Receivable",
-      value: "৳ 0",
-      icon: Clock,
-      color: "border-amber-300 bg-amber-50 text-amber-700",
-    },
-    {
-      title: "Net Profit",
-      value: "৳",
-      icon: Wallet,
-      color: "border-indigo-300 bg-indigo-50 text-indigo-700",
-    },
-
-    {
-      title: "Total Stock/Asset",
-      value: "৳ 0",
-      icon: Percent,
-      color: "border-slate-300 bg-slate-50 text-slate-700",
-    },
-    {
-      title: "Capital",
-      value: "৳ 0",
-      icon: RotateCcw,
-      color: "border-orange-300 bg-orange-50 text-orange-700",
-    },
-    {
-      title: "Cash on Hand",
-      value: "৳ 0",
-      icon: Banknote,
-      color: "border-cyan-300 bg-cyan-50 text-cyan-700",
-    },
-  ];
-
   //calculate current cash
   const currentCash =
     totalInvestment + totalRevenue - (totalExpense + totalPurchase);
@@ -390,7 +344,7 @@ const AccountsDashboard = () => {
 
           <div className="w-full bg-white border border-slate-100 rounded  overflow-hidden flex flex-col h-full font-sans">
             {/* Header with Glassmorphism feel */}
-            <div className="p-3 bg-slate-800 text-white flex justify-between items-center">
+            <div className="px-3 py-2 bg-slate-800 text-white flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <div className="p-1 bg-emerald-500 rounded text-white">
                   <ShoppingCart size={14} />
