@@ -450,7 +450,7 @@ const OrderList = () => {
       </div>
 
       {/* Orders Table */}
-      <div className="md:flex gap-3 ">
+      <div className="xl:flex xl:gap-3 ">
         {/* Left Side: Order Table */}
         <div className="lg:w-5/7 bg-white rounded md:max-h-165 max-h-90  overflow-auto border border-slate-300  mb-5 lg:mb-0">
           <div className="overflow-x-auto whitespace-nowrap ">
@@ -654,7 +654,7 @@ const OrderList = () => {
         )}
 
         {/* right side */}
-        <div className="w-full bg-white xl:max-h-166 lg:max-h-140 max-h-150 rounded border border-slate-300  flex flex-col">
+        <div className="w-full mt-4 xl:mt-0 bg-white xl:max-h-166 lg:max-h-140 max-h-150 rounded border border-slate-300  flex flex-col">
           <div className="bg-slate-50 border-b border-slate-200 md:px-3 px-2 py-3">
             {showDetails ? (
               <div className="flex justify-between items-center">

@@ -110,13 +110,13 @@ const FinancialLedger = ({ onRefresh }) => {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-4">
       {/* HEADER ACTION BAR */}
       <div className="flex flex-col xl:flex-row gap-4 justify-between items-center bg-white p-4 rounded border border-slate-300 shadow-xs">
         <h2 className="text-lg font-bold text-slate-800 tracking-tight">
           Financial Ledger
         </h2>
-        <div className="grid grid-cols-2 sm:flex gap-2 w-full md:w-auto">
+        <div className="grid grid-cols-2 sm:flex gap-4 w-full md:w-auto">
           <button
             onClick={() => setIsInvestmentModalOpen(true)}
             className="flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-2 rounded font-bold text-sm shadow-sm active:scale-95 transition-all"
@@ -437,19 +437,19 @@ const FinancialLedger = ({ onRefresh }) => {
                           <span
                             className={`px-2 py-1 rounded text-[11px] font-black uppercase tracking-tighter ${
                               t.type === "investment"
-                                ? "bg-emerald-100 text-emerald-700"
+                                ? "bg-emerald-100 text-emerald-600"
                                 : t.type === "purchase"
-                                  ? "bg-blue-100 text-blue-700"
-                                  : "bg-rose-100 text-rose-700"
+                                  ? "bg-blue-100 text-blue-600"
+                                  : "bg-rose-100 text-rose-600"
                             }`}
                           >
                             {t.type}
                           </span>
                         </td>
-                        <td className="px-4 text-sm font-bold text-slate-700">
+                        <td className="px-4 text-sm font-semibold text-slate-700">
                           {t.title}
                         </td>
-                        <td className="px-4 text-[11px] text-slate-500 italic">
+                        <td className="px-4 text-[12px] font-semibold text-slate-600 italic">
                           {t.reference}
                         </td>
                         <td

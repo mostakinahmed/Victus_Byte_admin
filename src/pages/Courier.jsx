@@ -40,9 +40,15 @@ const TripleSyncDashboard = () => {
   const [editingOrder, setEditingOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const calculateFinance = (total, delCharge, codPerc) => {
+  const calculateFinance = (total, delCharge, codPerc, courierName) => {
     const codCharge = total * (codPerc / 100);
-    const organicMoney = total - delCharge - codCharge;
+    let organicMoney = 0;
+    if (courierName === "steadfast") {
+      organicMoney = total - delCharge - codCharge;
+    } else {
+      organicMoney = total - delCharge;
+    }
+
     return { codCharge, organicMoney };
   };
 
@@ -57,9 +63,7 @@ const TripleSyncDashboard = () => {
         (o) => o.courier?.name?.toLowerCase() === "steadfast",
       );
     } else {
-      filtData = orderData.filter(
-        (o) => o.courier?.name === "ByteXpress",
-      );
+      filtData = orderData.filter((o) => o.courier?.name === "ByteXpress");
     }
 
     setData(filtData);
@@ -202,7 +206,7 @@ const TripleSyncDashboard = () => {
         {/* 3. TRIPLE PORTION TABLE */}
         <div className="bg-white rounded  overflow-hidden shadow-xs">
           <div className="md:pr-5  border-b border-slate-100 flex justify-between items-center">
-            <div className="flex bg-slate-100  rounded gap-2 md:w-1/5 w-full mb-4 border border-slate-200 shadow-inner">
+            <div className="flex bg-slate-200  rounded gap-2 w-full md:w-1/2  xl:w-1/5 mb-4 border border-slate-200 shadow-inner">
               {/* Steadfast Dispatch Button */}
               <button
                 onClick={() => setTrig(1)}
@@ -301,7 +305,9 @@ const TripleSyncDashboard = () => {
                     o.total_amount,
                     o.courier.delivery_charge,
                     o.courier.cod_percent,
+                    o.courier.name,
                   );
+
                   return (
                     <tr
                       key={o.order_id}
