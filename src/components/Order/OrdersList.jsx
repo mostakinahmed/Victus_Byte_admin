@@ -56,7 +56,7 @@ const OrderList = () => {
     "Pending",
     "Confirmed",
 
-    "Completed",
+    "Delivered",
     "Cancelled",
   ];
 

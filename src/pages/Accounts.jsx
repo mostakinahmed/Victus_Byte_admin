@@ -279,7 +279,7 @@ const AccountsDashboard = () => {
                 Total Capital
               </h2>
               <p class="text-2xl font-extrabold text-slate-900 leading-none mt-1.5">
-                ৳{totalStockInValue + accountsReceivable}
+                ৳{totalStockInValue + accountsReceivable+currentCash}
               </p>
             </div>
             <div class="p-3 bg-indigo-50 rounded-full">

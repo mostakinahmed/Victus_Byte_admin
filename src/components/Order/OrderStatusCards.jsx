@@ -17,23 +17,23 @@ const OrderStatusCards = () => {
   let allCount = orderData.length;
 
   const pendingCount = orderData.filter(
-    (order) => order.status === "Pending"
+    (order) => order.courier.delivery_status === "Pending",
   ).length;
 
   const confirmedCount = orderData.filter(
-    (order) => order.status === "Confirmed"
+    (order) => order.courier.delivery_status === "Confirmed",
   ).length;
 
   const shippedCount = orderData.filter(
-    (order) => order.status === "Shipped"
+    (order) => order.courier.delivery_status === "Shipped",
   ).length;
 
   const deliveredCount = orderData.filter(
-    (order) => order.status === "Completed"
+    (order) => order.courier.delivery_status === "Delivered",
   ).length;
 
   const cancelledCount = orderData.filter(
-    (order) => order.status === "Cancelled"
+    (order) => order.courier.delivery_status === "Cancelled",
   ).length;
 
   const today = new Date().toISOString().split("T")[0]; // "2025-11-12"
