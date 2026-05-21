@@ -169,6 +169,17 @@ export default function Sidebar() {
                 >
                   E-mail Service
                 </button>
+                   <button
+                  onClick={() => {
+                    window.open(
+                      "https://bulksmsbd.net/dashboard",
+                    );
+                    setIsServicesOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer bg-slate-800 tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 hover:text-[#1976d2] rounded "
+                >
+                  SMS Service
+                </button>
               </div>
             )}
           </div>
