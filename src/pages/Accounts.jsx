@@ -527,9 +527,9 @@ const AccountsDashboard = () => {
           <h3 className="text-xs font-black text-white uppercase tracking-widest">
             Consolidated Sales Ledger
           </h3>
-          <div className="flex items-center gap-2 px-2 py-1 bg-emerald-100 text-emerald-700 rounded text-[10px] font-black uppercase">
+          <div className="flex items-center gap-2 px-2 py-1 bg-white text-emerald-700 rounded text-[11px] font-black uppercase">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-600 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
             </span>
             Live Audit

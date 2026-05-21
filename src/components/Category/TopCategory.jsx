@@ -54,7 +54,7 @@ export const TopCategory = () => {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-[#1976d2] hover:bg-[#1565c0] text-white py-1.5 px-3 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-sm shadow-[#1976d2]/20"
+          className="bg-[#1976d2] hover:bg-[#1565c0] text-white py-1.5 px-4 rounded text-[11px] font-black uppercase tracking-wider transition-all active:scale-95 shadow-sm shadow-[#1976d2]/20"
         >
           <FiPlus className="inline mr-1" /> Add
         </button>
@@ -124,7 +124,7 @@ export const TopCategory = () => {
       {/* --- COMPACT MODAL --- */}
       {showModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-[200]">
-          <div className="bg-white w-full max-w-xs rounded-[2rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-white w-full max-w-xs shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="px-6 mt-4 -mb-2 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center">
               
               <button
@@ -170,7 +170,7 @@ export const TopCategory = () => {
                       </div>
                       <button
                         onClick={() => submit(item.catID, true)}
-                        className="px-3 py-1 bg-white border border-slate-300 text-[#1976d2] rounded-lg text-[9px] font-black uppercase hover:bg-[#1976d2] hover:text-white transition-all"
+                        className="px-3 py-1 bg-white border border-slate-400 text-[#1976d2] cursor-pointer rounded-lg text-[9px] font-black tracking-wider uppercase hover:bg-[#1976d2] hover:text-white transition-all"
                       >
                         Select
                       </button>

@@ -411,7 +411,7 @@ const UpdateProduct = () => {
                       { groupName: "", fields: [{ key: "", value: "" }] },
                     ])
                   }
-                  className="bg-indigo-600 text-white md:px-6 px-3 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest cursor-pointer hover:bg-indigo-700 transition-all"
+                  className="bg-indigo-600 text-white md:px-5 px-3 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wide cursor-pointer hover:bg-indigo-700 transition-all"
                 >
                   + Add Spec Section
                 </button>
