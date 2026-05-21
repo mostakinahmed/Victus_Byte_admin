@@ -52,7 +52,7 @@ export default function Dashboard() {
       <Navbar pageTitle="System Overview" />
 
       {/* MAIN CONTAINER */}
-      <div className="p-4 lg:p-6 space-y-5">
+      <div className="py-4 lg:py-6 space-y-5">
         {/* =====================================
             KPI CARDS
         ===================================== */}
@@ -99,7 +99,7 @@ export default function Dashboard() {
         ===================================== */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
           {/* SALES CHART */}
-          <div className="xl:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div className="xl:col-span-2 bg-white rounded border border-slate-200 p-5 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
               <div>
                 <h2 className="text-lg font-bold text-slate-800">
@@ -162,7 +162,7 @@ export default function Dashboard() {
           </div>
 
           {/* PIE CHART */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div className="bg-white rounded border border-slate-200 p-5 shadow-sm">
             <h2 className="text-lg font-bold text-slate-800 mb-5">
               Order Status
             </h2>
@@ -225,7 +225,7 @@ export default function Dashboard() {
          
 
           {/* SMS MONITOR */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm overflow-hidden">
+          <div className="bg-white rounded border border-slate-200 p-5 shadow-sm overflow-hidden">
             <SmsMonitor />
           </div>
         </div>

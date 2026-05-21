@@ -84,7 +84,7 @@ export default function Navbar({ pageTitle }) {
           href="https://victusbyte.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-2 py-1 bg-rose-50 rounded-full border border-rose-100 group transition-all"
+          className="flex items-center gap-2 px-3 py-1 bg-rose-100 rounded-full border border-rose-100 group transition-all"
           title="Live Status"
         >
           <RiBroadcastLine
