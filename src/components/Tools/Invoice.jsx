@@ -31,7 +31,7 @@ export default function Invoice({ order, close }) {
 
     // --- PDF Logic (Your Refined Original) ---
     try {
-      doc.addImage("/logo final.png", "PNG", margin, 30, 135, 60);
+      doc.addImage("/logo/logo tp 1.png", "PNG", margin, 5, 110, 110);
     } catch (e) {
       doc.setFontSize(22);
       doc.setTextColor(255, 117, 31);
@@ -41,10 +41,20 @@ export default function Invoice({ order, close }) {
     const rightX = pageWidth - margin - 200;
     doc.setFontSize(10);
     doc.setTextColor(80);
-    doc.text("Victus-Byte HQ", rightX, 40);
-    doc.text("123 Market Street", rightX, 55);
-    doc.text("Dhaka, Bangladesh", rightX, 70);
-    doc.text("Email: support@victusbyte.com", rightX, 85);
+    doc.text("Victus-Byte HQ", rightX, 35);
+    doc.text("123 Market Street", rightX, 50);
+    doc.text("Dhaka, Bangladesh", rightX, 65);
+    doc.text("Email: support@victusbyte.com", rightX, 80);
+
+    //only for number
+    doc.setFont("helvetica", "normal");
+    doc.text("Hotline: ", rightX, 95);
+
+    const hotlineWidth = doc.getTextWidth("Hotline: ");
+
+    doc.setFont("helvetica", "bold");
+    doc.text("09611-342936", rightX + hotlineWidth, 95);
+    //------------------
 
     doc.setDrawColor(180);
     doc.line(margin, 110, pageWidth - margin, 110);
@@ -125,7 +135,7 @@ export default function Invoice({ order, close }) {
     });
 
     const footerY = doc.internal.pageSize.height - 40;
-    doc.setFontSize(9);
+    doc.setFontSize(11);
     doc.setTextColor(120);
     doc.text(
       "Thank you for shopping with Victus-Byte! www.victusbyte.com",
@@ -155,7 +165,7 @@ export default function Invoice({ order, close }) {
         {/* Header Section */}
         <div className="flex justify-between items-start mb-8">
           <img
-            src="/logo final.png"
+            src="/logo/logo tp.png"
             alt="Logo"
             className="w-48 object-contain"
           />

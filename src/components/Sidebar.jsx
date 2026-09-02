@@ -70,20 +70,12 @@ export default function Sidebar() {
       >
         {/* --- BRAND IDENTITY (Desktop) --- */}
         <div
-          className="hidden lg:flex p-6 items-center gap-3 cursor-pointer"
+          className="hidden lg:flex p-5 items-center gap-3 cursor-pointer"
           onClick={() => navigate("/")}
         >
-          {/* Brand Color Applied to Desktop Logo Bg */}
-          <div className="p-1 bg-green-600 h-3 w-3 rounded-xl animate-pulse shadow-[0_0_15px_rgba(25,118,210,0.3)]">
-            {/* <img
-              src="https://7vgva7cju0vcfvwf.public.blob.vercel-storage.com/Black%20and%20Purple%20Gradient%20Cyber%20Security%20Poster.png"
-              alt="" className="w-6 h-8"
-            /> */}
-          </div>
+       
           <div className="flex flex-col">
-            <span className="text-sm font-black uppercase tracking-tighter">
-              Victus Byte
-            </span>
+            <img src="/logo/web NAV tp white1.png" alt="" />
           </div>
         </div>
 
