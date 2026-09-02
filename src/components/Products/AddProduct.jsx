@@ -195,16 +195,16 @@ const AddProduct = () => {
   };
 
   return (
-    <div className=" min-h-screen pb-10 mt-12 md:mt-0">
+    <div className="min-h-screen pb-10 mt-12 md:mt-0">
       <Navbar pageTitle="Add Product (Dynamic)" />
 
       <div className="mx-auto max-w-[1600px]">
-        <div className="relative w-full mx-auto bg-white  rounded overflow-hidden border border-gray-200">
+        <div className="relative w-full mx-auto bg-white rounded overflow-hidden border border-gray-200">
           <form onSubmit={handleSubmit}>
             <div className="lg:flex">
               {/* LEFT: General Info & Attributes */}
               <div className="lg:w-[550px] border-r border-gray-100 md:p-6 p-2 md:space-y-6 space-y-2">
-                <h2 className="md:text-xl  font-bold text-gray-800 border-b pb-2">
+                <h2 className="md:text-xl font-bold text-gray-800 border-b pb-2">
                   General Information
                 </h2>
 
@@ -212,7 +212,8 @@ const AddProduct = () => {
                   <input
                     type="text"
                     placeholder="Product Name"
-                    className="p-2 border rounded w-full outline-blue-500"
+                    className="p-2 border rounded w-full focus:outline-none focus:ring-1"
+                    style={{ focusRingColor: "#F66107" }}
                     value={formData.name}
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
@@ -222,7 +223,7 @@ const AddProduct = () => {
                   <input
                     type="text"
                     placeholder="Brand Name"
-                    className="p-2 border rounded w-full outline-blue-500"
+                    className="p-2 border rounded w-full focus:outline-none"
                     value={formData.brandName}
                     onChange={(e) =>
                       setFormData({ ...formData, brandName: e.target.value })
@@ -230,8 +231,17 @@ const AddProduct = () => {
                     required
                   />
 
-                  <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
-                    <label className="text-xs font-bold text-blue-600 uppercase">
+                  <div
+                    className="p-3 rounded-lg border"
+                    style={{
+                      backgroundColor: "#FDF2EC",
+                      borderColor: "#F8CDB8",
+                    }}
+                  >
+                    <label
+                      className="text-xs font-bold uppercase"
+                      style={{ color: "#F66107" }}
+                    >
                       Selling Price (BDT)
                     </label>
                     <input
@@ -244,7 +254,7 @@ const AddProduct = () => {
                         })
                       }
                       placeholder="0.00"
-                      className="mt-1 p-2 border rounded w-full font-bold "
+                      className="mt-1 p-2 border rounded w-full font-bold bg-white focus:outline-none"
                       required
                     />
                   </div>
@@ -265,14 +275,15 @@ const AddProduct = () => {
                           addTag("keywords", keywordInput, setKeywordInput))
                         }
                         placeholder="powerbank"
-                        className="flex-1 p-2 border rounded text-sm outline-blue-500"
+                        className="flex-1 p-2 border rounded text-sm outline-none"
                       />
                       <button
                         type="button"
                         onClick={() =>
                           addTag("keywords", keywordInput, setKeywordInput)
                         }
-                        className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold"
+                        className="text-white px-4 py-2 rounded text-sm font-bold transition-opacity hover:opacity-90"
+                        style={{ backgroundColor: "#F66107" }}
                       >
                         Add
                       </button>
@@ -281,7 +292,8 @@ const AddProduct = () => {
                       {formData.keywords.map((word, idx) => (
                         <span
                           key={idx}
-                          className="bg-white border border-blue-200 text-blue-700 px-2 py-1 rounded text-xs font-medium flex items-center gap-1 shadow-sm"
+                          className="bg-white border px-2 py-1 rounded text-xs font-medium flex items-center gap-1 shadow-sm"
+                          style={{ borderColor: "#F8CDB8", color: "#D35000" }}
                         >
                           {word}{" "}
                           <button
@@ -359,7 +371,7 @@ const AddProduct = () => {
                           value={img}
                           onChange={(e) => updateImage(idx, e.target.value)}
                           placeholder="https://..."
-                          className="p-2 border rounded flex-1 text-sm outline-blue-500"
+                          className="p-2 border rounded flex-1 text-sm outline-none"
                           required
                         />
                         {formData.images.length > 1 && (
@@ -376,7 +388,8 @@ const AddProduct = () => {
                     <button
                       type="button"
                       onClick={addImageField}
-                      className="text-xs text-blue-600 font-bold hover:underline"
+                      className="text-xs font-bold hover:underline"
+                      style={{ color: "#F66107" }}
                     >
                       + Add more images
                     </button>
@@ -389,7 +402,7 @@ const AddProduct = () => {
                       setFormData({ ...formData, description: e.target.value })
                     }
                     placeholder="Short Description..."
-                    className="p-3 border rounded w-full h-24 text-sm outline-blue-500"
+                    className="p-3 border rounded w-full h-24 text-sm outline-none"
                     required
                   />
 
@@ -416,13 +429,16 @@ const AddProduct = () => {
               {/* RIGHT: Dynamic Specifications */}
               <div className="flex-1 md:p-6 p-2">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="md:text-xl line-clamp-1 font-bold text-gray-800 border-b-2 border-blue-500 pb-1">
+                  <h2
+                    className="md:text-xl line-clamp-1 font-bold text-gray-800 border-b-2 pb-1"
+                    style={{ borderColor: "#F66107" }}
+                  >
                     Specifications Dynamic
                   </h2>
                   <button
                     type="button"
                     onClick={addSpecGroup}
-                    className="bg-green-600 ml-2 text-white md:px-5 px-4 py-2 rounded-lg hover:bg-green-700 shadow-lg shadow-green-100"
+                    className="bg-green-600 ml-2 text-white md:px-5 px-4 py-2 rounded-md hover:bg-green-700 shadow-lg shadow-green-100"
                   >
                     Add Section
                   </button>
@@ -437,7 +453,7 @@ const AddProduct = () => {
                       <button
                         type="button"
                         onClick={() => removeSpecGroup(gIdx)}
-                        className="absolute top-3 right-3 cursor-pointer  text-red-500 hover:text-red-600 text-sm font-bold bg-red-50 px-2 py-1 rounded"
+                        className="absolute top-3 right-3 cursor-pointer text-red-500 hover:text-red-600 text-sm font-bold bg-red-50 px-2 py-1 rounded"
                       >
                         Delete
                       </button>
@@ -453,14 +469,17 @@ const AddProduct = () => {
                             updateGroupName(gIdx, e.target.value)
                           }
                           placeholder="Key Feature"
-                          className="w-full p-1.5 mt-1 px-2 bg-white border rounded font-medium text-gray-800 focus:ring-1 focus:ring-blue-400 outline-none"
+                          className="w-full p-1.5 mt-1 px-2 bg-white border rounded font-medium text-gray-800 outline-none"
                           required
                         />
                       </div>
 
                       <div className="space-y-2">
                         {group.fields.map((field, fIdx) => (
-                          <div key={fIdx} className="flex  flex-col md:flex-row gap-2">
+                          <div
+                            key={fIdx}
+                            className="flex flex-col md:flex-row gap-2"
+                          >
                             <input
                               type="text"
                               placeholder="key"
@@ -468,7 +487,7 @@ const AddProduct = () => {
                               onChange={(e) =>
                                 updateField(gIdx, fIdx, "key", e.target.value)
                               }
-                              className="flex-1 p-1.5 bg-white border rounded text-sm outline-blue-300"
+                              className="flex-1 p-1.5 bg-white border rounded text-sm outline-none"
                               required
                             />
                             <input
@@ -478,7 +497,7 @@ const AddProduct = () => {
                               onChange={(e) =>
                                 updateField(gIdx, fIdx, "value", e.target.value)
                               }
-                              className="flex-1 p-1.5  border bg-white rounded text-sm outline-blue-300"
+                              className="flex-1 p-1.5 border bg-white rounded text-sm outline-none"
                               required
                             />
                             {group.fields.length > 1 && (
@@ -495,7 +514,11 @@ const AddProduct = () => {
                         <button
                           type="button"
                           onClick={() => addFieldRow(gIdx)}
-                          className="text-[11px] bg-blue-50 cursor-pointer  text-blue-600 px-3 py-1 rounded font-bold mt-2"
+                          className="text-[11px] cursor-pointer px-3 py-1 rounded font-bold mt-2"
+                          style={{
+                            backgroundColor: "#FDF2EC",
+                            color: "#F66107",
+                          }}
                         >
                           + Add Row
                         </button>
@@ -506,18 +529,19 @@ const AddProduct = () => {
               </div>
             </div>
 
-            {/* FORM FOOTER (Now Inside the Form) */}
+            {/* FORM FOOTER */}
             <div className="bg-gray-100 md:px-6 px-2 py-4 flex justify-end gap-4 border-t">
               <button
                 type="button"
                 onClick={() => navigate("/products")}
-                className="px-8 py-2 bg-white border cursor-pointer  border-gray-400 rounded-lg text-gray-7700 font-bold hover:bg-gray-50 transition-all"
+                className="px-8 py-2 bg-white border cursor-pointer border-gray-400 rounded-lg text-gray-700 font-bold hover:bg-gray-50 transition-all"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="md:px-12 px-3 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 shadow shadow-blue-200 transition-all transform active:scale-95"
+                className="md:px-12 px-3 py-2 text-white rounded-lg font-bold transition-all transform active:scale-95 shadow"
+                style={{ backgroundColor: "#F66107" }}
               >
                 Publish Product
               </button>
