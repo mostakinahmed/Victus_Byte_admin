@@ -40,33 +40,26 @@ export default function Navbar({ pageTitle }) {
     }
   };
 
-  // ... inside your component
-  <AnimatePresence>
-    {showPopup && (
-      <motion.div
-        initial={{ opacity: 0 }} // How it starts
-        animate={{ opacity: 1 }} // How it looks when visible
-        exit={{ opacity: 0 }} // How it fades out when showPopup is false
-      >
-        {/* Your Modal Content */}
-      </motion.div>
-    )}
-  </AnimatePresence>;
-
   return (
-    <div className="flex justify-between items-center bg-white border border-slate-300 border-b-2 border-b-[#1976d2] md:px-6 px-2 md:py-3 py-1.5 sticky top-0 z-[80] transition-all duration-300 mb-3  mt-1">
+    <div
+      className="flex justify-between items-center bg-white border border-slate-300 border-b-2 md:px-6 px-2 md:py-3 py-1.5 sticky top-0 z-[80] transition-all duration-300 mb-3 mt-1"
+      style={{ borderBottomColor: "#F66107" }}
+    >
       {/* --- Left Side: Dynamic Page Context --- */}
       <div className="flex items-center gap-3">
-        <div className="w-1 h-8 bg-indigo-600 rounded-full hidden lg:block" />
+        <div
+          className="w-1 h-8 rounded-full hidden lg:block"
+          style={{ backgroundColor: "#F66107" }}
+        />
         <div>
-          <h1 className=" lg:text-xl text-sm font-black text-slate-800 tracking-tighter uppercase line-clamp-1">
+          <h1 className="lg:text-xl text-sm font-black text-slate-800 tracking-tighter uppercase line-clamp-1">
             {pageTitle || "Command Center"}
           </h1>
         </div>
       </div>
 
       {/* --- Right Side: System Actions & Identity --- */}
-      <div className="flex items-center gap-4  lg:gap-6">
+      <div className="flex items-center gap-4 lg:gap-6">
         <button
           onClick={handleRefresh}
           disabled={isLoading}
@@ -75,7 +68,8 @@ export default function Navbar({ pageTitle }) {
         >
           <RefreshCw
             size={22}
-            className={`text-blue-600 ${isLoading ? "animate-spin" : ""}`}
+            className={`${isLoading ? "animate-spin" : ""}`}
+            style={{ color: "#F66107" }}
           />
         </button>
 
@@ -97,9 +91,23 @@ export default function Navbar({ pageTitle }) {
         </a>
 
         {/* Notifications */}
-        <button className=" hidden md:flex relative p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+        <button
+          className="hidden md:flex relative p-2.5 text-slate-600 rounded-xl transition-all hover:bg-opacity-10"
+          style={{ "--hover-color": "#F66107" }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "#F66107";
+            e.currentTarget.style.backgroundColor = "#FDF2EC";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "";
+            e.currentTarget.style.backgroundColor = "";
+          }}
+        >
           <FiBell size={20} />
-          <span className="absolute top-2 right-2.5 inline-block w-2 h-2 bg-indigo-600 rounded-full border-2 border-white"></span>
+          <span
+            className="absolute top-2 right-2.5 inline-block w-2 h-2 rounded-full border-2 border-white"
+            style={{ backgroundColor: "#F66107" }}
+          ></span>
         </button>
 
         {/* --- User Identity Block --- */}
@@ -109,18 +117,21 @@ export default function Navbar({ pageTitle }) {
         >
           <div className="hidden md:flex flex-col items-end text-right">
             <span className="text-xs font-black text-slate-800 uppercase leading-none mb-1">
-              {user.fullName || "Admin"}
+              {user?.fullName || "Admin"}
             </span>
-            <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest leading-none">
-              {user.role}
+            <span
+              className="text-[10px] font-bold uppercase tracking-widest leading-none"
+              style={{ color: "#F66107" }}
+            >
+              {user?.role}
             </span>
           </div>
 
           <div className="relative">
             <img
-              className="w-10 h-10 lg:w-11 lg:h-11 rounded-2xl border border-slate-300 group-hover:border-indigo-500 transition-all object-cover"
+              className="w-10 h-10 lg:w-11 lg:h-11 rounded-2xl border border-slate-300 transition-all object-cover group-hover:border-[#F66107]"
               src={
-                user.images ||
+                user?.images ||
                 "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
               }
               alt="User"
@@ -128,7 +139,7 @@ export default function Navbar({ pageTitle }) {
             <div className="absolute -bottom-1 -right-1 bg-white p-0.5 rounded-lg shadow-sm">
               <FiChevronDown
                 size={12}
-                className="text-slate-400 group-hover:text-indigo-600"
+                className="text-slate-400 group-hover:text-[#F66107]"
               />
             </div>
           </div>
@@ -172,7 +183,10 @@ export default function Navbar({ pageTitle }) {
                   <h2 className="text-sm font-bold text-white truncate">
                     {user.fullName}
                   </h2>
-                  <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-tight">
+                  <p
+                    className="text-[10px] font-black uppercase tracking-widest leading-tight"
+                    style={{ color: "#F66107" }}
+                  >
                     {user.role}
                   </p>
                 </div>
@@ -223,7 +237,7 @@ export default function Navbar({ pageTitle }) {
               <div className="p-3 bg-slate-50/50 border-t border-slate-100">
                 <button
                   onClick={() => logout()}
-                  className="w-full flex cursor-pointer items-center justify-center gap-2 py-3 text-rose-600 hover:bg-rose-100 bg-rose-50  rounded-lg text-sm font-bold transition-colors active:scale-95"
+                  className="w-full flex cursor-pointer items-center justify-center gap-2 py-3 text-rose-600 hover:bg-rose-100 bg-rose-50 rounded-lg text-sm font-bold transition-colors active:scale-95"
                 >
                   <FiLogOut size={14} />
                   Logout Session
