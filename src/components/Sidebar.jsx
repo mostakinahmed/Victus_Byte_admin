@@ -94,8 +94,8 @@ export default function Sidebar() {
                 onClick={() => setIsMobileExpanded(false)}
                 className={`group flex items-center px-3 py-2  rounded transition-all ${
                   isActive
-                    ? "bg-[#1976d2] text-white"
-                    : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+                    ? "bg-[#f66107ff] text-white font-medium"
+                    : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
                 } justify-start`}
               >
                 <span
