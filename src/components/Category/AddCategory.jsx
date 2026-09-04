@@ -21,7 +21,7 @@ const AddCategory = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const val = name === "catID" ? value.toUpperCase() : value;
+    const val = name === "catID" ? value : value;
     setCategory({ ...category, [name]: val });
   };
 
@@ -60,11 +60,9 @@ const AddCategory = () => {
   return (
     <div className="w-full font-normal animate-in fade-in duration-500">
       {/* --- HEADER --- */}
-      
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="grid grid-cols-1 gap-3">
-          
           {/* ID Input */}
           <div className="space-y-1">
             <label className="flex items-center gap-2 text-xs font-normal text-black uppercase ml-1">
@@ -75,7 +73,7 @@ const AddCategory = () => {
               name="catID"
               value={category.catID}
               onChange={handleChange}
-              placeholder="C-101"
+              placeholder="pocket-router"
               required
               className="h-10 text-sm rounded font-normal border-black bg-white focus:border-[#1976d2] focus:ring-0 transition-all"
             />
