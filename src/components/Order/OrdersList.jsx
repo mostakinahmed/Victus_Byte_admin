@@ -811,7 +811,7 @@ const OrderList = () => {
                                       `}
                                       >
                                         {skuStatus[idx] === "valid"
-                                          ? "Ready to Dispatch"
+                                          ? "Ready"
                                           : skuStatus[idx] === "sold"
                                             ? "Already Sold"
                                             : "Invalid SKU"}
@@ -860,7 +860,8 @@ const OrderList = () => {
                                   <div className="space-y-2">
                                     <div className="flex gap-2">
                                       <input
-                                        type="number"
+                                        type="text"
+                                        maxlength={15}
                                         value={imei1Inputs[idx] || ""}
                                         onChange={(e) =>
                                           setImei1Inputs({
@@ -1025,14 +1026,14 @@ const OrderList = () => {
               </section>
 
               <div className="flex gap-3 pt-4 border-t border-slate-100">
-                <button className="flex-1 flex items-center justify-center gap-2 bg-white text-rose-600 border border-rose-200 text-xs font-black py-3 rounded-xl hover:bg-rose-600 hover:text-white transition-all duration-300 shadow-sm">
+                <button className="flex-1 flex items-center justify-center gap-2 bg-white text-rose-600 border border-rose-200 text-xs font-black py-3 rounded hover:bg-rose-600 hover:text-white transition-all duration-300 shadow-sm">
                   <FiSlash /> CANCEL ORDER
                 </button>
                 {showDetails?.courier.delivery_status === "Pending" && (
                   <button
                     type="button"
                     onClick={submitBtn}
-                    className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white text-xs font-black py-3 rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all active:scale-95 uppercase tracking-widest"
+                    className="flex-1 flex items-center justify-center gap-2 bg-indigo-600 text-white text-xs font-black py-3 rounded hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all active:scale-95 uppercase tracking-widest"
                   >
                     <FiCheckCircle size={16} /> CONFIRM ORDER
                   </button>
