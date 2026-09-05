@@ -129,7 +129,7 @@ const AddCategory = () => {
         <div className="pt-2 flex justify-center">
           <Button
             type="submit"
-            className="w-2/5 h-10 text-xs font-semibold uppercase rounded-lg bg-black text-white hover:bg-[#1976d2] transition-all active:scale-95"
+            className="w-2/5 h-10 text-xs font-semibold uppercase rounded bg-black text-white  transition-all active:scale-95"
           >
             Save Entry
           </Button>

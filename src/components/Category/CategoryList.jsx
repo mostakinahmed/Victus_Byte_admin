@@ -69,19 +69,19 @@ const CategoryList = ({ data = [] }) => {
                   key={cat.catID}
                   className="hover:bg-indigo-50  transition-colors group"
                 >
-                  <td className="md:px-4  px-2 py-2 text-[12px]  text-slate-600 text-center">
+                  <td className="md:px-4  px-2 py-2 text-[13px]  text-slate-600 text-center">
                     {(index + 1).toString().padStart(2, "0")}
                   </td>
 
                   <td className="md:px-4 py-2">
-                    <span className="flex items-center gap-1 text-[12px]  font-bold text-indigo-600">
+                    <span className="flex items-center gap-1 text-[13px]  font-bold text-indigo-600">
                       <FiHash size={10} className="text-indigo-400" />{" "}
                       {cat.catID}
                     </span>
                   </td>
 
                   <td className="md:px-4 py-2">
-                    <p className="text-[12px] font-medium text-slate-700  truncate">
+                    <p className="text-[13px] font-medium text-slate-700  truncate">
                       {cat.catName}
                     </p>
                   </td>

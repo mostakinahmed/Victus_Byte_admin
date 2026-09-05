@@ -145,7 +145,7 @@ export default function CheckAndUpdateStock() {
         <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-sm flex flex-col">
           <div className="md:px-5 px-2 py-4 border-b border-slate-200">
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
+              <div className="w-1.5 h-6 bg-brand rounded-full"></div>
               <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
                 Inventory Lookup
               </h2>
@@ -165,13 +165,13 @@ export default function CheckAndUpdateStock() {
                     placeholder="PID or SKU..."
                     value={searchId}
                     onChange={(e) => setSearchId(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 bg-slate-50 border uppercase border-slate-300 rounded-xl text-md font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                    className="w-full pl-10 pr-4 py-2 placeholder:font-medium bg-slate-50 border uppercase border-slate-300 rounded text-md font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
                   />
                 </div>
               </div>
               <button
                 onClick={handleSearch}
-                className="bg-slate-900 mt-2 md:mt-0 text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-indigo-600 transition-all shadow-lg flex items-center gap-2"
+                className="bg-black mt-2 md:mt-0 text-white px-6 py-2.5 rounded font-bold text-sm hover:bg-brand transition-all shadow-lg flex items-center gap-2"
               >
                 <FiZap /> Search
               </button>
@@ -185,7 +185,7 @@ export default function CheckAndUpdateStock() {
                   </h3>
                   <button
                     onClick={() => setToggle(false)}
-                    className="px-4 py-2 rounded-lg text-indigo-600 font-black text-[10px] uppercase bg-indigo-200 border border-indigo-100 hover:bg-indigo-600 hover:text-white transition-all"
+                    className="px-4 py-2 rounded text-white font-black text-[10px] uppercase bg-black border border-indigo-100 hover:bg-brand  transition-all"
                   >
                     Add Stock
                   </button>
@@ -194,7 +194,7 @@ export default function CheckAndUpdateStock() {
                   <img
                     src={selectedProduct.images[0]}
                     alt=""
-                    className="w-28 h-28 object-contain rounded-2xl border-2 border-slate-50 bg-white shadow-sm p-2"
+                    className="w-28 h-28 object-contain rounded border-2 border-slate-50 bg-white  p-2"
                   />
                   <div className="flex-1 space-y-3 pt-1">
                     <h2 className="text-lg font-medium text-slate-900 leading-tight">
@@ -223,7 +223,7 @@ export default function CheckAndUpdateStock() {
         <div className="md:w-1/2 border-r border-slate-200 bg-white flex flex-col h-full overflow-hidden shadow-sm">
           <div className="md:px-5 px-2 py-4 border-b border-slate-200">
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
+              <div className="w-1.5 h-6 bg-brand rounded-full"></div>
               <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
                 Inventory Assets
               </h2>
@@ -307,7 +307,7 @@ export default function CheckAndUpdateStock() {
           >
             <div className="flex items-center gap-2">
               <div
-                className={`w-1.5 h-6 rounded-full ${toggle ? "bg-slate-400" : "bg-indigo-600"}`}
+                className={`w-1.5 h-6 rounded-full ${toggle ? "bg-slate-400" : "bg-brand"}`}
               ></div>
               <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
                 {toggle ? "Asset Profile" : "Stock Intake"}
@@ -430,13 +430,13 @@ export default function CheckAndUpdateStock() {
                     <button
                       type="button"
                       onClick={() => setToggle(true)}
-                      className="flex-1 bg-white text-rose-500 border border-rose-100 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-50 transition-all"
+                      className="flex-1 bg-white text-rose-500 border border-rose-200 py-3 rounded font-black text-[12px] uppercase tracking-widest hover:bg-rose-50 transition-all"
                     >
                       Discard
                     </button>
                     <button
                       type="submit"
-                      className="flex-[2] bg-indigo-600 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all"
+                      className="flex-[2] bg-black text-white/90 py-3 rounded font-black text-[12px] uppercase tracking-widest hover:bg-brand shadow-lg shadow-indigo-100 transition-all"
                     >
                       Confirm Intake
                     </button>

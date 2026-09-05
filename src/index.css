@@ -134,3 +134,7 @@
     width: 100%;
   }
 }
+
+@theme {
+  --color-brand: #f66107;
+}

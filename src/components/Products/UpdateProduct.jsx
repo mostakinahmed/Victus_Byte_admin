@@ -130,7 +130,7 @@ const UpdateProduct = () => {
             {/* --- LEFT SECTION: GENERAL INFORMATION --- */}
             <div className="lg:w-[620px] border-r border-slate-200 p-3 space-y-2">
               <div className="flex items-center gap-3 border-b border-slate-200 pb-4">
-                <div className="p-2 bg-indigo-600 rounded-lg text-white">
+                <div className="p-2 bg-brand rounded-lg text-white">
                   <FiEdit3 size={20} />
                 </div>
                 <h2 className="md:text-xl font-bold text-slate-800 tracking-tight">
@@ -283,7 +283,7 @@ const UpdateProduct = () => {
                       onClick={() =>
                         addTag("colors", colorInput, setColorInput)
                       }
-                      className="bg-emerald-600 cursor-pointer text-white px-5 rounded font-bold text-xs uppercase"
+                      className="bg-black cursor-pointer text-white px-5 rounded font-bold text-xs uppercase"
                     >
                       Add
                     </button>
@@ -411,7 +411,7 @@ const UpdateProduct = () => {
                       { groupName: "", fields: [{ key: "", value: "" }] },
                     ])
                   }
-                  className="bg-indigo-600 text-white md:px-5 px-3 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wide cursor-pointer hover:bg-indigo-700 transition-all"
+                  className="bg-black text-white md:px-5 px-3 py-2.5 rounded font-bold text-xs uppercase tracking-wide cursor-pointer hover:bg-indigo-700 transition-all"
                 >
                   + Add Spec Section
                 </button>
@@ -519,7 +519,7 @@ const UpdateProduct = () => {
             </button>
             <button
               type="submit"
-              className="bg-indigo-600 text-white md:px-14 px-3 md:py-4 py-2 md:mr-5  rounded-2xl font-black md:text-sm text-xs uppercase tracking-[0.1em] flex items-center gap-3 hover:bg-indigo-500 shadow-2xl shadow-indigo-500/20 active:scale-95 transition-all"
+              className="bg-indigo-600 text-white md:px-14 px-3 md:py-4 py-2 md:mr-5  rounded font-black md:text-sm text-xs uppercase tracking-[0.1em] flex items-center gap-3 hover:bg-indigo-500 shadow-2xl shadow-indigo-500/20 active:scale-95 transition-all"
             >
               <FiSave size={18} /> Save Update
             </button>

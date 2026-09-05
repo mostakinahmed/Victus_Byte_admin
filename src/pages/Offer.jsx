@@ -165,7 +165,7 @@ const Offer = () => {
             {/* Submit Button */}
             <button
               disabled={loading}
-              className="bg-slate-900 cursor-pointer hover:bg-[#1976d2] text-white text-[10px] font-black uppercase tracking-widest h-[42px] rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
+              className="bg-black cursor-pointer hover:bg-brand text-white text-[10px] font-black uppercase tracking-widest h-[42px] rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
             >
               {loading ? "Saving...." : "Save Offer"}
             </button>

@@ -72,7 +72,7 @@ export default function Sales() {
           <BackButton />
           <button
             onClick={() => navigate(`/sales/new`)}
-            className="flex items-center justify-center gap-2 bg-slate-900 text-white px-5 py-2 rounded text-sm font-bold hover:bg-indigo-600 transition-all shadow-lg flex-1 md:flex-none"
+            className="flex items-center justify-center gap-2 bg-black text-white px-5 py-2 rounded text-sm font-bold hover:bg-brand transition-all shadow-lg flex-1 md:flex-none"
           >
             <FiPlus /> New Entry
           </button>

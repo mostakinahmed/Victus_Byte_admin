@@ -65,7 +65,7 @@ export default function Sidebar() {
 
       {/* --- SIDEBAR --- */}
       <div
-        className={`fixed top-0 left-0 h-screen font-sans bg-slate-900 text-white flex flex-col transition-all duration-300 z-[100] border-r border-slate-800 
+        className={`fixed top-0 left-0 h-screen font-sans bg-black text-white flex flex-col transition-all duration-300 z-[100] border-r border-slate-800 
         ${isMobileExpanded ? "w-64 translate-x-0" : "w-0 -translate-x-full lg:translate-x-0 lg:w-60"} lg:sticky md:mt-16 mt-12 lg:mt-0 overflow-hidden`}
       >
         {/* --- BRAND IDENTITY (Desktop) --- */}
@@ -80,7 +80,7 @@ export default function Sidebar() {
         </div>
 
         {/* --- NAVIGATION --- */}
-        <nav className="flex-1 px-4 mt-5 lg:mt-4 md:space-y-3  overflow-y-auto no-scrollbar">
+        <nav className="flex-1 px-4 mt-5 lg:mt-1 md:space-y-3  overflow-y-auto no-scrollbar">
           {links.map((link) => {
             const isActive =
               link.path === "/"
