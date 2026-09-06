@@ -757,8 +757,13 @@ const OrderList = () => {
                                 <p className="text-[12px] line-clamp-1 font-medium text-indigo-600 uppercase mb-1">
                                   User Specifications
                                 </p>
-                                <p className="text-[13px] font-medium text-indigo-900">
-                                  {item.product_comments ||
+                                <p className="text-[13px] font-medium text-indigo-950">
+                                  {"Storage: " +
+                                    item.product_comments.storage ||
+                                    "No specifics provided"}
+                                </p>
+                                <p className="text-[13px] font-medium text-indigo-950">
+                                  {" Color: " + item.product_comments.color ||
                                     "No specifics provided"}
                                 </p>
                               </div>
