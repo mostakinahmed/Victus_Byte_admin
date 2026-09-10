@@ -301,7 +301,7 @@ const AccountsDashboard = () => {
           </div>
 
           <div class="grid grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-4">
-            <div class="px-4  transition-all border-l-4 bg-slate-50 border-emerald-500 rounded-r-xl hover:shadow-md">
+            <div class="px-4  transition-all border-l-4 bg-slate-50 border-emerald-500 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 Cash Asset
               </span>
@@ -310,7 +310,7 @@ const AccountsDashboard = () => {
               </p>
             </div>
 
-            <div class="px-4  transition-all border-l-4 bg-slate-50 border-blue-500 rounded-r-xl hover:shadow-md">
+            <div class="px-4  transition-all border-l-4 bg-slate-50 border-blue-500 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 Stock In
               </span>
@@ -319,7 +319,7 @@ const AccountsDashboard = () => {
               </p>
             </div>
 
-            <div class="px-4  transition-all border-l-4 bg-slate-50 border-amber-500 rounded-r-xl hover:shadow-md">
+            <div class="px-4  transition-all border-l-4 bg-slate-50 border-amber-500 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 A/C Receivable
               </span>
@@ -328,7 +328,7 @@ const AccountsDashboard = () => {
               </p>
             </div>
 
-            <div class="px-4  transition-all border-l-4 bg-slate-50 border-indigo-500 rounded-r-xl hover:shadow-md">
+            <div class="px-4  transition-all border-l-4 bg-slate-50 border-indigo-500 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 Equity Capital
               </span>
@@ -466,7 +466,7 @@ const AccountsDashboard = () => {
           </div>
 
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            <div class="px-4  transition-all border-l-4 bg-slate-50 border-blue-500 rounded-r-xl hover:shadow-md">
+            <div class="px-4  transition-all border-l-4 bg-slate-50 border-blue-500 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 Total Revenue
               </span>
@@ -477,7 +477,7 @@ const AccountsDashboard = () => {
               </div>
             </div>
 
-            <div class="px-4 transition-all border-l-4 bg-slate-50 border-orange-500 rounded-r-xl hover:shadow-md">
+            <div class="px-4 transition-all border-l-4 bg-slate-50 border-orange-500 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 Purchase Cost
               </span>
@@ -488,7 +488,7 @@ const AccountsDashboard = () => {
               </div>
             </div>
 
-            <div class="px-4  transition-all border-l-4 bg-slate-50 border-emerald-500 rounded-r-xl hover:shadow-md">
+            <div class="px-4  transition-all border-l-4 bg-slate-50 border-emerald-500 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 Gross Profit
               </span>
@@ -499,7 +499,7 @@ const AccountsDashboard = () => {
               </div>
             </div>
 
-            <div class="px-4  transition-all border-l-4 bg-slate-50 border-rose-500 rounded-r-xl hover:shadow-md">
+            <div class="px-4  transition-all border-l-4 bg-slate-50 border-rose-500 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 Total Expense
               </span>
@@ -510,7 +510,7 @@ const AccountsDashboard = () => {
               </div>
             </div>
 
-            <div class="px-4  transition-all border-l-4 bg-slate-50 border-slate-400 rounded-r-xl hover:shadow-md">
+            <div class="px-4  transition-all border-l-4 bg-slate-50 border-slate-400 rounded-r-xl">
               <span class="text-[10px] font-bold uppercase text-slate-500">
                 Profit Margin
               </span>

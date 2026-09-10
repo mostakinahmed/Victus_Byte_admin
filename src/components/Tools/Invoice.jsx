@@ -103,7 +103,7 @@ export default function Invoice({ order, close }) {
     // Company information
     const rightX = pageWidth - margin - 200;
 
-    doc.setFontSize(10);
+    doc.setFontSize(11);
     doc.setTextColor(80);
 
     doc.text("Victus-Byte HQ", rightX, 35);
@@ -221,11 +221,21 @@ export default function Invoice({ order, close }) {
       Number(order.total_amount || 0).toFixed(2),
     ]);
 
+  
     // Generate product table
     autoTable(doc, {
       startY: customerY + 90,
 
-      head: [["Item", "SKU", "Quantity", "Price", "Total"]],
+      // Explicitly set alignment for each header cell to match your column layout
+      head: [
+        [
+          { content: "Item", styles: { halign: "left" } },
+          { content: "SKU", styles: { halign: "center" } },
+          { content: "Quantity", styles: { halign: "center" } },
+          { content: "Price", styles: { halign: "center" } },
+          { content: "Total", styles: { halign: "right" } },
+        ],
+      ],
 
       body: tableRows,
 
@@ -234,7 +244,6 @@ export default function Invoice({ order, close }) {
       headStyles: {
         fillColor: [255, 117, 31],
         textColor: 255,
-        halign: "center",
       },
 
       styles: {
@@ -242,14 +251,13 @@ export default function Invoice({ order, close }) {
         cellPadding: 5,
       },
 
+      // Body column alignments
       columnStyles: {
-        0: {
-          halign: "left",
-        },
-
-        4: {
-          halign: "right",
-        },
+        0: { halign: "left" }, // Item
+        1: { halign: "center" }, // SKU
+        2: { halign: "center" }, // Quantity
+        3: { halign: "center" }, // Price
+        4: { halign: "right" }, // Total
       },
 
       margin: {
