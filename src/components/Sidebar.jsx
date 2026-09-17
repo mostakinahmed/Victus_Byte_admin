@@ -114,7 +114,7 @@ export default function Sidebar() {
           <div className="relative mt-5 border border-slate-700 rounded">
             <button
               onClick={() => setIsServicesOpen(!isServicesOpen)}
-              className={`flex items-center px-4 py-2 bg-slate-800/30 text-slate-400 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all w-full justify-start`}
+              className={`flex items-center px-4 py-2 bg-slate-800/30 text-slate-400 text-[13px] font-black uppercase tracking-widest rounded-xl transition-all w-full justify-start`}
             >
               <div className="flex items-center gap-2">
                 <FiFileText

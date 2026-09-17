@@ -47,7 +47,7 @@ export default function Dashboard() {
   const COLORS = ["#10B981", "#F59E0B", "#EF4444"];
 
   return (
-    <div className="min-h-screen bg-slate-100 pb-10 mt-12 md:mt-0">
+    <div className=" pb-10 mt-12 md:mt-0">
       {/* NAVBAR */}
       <Navbar pageTitle="System Overview" />
 
@@ -81,23 +81,22 @@ export default function Dashboard() {
             color="blue"
           />
 
-          <StatCard
+          {/* <StatCard
             title="Revenue"
             value="$24.5K"
             trend="+22%"
             icon={<FiTrendingUp />}
             color="purple"
-          />
+          /> */}
 
-          
-            <SmsBalanceCard />
-          
+          <SmsBalanceCard />
+          <SmsMonitor />
         </div>
 
         {/* =====================================
             CHART SECTION
         ===================================== */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+        <div className="grid hidden grid-cols-1 xl:grid-cols-3 gap-5">
           {/* SALES CHART */}
           <div className="xl:col-span-2 bg-white rounded border border-slate-200 p-5 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
@@ -106,9 +105,7 @@ export default function Dashboard() {
                   Sales Analytics
                 </h2>
 
-                <p className="text-sm text-slate-400">
-                  Monthly sales overview
-                </p>
+                <p className="text-sm text-slate-400">Monthly sales overview</p>
               </div>
 
               <button className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 transition text-white text-sm font-semibold">
@@ -127,17 +124,9 @@ export default function Dashboard() {
                       x2="0"
                       y2="1"
                     >
-                      <stop
-                        offset="5%"
-                        stopColor="#6366F1"
-                        stopOpacity={0.4}
-                      />
+                      <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4} />
 
-                      <stop
-                        offset="95%"
-                        stopColor="#6366F1"
-                        stopOpacity={0}
-                      />
+                      <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
                     </linearGradient>
                   </defs>
 
@@ -178,10 +167,7 @@ export default function Dashboard() {
                     dataKey="value"
                   >
                     {pieData.map((entry, index) => (
-                      <Cell
-                        key={index}
-                        fill={COLORS[index % COLORS.length]}
-                      />
+                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
 
@@ -192,10 +178,7 @@ export default function Dashboard() {
 
             <div className="space-y-3 mt-4">
               {pieData.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between"
-                >
+                <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-3 rounded-full"
@@ -204,9 +187,7 @@ export default function Dashboard() {
                       }}
                     />
 
-                    <span className="text-sm text-slate-600">
-                      {item.name}
-                    </span>
+                    <span className="text-sm text-slate-600">{item.name}</span>
                   </div>
 
                   <span className="font-bold text-slate-700">
@@ -221,12 +202,13 @@ export default function Dashboard() {
         {/* =====================================
             SMS SECTION
         ===================================== */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-         
-
+        <div className=" flex mt-25 items-center justify-center gap-5">
           {/* SMS MONITOR */}
-          <div className="bg-white rounded border border-slate-200 p-5 shadow-sm overflow-hidden">
+          <div className="hidden overflow-hidden">
             <SmsMonitor />
+          </div>
+          <div className="md:block hidden">
+            <img src="/logo/only shop.png" alt="" />
           </div>
         </div>
       </div>
@@ -237,14 +219,7 @@ export default function Dashboard() {
 // =====================================
 // KPI CARD COMPONENT
 // =====================================
-function StatCard({
-  title,
-  value,
-  trend,
-  icon,
-  color,
-  isAlert,
-}) {
+function StatCard({ title, value, trend, icon, color, isAlert }) {
   const colors = {
     indigo: "bg-indigo-500",
     emerald: "bg-emerald-500",
@@ -254,32 +229,30 @@ function StatCard({
   };
 
   return (
-    <div className="bg-white p-4 rounded border border-slate-200 shadow-sm hover:shadow-lg transition-all">
-      <div className="flex items-start justify-between mb-5">
-        <div
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl ${colors[color]}`}
-        >
-          {icon}
+    <>
+      <div className="bg-white p-4 rounded border border-slate-200 shadow-sm hover:shadow-lg transition-all">
+        <div className="flex items-start justify-between mb-5">
+          <div
+            className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl ${colors[color]}`}
+          >
+            {icon}
+          </div>
+
+          <span
+            className={`text-xs font-black uppercase tracking-wider ${
+              isAlert ? "text-rose-500 animate-pulse" : "text-emerald-500"
+            }`}
+          >
+            {trend}
+          </span>
         </div>
 
-        <span
-          className={`text-xs font-black uppercase tracking-wider ${
-            isAlert
-              ? "text-rose-500 animate-pulse"
-              : "text-emerald-500"
-          }`}
-        >
-          {trend}
-        </span>
+        <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold">
+          {title}
+        </h3>
+
+        <p className="text-2xl font-black text-slate-800 mt-2">{value}</p>
       </div>
-
-      <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold">
-        {title}
-      </h3>
-
-      <p className="text-2xl font-black text-slate-800 mt-2">
-        {value}
-      </p>
-    </div>
+    </>
   );
 }
