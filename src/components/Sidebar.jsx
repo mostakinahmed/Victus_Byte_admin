@@ -34,26 +34,23 @@ export default function Sidebar() {
     { name: "Courier", path: "/courier", icon: <FiFileText /> },
     { name: "Accounts", path: "/accounts", icon: <FiUser /> },
     { name: "Users", path: "/users", icon: <FiUsers /> },
-    { name: "Tools", path: "/tools", icon: <FiFileText /> },
+    { name: "Report Manage", path: "/report-manager", icon: <FiFileText /> },
     { name: "Offer/Coupon", path: "/offer", icon: <FiUser /> },
   ];
 
   return (
     <div className="">
       {/* --- MOBILE TOP HEADER --- */}
-      <div className="lg:hidden fixed font-sans top-0 left-0 w-full h-12 bg-slate-900 border-b border-slate-800 z-[120] flex items-center px-4 justify-between">
+      <div className="lg:hidden fixed font-sans top-0 left-0 w-full h-14 bg-black border-b border-slate-800 z-[120] flex items-center px-4 justify-between">
         <div
           className="flex items-center gap-3 cursor-pointer"
           onClick={() => navigate("/")}
         >
           {/* Brand Color Applied to Mobile Logo Bg */}
-          <div className="p-1.5 bg-[#1976d2] rounded-lg shadow-lg">
-            <FiLayers size={20} className="text-white hidden" />
-            <FiLayers size={15} className="text-white md:hidden" />
+          <div className="p-1.5 rounded-lg shadow-lg">
+          <img className="h-9 w-full" src="/logo/web NAV tp white1.png" alt="" />
           </div>
-          <span className="text-white text-xs font-black uppercase tracking-widest">
-            Victus Byte
-          </span>
+          
         </div>
         <button
           onClick={() => setIsMobileExpanded(!isMobileExpanded)}
@@ -73,14 +70,13 @@ export default function Sidebar() {
           className="hidden lg:flex p-5 items-center gap-3 cursor-pointer"
           onClick={() => navigate("/")}
         >
-       
           <div className="flex flex-col">
             <img src="/logo/web NAV tp white1.png" alt="" />
           </div>
         </div>
 
         {/* --- NAVIGATION --- */}
-        <nav className="flex-1 px-4 mt-5 lg:mt-1 md:space-y-3  overflow-y-auto no-scrollbar">
+        <nav className="flex-1 px-4 mt-7 lg:mt-1 md:space-y-3 space-y-3  overflow-y-auto no-scrollbar">
           {links.map((link) => {
             const isActive =
               link.path === "/"
@@ -94,8 +90,8 @@ export default function Sidebar() {
                 onClick={() => setIsMobileExpanded(false)}
                 className={`group flex items-center px-3 py-2  rounded transition-all ${
                   isActive
-                    ? "bg-[#f66107ff] text-white font-medium"
-                    : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
+                    ? "bg-brand text-white font-medium"
+                    : "text-slate-300/90 hover:bg-slate-800/70 font-medium hover:text-slate-200"
                 } justify-start`}
               >
                 <span
@@ -161,11 +157,9 @@ export default function Sidebar() {
                 >
                   E-mail Service
                 </button>
-                   <button
+                <button
                   onClick={() => {
-                    window.open(
-                      "https://bulksmsbd.net/dashboard",
-                    );
+                    window.open("https://bulksmsbd.net/dashboard");
                     setIsServicesOpen(false);
                   }}
                   className="w-full text-left px-3 py-2.5 text-[12px] cursor-pointer bg-slate-800 tracking-wider font-medium text-slate-400 hover:bg-slate-700/30 hover:text-[#1976d2] rounded "

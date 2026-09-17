@@ -142,7 +142,7 @@ export default function CheckAndUpdateStock() {
       <Navbar pageTitle="Stock Management" />
       <div className="md:flex border-t  md:mt-3 font-sans">
         {/* LEFT PANEL */}
-        <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-sm flex flex-col">
+        <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-xs flex flex-col">
           <div className="md:px-5 px-2 py-4 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-brand rounded-full"></div>
@@ -159,13 +159,13 @@ export default function CheckAndUpdateStock() {
                   Catalog Search
                 </label>
                 <div className="relative group">
-                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400  transition-colors" />
                   <input
                     type="text"
                     placeholder="PID or SKU..."
                     value={searchId}
                     onChange={(e) => setSearchId(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 placeholder:font-medium bg-slate-50 border uppercase border-slate-300 rounded text-md font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                    className="w-full pl-10 pr-4 py-2 placeholder:font-medium bg-gray-100 border uppercase border-slate-400/70 rounded text-md font-bold text-slate-700 outline-none  transition-all"
                   />
                 </div>
               </div>
@@ -220,7 +220,7 @@ export default function CheckAndUpdateStock() {
         </div>
 
         {/* MIDDLE PANEL */}
-        <div className="md:w-1/2 border-r border-slate-200 bg-white flex flex-col h-full overflow-hidden shadow-sm">
+        <div className="md:w-1/2 border-r border-slate-200 bg-white flex flex-col h-full overflow-hidden shadow-xs">
           <div className="md:px-5 px-2 py-4 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-brand rounded-full"></div>
@@ -293,7 +293,7 @@ export default function CheckAndUpdateStock() {
                 </tbody>
               </table>
             ) : (
-              <div className="text-center py-20 opacity-10">
+              <div className="text-center py-40 opacity-10">
                 <FiActivity size={40} className="mx-auto" />
               </div>
             )}
@@ -301,7 +301,7 @@ export default function CheckAndUpdateStock() {
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="md:w-1/2 bg-white flex flex-col border-slate-200 shadow-sm border overflow-hidden">
+        <div className="md:w-1/2 bg-white flex flex-col border-slate-200 shadow-xs border overflow-hidden">
           <div
             className={`md:px-5 px-2 py-4 border-b ${toggle ? "bg-slate-50" : "bg-indigo-50/30 border-indigo-200"}`}
           >

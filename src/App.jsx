@@ -11,7 +11,6 @@ import Products from "./pages/Products";
 import Stock from "./pages/Stock";
 import Orders from "./pages/Orders";
 import Users from "./pages/Users";
-import Tools from "./pages/Tools";
 import Category from "./pages/Category";
 import AddProduct from "./components/Products/AddProduct";
 import UpdateProduct from "./components/Products/UpdateProduct";
@@ -25,6 +24,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import Accounts from "./pages/Accounts";
 import { StatusManagement } from "./components/Products/StatusManagement";
 import Courier from "./pages/Courier.jsx";
+import AdminReports from "./pages/AdminReports.jsx";
 
 function AppLayout() {
   const { user } = useContext(AuthContext);
@@ -66,7 +66,7 @@ function AppLayout() {
               </PrivateRoute>
             }
           />
-            <Route
+          <Route
             path="/products/update-product"
             element={
               <PrivateRoute>
@@ -100,6 +100,16 @@ function AppLayout() {
               </PrivateRoute>
             }
           />
+          {/* Other routes */}
+          <Route
+            path="/report-manager"
+            element={
+              <PrivateRoute>
+                <AdminReports />
+              </PrivateRoute>
+            }
+          />
+
           <Route
             path="/stock"
             element={
@@ -137,7 +147,6 @@ function AppLayout() {
             }
           />
 
-         
           <Route
             path="/sales/new"
             element={
@@ -155,14 +164,6 @@ function AppLayout() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/tools"
-            element={
-              <PrivateRoute>
-                <Tools />
-              </PrivateRoute>
-            }
-          />
 
           <Route
             path="/courier"
@@ -172,7 +173,7 @@ function AppLayout() {
               </PrivateRoute>
             }
           />
-             <Route
+          <Route
             path="/offer"
             element={
               <PrivateRoute>

@@ -42,7 +42,7 @@ export default function Navbar({ pageTitle }) {
 
   return (
     <div
-      className="flex justify-between items-center bg-white border border-slate-300 border-b-2 md:px-6 px-2 md:py-3 py-1.5 sticky top-0 z-[80] transition-all duration-300 mb-3 mt-1"
+      className="flex justify-between items-center bg-white border border-slate-300 border-b-2 md:px-6 px-2 md:py-3 py-1.5 sticky top-0 z-[80] transition-all duration-300 mb-3 mt-15 md:mt-1"
       style={{ borderBottomColor: "#F66107" }}
     >
       {/* --- Left Side: Dynamic Page Context --- */}
