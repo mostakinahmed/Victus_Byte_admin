@@ -17,12 +17,14 @@ const AddProduct = () => {
 
   const [keywordInput, setKeywordInput] = useState("");
   const [colorInput, setKeywordColorInput] = useState("");
+  const [imageFiles, setImageFiles] = useState([]);
+  const [folderId, setFolderId] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
     brandName: "",
     price: { selling: "" },
-    images: [""],
+    images: [],
     description: "",
     category: "",
     keywords: [],
@@ -108,10 +110,115 @@ const AddProduct = () => {
   // -------------------
   // SUBMIT LOGIC
   // -------------------
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   // 1. Manual Validation for custom parts
+  //   if (formData.keywords.length === 0) {
+  //     return Swal.fire(
+  //       "Required",
+  //       "Please add at least one Search Keyword",
+  //       "warning",
+  //     );
+  //   }
+
+  //   // 2. Format Specifications
+  //   const formattedSpecs = {};
+  //   customSpecs.forEach((group) => {
+  //     if (group.groupName.trim()) {
+  //       const validFields = group.fields.filter(
+  //         (f) => f.key.trim() && f.value.trim(),
+  //       );
+  //       if (validFields.length > 0) {
+  //         formattedSpecs[group.groupName] = validFields;
+  //       }
+  //     }
+  //   });
+
+  //   if (Object.keys(formattedSpecs).length === 0) {
+  //     return Swal.fire(
+  //       "Required",
+  //       "Please add at least one Specification Section with Key/Value",
+  //       "warning",
+  //     );
+  //   }
+
+  //   const finalData = {
+  //     ...formData,
+  //     images: formData.images.filter((img) => img.trim() !== ""),
+  //     specifications: formattedSpecs,
+  //   };
+
+  //   console.log(finalData);
+
+  //   saveData(finalData);
+  // };
+  const handleImageUpload = async (e) => {
+    if (!folderId || folderId.trim() === "") {
+      alert("Please enter a Folder ID before uploading images!");
+      e.target.value = ""; // Reset the file input so they can select again later
+      return;
+    }
+
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    const uploadData = new FormData();
+    files.forEach((file) => {
+      uploadData.append("images", file);
+    });
+
+    try {
+      // Show a loading popup while images upload
+      Swal.fire({
+        title: "Uploading images...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      const uploadResponse = await fetch(
+        `https://api.victusbyte.com/api/upload/images?folderId=${encodeURIComponent(folderId)}`,
+        {
+          method: "POST",
+          body: uploadData,
+          credentials: "include",
+        },
+      );
+
+      if (!uploadResponse.ok) {
+        throw new Error("Image upload failed");
+      }
+
+      const uploadResult = await uploadResponse.json();
+
+      // 👉 CORRECTED: Log the parsed uploadResult.images array, not uploadResponse
+      console.log("Returned Image Array:", uploadResult.images);
+
+      const newImageUrls = uploadResult.images; // array of URLs from server
+
+      // Save URLs directly into your form state
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...newImageUrls],
+      }));
+      Swal.close(); // Close the loading alert
+    } catch (error) {
+      console.error("Image upload error:", error);
+      Swal.fire(
+        "Upload Failed",
+        "Unable to upload product images. Please try again.",
+        "error",
+      );
+    } finally {
+      // Reset file input so the same file can be chosen again if needed
+      e.target.value = "";
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1. Manual Validation for custom parts
+    // 1. Validate keywords
     if (formData.keywords.length === 0) {
       return Swal.fire(
         "Required",
@@ -120,13 +227,24 @@ const AddProduct = () => {
       );
     }
 
-    // 2. Format Specifications
+    // 2. Validate images (checking formData.images directly since they are already URLs)
+    if (formData.images.length === 0) {
+      return Swal.fire(
+        "Required",
+        "Please upload at least one product image",
+        "warning",
+      );
+    }
+
+    // 3. Format Specifications
     const formattedSpecs = {};
+
     customSpecs.forEach((group) => {
       if (group.groupName.trim()) {
         const validFields = group.fields.filter(
           (f) => f.key.trim() && f.value.trim(),
         );
+
         if (validFields.length > 0) {
           formattedSpecs[group.groupName] = validFields;
         }
@@ -141,16 +259,110 @@ const AddProduct = () => {
       );
     }
 
+    // 4. Prepare final product data (formData.images already holds the backend URLs)
     const finalData = {
       ...formData,
-      images: formData.images.filter((img) => img.trim() !== ""),
       specifications: formattedSpecs,
     };
 
-    console.log(finalData);
+    console.log("Final Product Data:", finalData);
 
+    // 5. Save product
     saveData(finalData);
   };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   // 1. Validate keywords
+  //   if (formData.keywords.length === 0) {
+  //     return Swal.fire(
+  //       "Required",
+  //       "Please add at least one Search Keyword",
+  //       "warning",
+  //     );
+  //   }
+
+  //   // 2. Validate images
+  //   if (imageFiles.length === 0) {
+  //     return Swal.fire(
+  //       "Required",
+  //       "Please upload at least one product image",
+  //       "warning",
+  //     );
+  //   }
+
+  //   // 3. Format Specifications
+  //   const formattedSpecs = {};
+
+  //   customSpecs.forEach((group) => {
+  //     if (group.groupName.trim()) {
+  //       const validFields = group.fields.filter(
+  //         (f) => f.key.trim() && f.value.trim(),
+  //       );
+
+  //       if (validFields.length > 0) {
+  //         formattedSpecs[group.groupName] = validFields;
+  //       }
+  //     }
+  //   });
+
+  //   if (Object.keys(formattedSpecs).length === 0) {
+  //     return Swal.fire(
+  //       "Required",
+  //       "Please add at least one Specification Section with Key/Value",
+  //       "warning",
+  //     );
+  //   }
+
+  //   try {
+  //     // 4. Upload images
+  //     const uploadData = new FormData();
+
+  //     imageFiles.forEach((file) => {
+  //       uploadData.append("images", file);
+  //     });
+
+  //     const uploadResponse = await fetch(
+  //       "https://api.victusbyte.com/api/upload/images",
+  //       {
+  //         method: "POST",
+  //         body: uploadData,
+  //         credentials: "include",
+  //       },
+  //     );
+
+  //     if (!uploadResponse.ok) {
+  //       throw new Error("Image upload failed");
+  //     }
+
+  //     const uploadResult = await uploadResponse.json();
+
+  //     console.log("Uploaded images:", uploadResult);
+
+  //     // 5. Get image URLs from backend
+  //     const imageUrls = uploadResult.images;
+
+  //     // 6. Prepare final product data
+  //     const finalData = {
+  //       ...formData,
+  //       images: imageUrls,
+  //       specifications: formattedSpecs,
+  //     };
+
+  //     console.log("Final Product Data:", finalData);
+
+  //     // 7. Save product
+  //     saveData(finalData);
+  //   } catch (error) {
+  //     console.error("Image upload error:", error);
+
+  //     Swal.fire(
+  //       "Upload Failed",
+  //       "Unable to upload product images. Please try again.",
+  //       "error",
+  //     );
+  //   }
+  // };
 
   const saveData = async (data) => {
     try {
@@ -359,7 +571,7 @@ const AddProduct = () => {
                     </div>
                   </div>
 
-                  {/* IMAGES */}
+                  {/* IMAGES
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">
                       Image Gallery (URLs)
@@ -393,6 +605,65 @@ const AddProduct = () => {
                     >
                       + Add more images
                     </button>
+                  </div> */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                        Image Gallery
+                      </label>
+                      <input
+                        className="w-40 border px-2 py-1 border-slate-300 outline-none bg-slate-50"
+                        type="text"
+                        required
+                        placeholder="Folder ID"
+                        value={folderId}
+                        onChange={(e) => setFolderId(e.target.value)} // Updates state as you type
+                      />
+                    </div>
+
+                    {/* Image Preview + Upload */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {formData.images.map((img, idx) => (
+                        <div
+                          key={idx}
+                          className="relative border rounded-lg overflow-hidden bg-gray-50 aspect-square"
+                        >
+                          <img
+                            src={img}
+                            alt={`Product ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+
+                          <button
+                            type="button"
+                            onClick={() => removeImage(idx)}
+                            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 text-white text-lg flex items-center justify-center hover:bg-red-600 transition"
+                          >
+                            ×
+                          </button>
+
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs px-2 py-1">
+                            Image {idx + 1}
+                          </div>
+                        </div>
+                      ))}
+
+                      {/* Add Image */}
+                      <label className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-[#F66107] transition">
+                        <span className="text-3xl text-gray-400">+</span>
+                        <span className="text-xs text-gray-500 mt-1">
+                          Add Image
+                        </span>
+
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
                   </div>
 
                   <textarea
