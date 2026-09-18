@@ -17,7 +17,6 @@ const AddProduct = () => {
 
   const [keywordInput, setKeywordInput] = useState("");
   const [colorInput, setKeywordColorInput] = useState("");
-  const [imageFiles, setImageFiles] = useState([]);
   const [folderId, setFolderId] = useState("");
 
   const [formData, setFormData] = useState({
@@ -69,19 +68,6 @@ const AddProduct = () => {
       (_, i) => i !== fieldIndex,
     );
     setCustomSpecs(updated);
-  };
-
-  // -------------------
-  // IMAGE HANDLERS
-  // -------------------
-  const updateImage = (index, value) => {
-    const updated = [...formData.images];
-    updated[index] = value;
-    setFormData((prev) => ({ ...prev, images: updated }));
-  };
-
-  const addImageField = () => {
-    setFormData((prev) => ({ ...prev, images: [...prev.images, ""] }));
   };
 
   const removeImage = (index) => {
@@ -158,6 +144,17 @@ const AddProduct = () => {
       alert("Please enter a Folder ID before uploading images!");
       e.target.value = ""; // Reset the file input so they can select again later
       return;
+    }
+
+    // Check file sizes (Max 500KB per image)
+    const MAX_SIZE = 500 * 1024; // 500KB in bytes
+    for (let i = 0; i < e.target.files.length; i++) {
+      const file = e.target.files[i];
+      if (file.size > MAX_SIZE) {
+        alert(`Image exceeds 500KB! Please choose a smaller image.`);
+        e.target.value = ""; // Reset the file input
+        return;
+      }
     }
 
     const files = Array.from(e.target.files);
@@ -393,11 +390,12 @@ const AddProduct = () => {
   };
 
   const resetForm = () => {
+    setFolderId("");
     setFormData({
       name: "",
       brandName: "",
       price: { selling: "" },
-      images: [""],
+      images: [],
       description: "",
       category: "",
       keywords: [],
