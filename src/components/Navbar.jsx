@@ -164,10 +164,10 @@ export default function Navbar({ pageTitle }) {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative bg-white rounded-xl shadow-xl w-full max-w-[340px] overflow-hidden border border-slate-200"
+              className="relative bg-white rounded shadow-xl w-full max-w-[340px] overflow-hidden"
             >
               {/* Profile Header (Compact) */}
-              <div className="p-5 flex items-center gap-4 bg-slate-800 border-b border-slate-100">
+              <div className="p-5 flex items-center gap-4 bg-black border-b border-slate-100">
                 <div className="relative shrink-0">
                   <img
                     src={
@@ -237,7 +237,7 @@ export default function Navbar({ pageTitle }) {
               <div className="p-3 bg-slate-50/50 border-t border-slate-100">
                 <button
                   onClick={() => logout()}
-                  className="w-full flex cursor-pointer items-center justify-center gap-2 py-3 text-rose-600 hover:bg-rose-100 bg-rose-50 rounded-lg text-sm font-bold transition-colors active:scale-95"
+                  className="w-full flex cursor-pointer items-center justify-center gap-2 py-3 text-rose-600 hover:bg-rose-200 bg-rose-100 rounded-lg text-sm font-bold transition-colors active:scale-95"
                 >
                   <FiLogOut size={14} />
                   Logout Session
