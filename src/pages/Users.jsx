@@ -11,7 +11,7 @@ export default function Users() {
   return (
     <div className="mt-12 md:mt-0 font-sans">
       <Navbar pageTitle="User Management" />
-      <div className=" shadow-xl p-4 w-full mx-auto rounded-xl border border-slate-100">
+      <div className="shadow p-4 w-full mx-auto h-200 rounded-xl border border-slate-100 overflow-hidden">
         
         {/* Main Navigation Container */}
         <div className="flex flex-col lg:flex-row justify-between md:justify-center items-start w-full gap-4 mb-6">
@@ -66,14 +66,15 @@ export default function Users() {
           </div>
         </div>
 
-        {/* Conditional Content */}
-        <div className="min-h-screen animate-in fade-in slide-in-from-bottom-2 duration-500">
+        {/* Conditional Content (min-h-screen removed to stop forced scrolling) */}
+        <div className="animate-in fade-in slide-in-from-bottom-2 overflow-y-auto duration-500">
           {activeTab === "admin" && <AdminList />}
           {activeTab === "customer" && <CustomerList />}
           {activeTab === "addAdmin" && <AdminRegistration />}
           {activeTab === "system" && <SystemPersonnel />}
         </div>
       </div>
+
     </div>
   );
 }

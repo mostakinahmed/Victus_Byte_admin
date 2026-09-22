@@ -41,27 +41,6 @@ const AdminList = () => {
       admin.adminID?.includes(searchTerm.toUpperCase()),
   );
 
-  // 🔹 Delete admin handler
-  // const handleDelete = async (id) => {
-  //   const confirmed = window.confirm(
-  //     "Are you sure you want to delete this admin?"
-  //   );
-  //   if (!confirmed) return;
-
-  //   try {
-  //     setLoading(true);
-  //     await axios.delete(
-  //       `https://fabribuzz.onrender.com/api/user/admin/delete/${id}`
-  //     );
-  //     await updateApi(); // Refresh admin list after delete
-  //   } catch (err) {
-  //     console.error("Delete failed:", err);
-  //     alert("Failed to delete admin. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
     <div className="bg-white rounded border border-slate-200 overflow-hidden animate-in fade-in duration-500">
       {editAdmin ? (
@@ -75,7 +54,7 @@ const AdminList = () => {
                 <div>
                   <h2 className="text-[14px] font-black text-slate-800 uppercase tracking-[0.2em] flex items-center gap-3">
                     <span className="w-1.5 h-5 bg-[#1976d2] rounded-full"></span>
-                    Customer List
+                    Admin List
                   </h2>
                 </div>
               </div>
@@ -93,10 +72,10 @@ const AdminList = () => {
             </div>
           </div>
 
-          {/* --- Atomized Table --- */}
-          <div className="overflow-x-auto">
+          {/* --- Atomized Table with Vertical Auto Scroll --- */}
+          <div className="max-h-[450px] overflow-y-auto overflow-x-auto relative">
             <table className="w-full text-left border-collapse whitespace-nowrap">
-              <thead className="bg-slate-50 border-b border-slate-200">
+              <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
                 <tr>
                   <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
                     S/N
@@ -143,43 +122,43 @@ const AdminList = () => {
                         {(index + 1).toString().padStart(2, "0")}
                       </td>
 
-                      {/* 2. Admin ID (Separate) */}
+                      {/* 2. Admin ID */}
                       <td className="px-6 py-3">
                         <span className="flex items-center gap-1.5 text-[12px] font-mono font-black text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">
                           <FiKey size={12} /> {admin.adminID}
                         </span>
                       </td>
 
-                      {/* 3. Full Name (Separate) */}
+                      {/* 3. Full Name */}
                       <td className="px-6 py-3">
                         <span className="text-sm font-black text-slate-800 uppercase ">
                           {admin.fullName}
                         </span>
                       </td>
 
-                      {/* 4. Username (Separate) */}
+                      {/* 4. Username */}
                       <td className="px-6 py-3 text-sm font-medium text-slate-800 lowercase">
                         @{admin.userName}
                       </td>
 
-                      {/* 5. Email (Separate) */}
+                      {/* 5. Email */}
                       <td className="px-6 py-3 text-sm font-medium text-slate-800 lowercase">
                         {admin.email}
                       </td>
 
-                      {/* 6. Phone (Separate) */}
+                      {/* 6. Phone */}
                       <td className="px-6 py-3 text-sm font-medium text-slate-800 lowercase">
                         {admin.phone}
                       </td>
 
-                      {/* 7. Role (Separate) */}
+                      {/* 7. Role */}
                       <td className="px-6 py-3">
                         <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-indigo-600 tracking-wider bg-indigo-50/50 px-2 py-0.5 rounded border border-indigo-100">
                           <FiShield size={10} /> {admin.role}
                         </div>
                       </td>
 
-                      {/* 8. Status (Separate) */}
+                      {/* 8. Status */}
                       <td className="px-6 py-3">
                         <span
                           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${
@@ -199,9 +178,9 @@ const AdminList = () => {
                         </span>
                       </td>
 
-                      {/* 9. Last Active (Separate) */}
+                      {/* 9. Last Active */}
                       <td className="px-6 py-3">
-                        <div className="flex items-center gap-2  text-sm font-medium text-slate-800 lowercase">
+                        <div className="flex items-center gap-2 text-sm font-medium text-slate-800 lowercase">
                           {formatDate(admin.lastLogin)}
                         </div>
                       </td>

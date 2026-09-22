@@ -5,7 +5,7 @@ import { DataContext } from "@/Context Api/ApiContext";
 
 const CustomerList = () => {
   const { customerData } = useContext(DataContext);
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("list");
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -20,7 +20,7 @@ const CustomerList = () => {
     ) || [];
 
   return (
-    <div className="bg-white rounded shadow-xs border p-5  px-2">
+    <div className="bg-white rounded shadow-xs border p-5 px-2">
       {/* 1. Header + Brand Search */}
       {activeTab === "list" && (
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
@@ -41,11 +41,11 @@ const CustomerList = () => {
         </div>
       )}
 
-      {/* 2. Customer Table */}
+      {/* 2. Customer Table with Vertical Auto Scroll */}
       {activeTab === "list" && (
-        <div className="overflow-x-auto">
+        <div className="max-h-[450px] overflow-y-auto overflow-x-auto relative rounded-lg border border-slate-100">
           <table className="w-full text-sm text-left whitespace-nowrap">
-            <thead className="bg-slate-100 shadow-sm text-slate-500 uppercase text-[10px] font-black tracking-widest">
+            <thead className="bg-slate-100 shadow-sm text-slate-500 uppercase text-[10px] font-black tracking-widest sticky top-0 z-10">
               <tr>
                 <th className="py-4 px-4 border-b border-slate-100">User ID</th>
                 <th className="py-4 px-4 border-b border-slate-100">
@@ -59,7 +59,7 @@ const CustomerList = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 ">
+            <tbody className="divide-y divide-slate-100">
               {filteredCustomers.length > 0 ? (
                 filteredCustomers.map((customer) => (
                   <tr
@@ -80,7 +80,7 @@ const CustomerList = () => {
                     </td>
                     <td className="py-2 px-4">
                       {customer.isVerified ? (
-                        <span className="bg-emerald-50 text-emerald-600 text-[10px] font-black px-2 py-1 rounded uppercase  border border-emerald-100">
+                        <span className="bg-emerald-50 text-emerald-600 text-[10px] font-black px-2 py-1 rounded uppercase border border-emerald-100">
                           Verified
                         </span>
                       ) : (
@@ -93,7 +93,7 @@ const CustomerList = () => {
                       <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => {
-                            setSelectedCustomer(customer); // FIXED: Passing customer instead of admin
+                            setSelectedCustomer(customer);
                             setActiveTab("view");
                           }}
                           className="p-2 text-slate-500 cursor-pointer hover:text-[#1976d2] hover:bg-white rounded-lg transition-all"
