@@ -856,44 +856,59 @@ const OrderList = () => {
                                 )}
                               </div>
 
-                              <div className="p-2.5 rounded bg-red-50 border border-slate-300">
-                                <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
-                                  IMEI Number
-                                </p>
-                                {showDetails.courier.delivery_status ===
-                                "Pending" ? (
-                                  <div className="space-y-2">
-                                    <div className="flex gap-2">
-                                      <input
-                                        type="text"
-                                        maxlength={15}
-                                        value={imei1Inputs[idx] || ""}
-                                        onChange={(e) =>
-                                          setImei1Inputs({
-                                            ...imei1Inputs,
-                                            [idx]: e.target.value,
-                                          })
-                                        }
-                                        className="w-full text-[15px] tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded  outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal placeholder:text-slate-300"
-                                        placeholder="Only for mobile."
-                                      />
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <div className="flex items-center gap-1.5">
-                                    {item.imei ? (
-                                      <span className="text-[14px] font-mono font-black bg-amber-200 text-emerald-700 px-2 py-0.5 rounded">
-                                        #{item.imei}
-                                      </span>
-                                    ) : (
-                                      <span className="text-[10px] font-bold text-rose-400 flex items-center gap-1 uppercase tracking-tighter">
-                                        <div className="w-1 h-1 bg-rose-400 rounded-full animate-pulse" />{" "}
-                                        Pending IMEI
-                                      </span>
+
+                              {showDetails.items.map((item, idx) => {
+                                // Find category for this item
+                                const matchedProduct = productData.find(
+                                  (product) => product.pID === item.product_id,
+                                );
+                                const currentCategory = matchedProduct
+                                  ? matchedProduct.category
+                                  : "";
+
+                                // Check if it's a mobile phone (safe flexible check)
+                                const isMobilePhone =
+                                  currentCategory
+                                    ?.toLowerCase()
+                                    .includes("mobile") ||
+                                  currentCategory
+                                    ?.toLowerCase()
+                                    .includes("phone");
+
+                                return (
+                                  <div key={item.id || idx}>
+                                    {/* IMEI Box only shows if it's a mobile phone */}
+                                    {isMobilePhone && (
+                                      <div className="p-2.5 rounded bg-red-50 border border-slate-300">
+                                        <p className="text-[12px] font-medium text-slate-600 uppercase mb-1">
+                                          IMEI Number
+                                        </p>
+
+                                        {showDetails.courier.delivery_status ===
+                                        "Pending" ? (
+                                          <input
+                                            type="text"
+                                            maxLength={15}
+                                            value={imei1Inputs[idx] || ""}
+                                            onChange={(e) =>
+                                              setImei1Inputs({
+                                                ...imei1Inputs,
+                                                [idx]: e.target.value,
+                                              })
+                                            }
+                                            className="w-full text-[15px] tracking-wide font-semibold px-2 py-1 bg-white border border-slate-300 rounded outline-none"
+                                            placeholder="Enter IMEI..."
+                                          />
+                                        ) : (
+                                          <span>
+                                            {item.imei || "Pending IMEI"}
+                                          </span>
+                                        )}
+                                      </div>
                                     )}
                                   </div>
-                                )}
-                              </div>
+                                );
+                              })}
                             </div>
                           </div>
                         </div>

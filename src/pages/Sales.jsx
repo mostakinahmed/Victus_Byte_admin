@@ -151,7 +151,7 @@ export default function Sales() {
                 ].map((header, index) => (
                   <th
                     key={header}
-                    className={`p-4 text-[11px] font-black text-slate-500 uppercase tracking-widest bg-slate-50 border-b border-slate-200 
+                    className={`p-4 text-[11px] font-black text-slate-600 uppercase tracking-widest bg-slate-100 border-b border-slate-200 
           ${index === 0 ? "text-left" : index === 9 ? "text-right" : "text-center"}`}
                   >
                     {header}
@@ -197,14 +197,14 @@ export default function Sales() {
                       >
                         {sale.staffName?.charAt(0) || "U"}
                       </div>
-                      <span className="text-[11px] font-black text-slate-700 uppercase tracking-tighter">
+                      <span className="text-[11px] font-black text-slate-700 uppercase">
                         {sale.staffName}
                       </span>
                     </div>
                   </td>
 
                   {/* 5. Date (Center) */}
-                  <td className="px-4 text-center text-[11px] font-black text-slate-500">
+                  <td className="px-4 text-center text-[12px] font-bold text-slate-600">
                     {sale.order_date?.split(" ")[0]}
                   </td>
 
@@ -226,7 +226,7 @@ export default function Sales() {
 
                   {/* 7. Del Type (Center) */}
                   <td className="px-4 text-center">
-                    <span className="text-[11px] font-black text-slate-500 uppercase border border-slate-200 px-2 py-1 rounded-full bg-white">
+                    <span className="text-[11px] font-black text-slate-600 uppercase border border-slate-300 px-2 py-1 rounded-full bg-white">
                       {sale.courier.del_type || "REG"}
                     </span>
                   </td>
@@ -234,13 +234,13 @@ export default function Sales() {
                   {/* 8. Payout Method (Center) */}
                   <td className="px-4 text-center">
                     <span
-                      className={`text-[11px] font-black px-2 py-0.5 rounded
+                      className={`text-[11px] font-black px-2 py-0.5 tracking-wider rounded
             ${
               sale.courier.payment_method === "bKash"
                 ? "text-pink-600 bg-pink-50"
                 : sale.courier.payment_method === "Nagad"
                   ? "text-orange-600 bg-orange-50"
-                  : "text-slate-500 bg-slate-100"
+                  : "text-slate-600 bg-slate-100"
             }`}
                     >
                       {sale.courier.payment_method || "N/A"}
