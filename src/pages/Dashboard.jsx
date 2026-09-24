@@ -230,7 +230,7 @@ function StatCard({ title, value, trend, icon, color, isAlert }) {
 
   return (
     <>
-      <div className="bg-white p-4 rounded border border-slate-200 shadow-sm hover:shadow-lg transition-all">
+      <div className="bg-white p-4 rounded border border-slate-300 hover:shadow-lg transition-all">
         <div className="flex items-start justify-between mb-5">
           <div
             className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl ${colors[color]}`}
