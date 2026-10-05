@@ -24,11 +24,10 @@ import {
   Pie,
   Cell,
 } from "recharts";
+import ManualSMS from "@/components/ManualSMS";
 
 export default function Dashboard() {
-  // ============================
-  // CHART DATA
-  // ============================
+
   const salesData = [
     { name: "Jan", sales: 400 },
     { name: "Feb", sales: 900 },
@@ -45,7 +44,6 @@ export default function Dashboard() {
   ];
 
   const COLORS = ["#10B981", "#F59E0B", "#EF4444"];
-
   return (
     <div className=" pb-10 mt-12 md:mt-0">
       {/* NAVBAR */}
