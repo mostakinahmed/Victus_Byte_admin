@@ -72,6 +72,7 @@ export default function CheckAndUpdateStock() {
     if (foundProduct && foundStock) {
       setCurrentStock(foundStock);
       setSelectedProduct(foundProduct);
+      setToggle(true);
       const selectSKU = Object.values(foundStock).find(
         (s) => s.skuID === searchId,
       );
@@ -142,7 +143,7 @@ export default function CheckAndUpdateStock() {
       <Navbar pageTitle="Stock Management" />
       <div className="md:flex border-t  md:mt-3 font-sans">
         {/* LEFT PANEL */}
-        <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden shadow-xs flex flex-col">
+        <div className="border-r border-slate-200 md:w-1/2 bg-white overflow-hidden  flex flex-col">
           <div className="md:px-5 px-2 py-4 border-b border-slate-200">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-brand rounded-full"></div>
@@ -171,7 +172,7 @@ export default function CheckAndUpdateStock() {
               </div>
               <button
                 onClick={handleSearch}
-                className="bg-black mt-2 md:mt-0 text-white px-6 py-2.5 rounded font-bold text-sm hover:bg-brand transition-all shadow-lg flex items-center gap-2"
+                className="bg-black mt-2 md:mt-0 text-white px-6 py-2.5 rounded font-bold text-sm hover:bg-brand transition-all flex items-center gap-2"
               >
                 <FiZap /> Search
               </button>
@@ -190,23 +191,92 @@ export default function CheckAndUpdateStock() {
                     Add Stock
                   </button>
                 </div>
-                <div className="flex gap-6 items-start">
-                  <img
-                    src={selectedProduct.images[0]}
-                    alt=""
-                    className="w-28 h-28 object-contain rounded border-2 border-slate-50 bg-white  p-2"
-                  />
-                  <div className="flex-1 space-y-3 pt-1">
-                    <h2 className="text-lg font-medium text-slate-900 leading-tight">
-                      {selectedProduct.name}
-                    </h2>
-                    <div className="bg-slate-900 rounded-2xl p-3 shadow-md">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">
-                        MSRP / Default Price
-                      </p>
-                      <p className="text-lg font-black text-white">
-                        ৳ {selectedProduct.price.selling}
-                      </p>
+                <div className="space-y-6">
+                  <div className="flex gap-6 items-start">
+                    <div className="relative shrink-0">
+                      <img
+                        src={selectedProduct.images[0]}
+                        alt={selectedProduct.name}
+                        className="w-30 h-30 object-contain rounded-2xl border-2 border-slate-50 bg-white shadow-sm p-2"
+                      />
+                    </div>
+
+                    <div className="flex-1 space-y-3 pt-1">
+                      <h2 className="md:text-lg font-medium text-slate-900 leading-tight">
+                        {selectedProduct.name}
+                      </h2>
+
+                      {/* Badges / Meta Info: Type, Brand, Code, Category */}
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        {selectedProduct.type && (
+                          <span className="text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md font-medium border border-slate-200">
+                            TYPE:{" "}
+                            <span className="font-bold text-slate-800">
+                              {selectedProduct.type}
+                            </span>
+                          </span>
+                        )}
+
+                        {selectedProduct.brand && (
+                          <span className="text-orange-600 bg-orange-50 px-2.5 py-1 rounded-md font-medium border border-orange-100">
+                            BRAND:{" "}
+                            <span className="font-bold">
+                              {selectedProduct.brand}
+                            </span>
+                          </span>
+                        )}
+
+                        <div className="flex items-center gap-1.5 text-slate-500 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
+                          <FiHash className="text-slate-400" />
+                          <span className="font-mono font-medium text-slate-800">
+                            CODE: {selectedProduct.pID}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100">
+                          <FiPackage className="text-indigo-400" />
+                          <span className="font-medium">
+                            {selectedProduct.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Colors List Section */}
+                      {selectedProduct.colors &&
+                        selectedProduct.colors.length > 0 && (
+                          <div className="border border-slate-200 rounded-2xl p-3 bg-white shadow-xs">
+                            <p className="text-xs font-semibold text-slate-700 mb-2">
+                              Colors
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedProduct.colors.map((color, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 text-xs text-slate-700 bg-white hover:border-slate-300 transition-colors cursor-pointer"
+                                >
+                                  {/* Optional color dot indicator */}
+                                  <span
+                                    className="w-3 h-3 rounded-full border border-slate-300 shrink-0"
+                                    style={{
+                                      backgroundColor: color.toLowerCase(),
+                                    }}
+                                  />
+                                  <span className="font-medium">{color}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                      {/* Selling Price */}
+                      <div className="bg-slate-900 rounded-2xl p-3 shadow-md">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                          Selling Price
+                        </p>
+                        <p className="text-lg font-black text-white">
+                          ৳ {selectedProduct.price.selling}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -220,8 +290,8 @@ export default function CheckAndUpdateStock() {
         </div>
 
         {/* MIDDLE PANEL */}
-        <div className="md:w-1/2 border-r border-slate-200 bg-white flex flex-col h-full overflow-hidden shadow-xs">
-          <div className="md:px-5 px-2 py-4 border-b border-slate-200">
+        <div className="md:w-1/2 border-r border-slate-100 bg-white flex flex-col h-full overflow-hidden">
+          <div className="md:px-5 px-2 py-4 ">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-brand rounded-full"></div>
               <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em]">
@@ -276,7 +346,7 @@ export default function CheckAndUpdateStock() {
                           handleSelectSKU(sku.skuID);
                           setToggle(true);
                         }}
-                        className={`cursor-pointer hover:bg-slate-50 ${currentSKU?.skuID === sku.skuID ? "bg-indigo-50" : ""}`}
+                        className={`cursor-pointer bg-white hover:bg-slate-50 ${currentSKU?.skuID === sku.skuID ? "bg-indigo-50" : ""}`}
                       >
                         <td className="py-3 text-sm font-bold text-slate-700 uppercase font-mono">
                           {sku.skuID}
@@ -301,7 +371,7 @@ export default function CheckAndUpdateStock() {
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="md:w-1/2 bg-white flex flex-col border-slate-200 shadow-xs border overflow-hidden">
+        <div className="md:w-1/2 bg-white flex flex-col border-slate-200 border overflow-hidden">
           <div
             className={`md:px-5 px-2 py-4 border-b ${toggle ? "bg-slate-50" : "bg-indigo-50/30 border-indigo-200"}`}
           >

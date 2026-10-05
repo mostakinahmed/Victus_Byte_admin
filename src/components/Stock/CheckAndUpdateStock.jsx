@@ -254,6 +254,96 @@ export default function CheckAndUpdateStock() {
                   </div>
                 </div>
               </div>
+
+              <div className="space-y-6">
+                <div className="flex gap-6 items-start">
+                  <div className="relative shrink-0">
+                    <img
+                      src={selectedProduct.images[0]}
+                      alt={selectedProduct.name}
+                      className="w-30 h-30 object-contain rounded-2xl border-2 border-slate-50 bg-white shadow-sm p-2"
+                    />
+                  </div>
+
+                  <div className="flex-1 space-y-3 pt-1">
+                    <h2 className="md:text-lg font-medium text-slate-900 leading-tight">
+                      {selectedProduct.name}
+                    </h2>
+
+                    {/* Badges / Meta Info: Type, Brand, Code, Category */}
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      {selectedProduct.type && (
+                        <span className="text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md font-medium border border-slate-200">
+                          TYPE:{" "}
+                          <span className="font-bold text-slate-800">
+                            {selectedProduct.type}
+                          </span>
+                        </span>
+                      )}
+
+                      {selectedProduct.brand && (
+                        <span className="text-orange-600 bg-orange-50 px-2.5 py-1 rounded-md font-medium border border-orange-100">
+                          BRAND:{" "}
+                          <span className="font-bold">
+                            {selectedProduct.brand}
+                          </span>
+                        </span>
+                      )}
+
+                      <div className="flex items-center gap-1.5 text-slate-500 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
+                        <FiHash className="text-slate-400" />
+                        <span className="font-mono font-medium text-slate-800">
+                          CODE: {selectedProduct.pID}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100">
+                        <FiPackage className="text-indigo-400" />
+                        <span className="font-medium">
+                          {selectedProduct.category}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Colors List Section */}
+                    {selectedProduct.colors &&
+                      selectedProduct.colors.length > 0 && (
+                        <div className="border border-slate-200 rounded-2xl p-3 bg-white shadow-xs">
+                          <p className="text-xs font-semibold text-slate-700 mb-2">
+                            Colors
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedProduct.colors.map((color, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 text-xs text-slate-700 bg-white hover:border-slate-300 transition-colors cursor-pointer"
+                              >
+                                {/* Optional color dot indicator */}
+                                <span
+                                  className="w-3 h-3 rounded-full border border-slate-300 shrink-0"
+                                  style={{
+                                    backgroundColor: color.toLowerCase(),
+                                  }}
+                                />
+                                <span className="font-medium">{color}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                    {/* Selling Price */}
+                    <div className="bg-slate-900 rounded-2xl p-3 shadow-md">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                        Selling Price
+                      </p>
+                      <p className="text-lg font-black text-white">
+                        ৳ {selectedProduct.price.selling}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="mt-4 p-12 flex flex-col items-center justify-center bg-slate-50 border border-slate-200 rounded-2xl border-dashed text-slate-400">
