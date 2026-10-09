@@ -162,8 +162,8 @@ const TripleSyncDashboard = () => {
                   <Send size={14} />
                 </div>
                 <div className="flex items-center gap-1 mt-1">
-                  <span className="w-1 h-1 bg-emerald-500 rounded-full animate-pulse" />
-                  <span className="text-[8px] font-black text-slate-400 uppercase tracking-tighter">
+                  <span className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse" />
+                  <span className="text-[8px] font-black text-white uppercase tracking-tighter">
                     Sync
                   </span>
                 </div>
@@ -204,17 +204,17 @@ const TripleSyncDashboard = () => {
         </div>
 
         {/* 3. TRIPLE PORTION TABLE */}
-        <div className="bg-white rounded  overflow-hidden shadow-xs">
+        <div className="bg-white rounded  overflow-hidden">
           <div className="md:pr-5  border-b border-slate-100 flex justify-between items-center">
-            <div className="flex bg-slate-200  rounded gap-2 w-full md:w-1/2  xl:w-1/5 mb-4 border border-slate-200 shadow-inner">
+            <div className="flex bg-slate-300  rounded gap-2 w-full md:w-1/2  xl:w-1/5 mb-4 border border-slate-300">
               {/* Steadfast Dispatch Button */}
               <button
                 onClick={() => setTrig(1)}
                 className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 text-[10px] font-black uppercase tracking-widest transition-all duration-200 rounded cursor-pointer
       ${
         trig === 1
-          ? "bg-[#1976d2] text-white shadow-lg shadow-indigo-200 scale-[1.02]"
-          : "text-slate-600 hover:bg-white hover:text-[#1976d2]"
+          ? "bg-[#1976d2] text-white "
+          : "text-slate-700 hover:bg-white hover:text-[#1976d2]"
       }`}
               >
                 <FiSend
@@ -230,8 +230,8 @@ const TripleSyncDashboard = () => {
                 className={`flex-1 flex items-center justify-center gap-2 py-3 px-2 text-[10px] font-black uppercase tracking-widest transition-all duration-200 rounded cursor-pointer
       ${
         trig === 2
-          ? "bg-slate-800 text-white shadow-lg shadow-slate-300 scale-[1.02]"
-          : "text-slate-600 hover:bg-white hover:text-slate-800"
+          ? "bg-slate-800 text-white"
+          : "text-slate-700 hover:bg-white hover:text-slate-800"
       }`}
               >
                 <FiTruck size={12} />

@@ -165,14 +165,14 @@ const Offer = () => {
             {/* Submit Button */}
             <button
               disabled={loading}
-              className="bg-black cursor-pointer hover:bg-brand text-white text-[10px] font-black uppercase tracking-widest h-[42px] rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
+              className="bg-slate-900 cursor-pointer hover:bg-brand text-white text-[10px] font-black uppercase tracking-widest h-[42px] rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50"
             >
               {loading ? "Saving...." : "Save Offer"}
             </button>
           </form>
         </div>
         {/* Mini Active List Summary */}
-        <div className="bg-slate-800 text-white p-6 rounded">
+        <div className="bg-slate-900 text-white p-6 rounded">
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-green-400">
             <ListChecks size={20} /> Active Now
           </h2>

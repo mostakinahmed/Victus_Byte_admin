@@ -1013,10 +1013,13 @@ const OrderList = () => {
                         {showDetails.courier.payment_status}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right hidden">
                       <p className="text-[12px] font-black text-slate-500 uppercase">
                         Applied Discount
                       </p>
+                      {
+                        
+                      }
                       <p className="text-sm font-bold text-rose-400">
                         -৳{showDetails.discount || 0}
                       </p>

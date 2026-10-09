@@ -330,7 +330,7 @@ export default function AdminReports() {
         </div>
 
         {/* Advanced Filter Toolbar */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-slate-100 p-4 rounded-xl border border-slate-200/60">
           {reportType === "orders" && (
             <>
               <div>
@@ -342,7 +342,7 @@ export default function AdminReports() {
                   placeholder="Order ID or name..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm outline-none focus:border-blue-500"
+                  className="w-full bg-white border border-slate-300 rounded p-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
               <div>
@@ -353,7 +353,7 @@ export default function AdminReports() {
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm outline-none focus:border-blue-500"
+                  className="w-full bg-white border border-slate-300 rounded p-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
               <div>
@@ -364,7 +364,7 @@ export default function AdminReports() {
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm outline-none focus:border-blue-500"
+                  className="w-full bg-white border border-slate-300 rounded p-2 text-sm outline-none focus:border-blue-500"
                 />
               </div>
               <div>
@@ -374,7 +374,7 @@ export default function AdminReports() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm outline-none focus:border-blue-500"
+                  className="w-full bg-white border border-slate-300 rounded p-2 text-sm outline-none focus:border-blue-500"
                 >
                   <option value="ALL">All Statuses</option>
                   <option value="Pending">Pending</option>

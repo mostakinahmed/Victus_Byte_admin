@@ -28,28 +28,9 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 
-// Utility: Generate Professional Unique Order ID (12 Digits)
-// function generateOrderId() {
-//   const now = new Date();
-
-//   // 1. Today's Date: YYMMDD (6 digits)
-//   const year = now.getFullYear().toString().slice(-2);
-//   const month = String(now.getMonth() + 1).padStart(2, "0");
-//   // const day = String(now.getDate()).padStart(2, "0");
-
-//   // We take the last 4 digits of the timestamp
-//   const msStr = now.getTime().toString().slice(-4);
-
-//   // 3. Random Number: (2 digits)
-//   const randomStr = Math.floor(1000 + Math.random() * 9000).toString();
-//   return `OID${year}${msStr}${month}${randomStr}`;
-// }
-
-// Example Output: OID260127458291
-
 function generateOrderId() {
-  const ms = Date.now().toString().slice(-4); // 3 digits
-  const random = Math.floor(10 + Math.random() * 90).toString(); // 2 digits
+  const ms = Date.now().toString().slice(-4);
+  const random = Math.floor(10 + Math.random() * 90).toString();
   return ms + random;
 }
 
@@ -77,31 +58,50 @@ const AdminSaleFull = () => {
   const [loader, setLoader] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // Exact Model Schema Matching Screenshot
   const [order, setOrder] = useState({
     order_id: generateOrderId(),
-    customer_id: "",
     order_date: getOrderDateTime12h(),
-    status: "Pending",
     mode: null,
+    customer_id: "",
+    items: [
+      {
+        product_id: "",
+        skuID: "",
+        product_name: "",
+        quantity: 1,
+        product_price: 0,
+        imei: "",
+        discount: 0,
+        product_comments: "",
+      },
+    ],
     subtotal: 0,
-    shipping_cost: "",
-    discount: "",
     total_amount: 0,
-    payment: { method: "COD", status: "Pending" },
     shipping_address: {
       recipient_name: "",
       phone: "",
       address_line1: "",
       email: "",
     },
-    items: [
-      { product_id: "", product_name: "", quantity: 1, product_price: 0 },
-    ],
+    courier: {
+      name: "N/A",
+      consignment_id: "N/A",
+      delivery_status: "Pending",
+      payment_status: "Pending",
+      payment_method: "COD",
+      del_type: "COD",
+      total_cod_amount: 0,
+      delivery_charge: 0,
+      cod_fee: 0,
+      cod_percent: 1,
+    },
+    discount: "", // Admin manual order discount input
   });
 
   // Handle customer autofill
   const handleCustomerPhone = (phone) => {
-    const customer = customerData.find((c) => c.phone === phone);
+    const customer = customerData?.find((c) => c.phone === phone);
     setOrder((prev) => ({
       ...prev,
       customer_id: customer ? customer.cID : "",
@@ -120,17 +120,29 @@ const AdminSaleFull = () => {
     const items = [...order.items];
     if (field === "product_id") {
       items[idx][field] = value;
-      const product = productData.find((p) => p.pID === value);
+      const product = productData?.find((p) => p.pID === value);
       if (product) {
+        const resolvedPrice =
+          typeof product.price === "object"
+            ? product.price.selling || 0
+            : Number(product.price) || 0;
+
         items[idx] = {
           ...items[idx],
           product_id: product.pID,
           product_name: product.name,
-          product_comments: product.comments,
-          product_price: product.price || 0,
+          product_comments: product.comments || "",
+          product_price: resolvedPrice,
+          skuID: product.skuID || product.sku || "",
+          imei: product.imei || "",
+          discount: Number(product.discount || 0),
         };
       }
-    } else if (field === "quantity" || field === "product_price") {
+    } else if (
+      field === "quantity" ||
+      field === "product_price" ||
+      field === "discount"
+    ) {
       items[idx][field] = Number(value);
     } else {
       items[idx][field] = value;
@@ -145,9 +157,19 @@ const AdminSaleFull = () => {
       ...prev,
       items: [
         ...prev.items,
-        { product_id: "", product_name: "", quantity: 1, product_price: 1 },
+        {
+          product_id: "",
+          skuID: "",
+          product_name: "",
+          quantity: 1,
+          product_price: 0,
+          imei: "",
+          discount: 0,
+          product_comments: "",
+        },
       ],
     }));
+
   const removeItem = (idx) => {
     const items = order.items.filter((_, i) => i !== idx);
     setOrder((prev) => ({ ...prev, items }));
@@ -155,29 +177,51 @@ const AdminSaleFull = () => {
 
   // Auto calculate totals
   useEffect(() => {
-    const subtotal = order.items.reduce(
-      (sum, i) => sum + i.product_price?.selling * i.quantity,
-      0,
-    );
+    const subtotal = order.items.reduce((sum, item) => {
+      const unitPrice =
+        typeof item.product_price === "object"
+          ? Number(item.product_price?.selling || 0)
+          : Number(item.product_price || 0);
 
-    const shipping = Number(order.shipping_cost || 0);
-    const discount = Number(order.discount || 0);
-    const total_amount = subtotal + shipping - discount;
-    setOrder((prev) => ({ ...prev, subtotal, total_amount }));
-  }, [order.items, order.shipping_cost, order.discount]);
+      const itemDiscount = Number(item.discount || 0);
+      const effectivePrice = Math.max(0, unitPrice - itemDiscount);
+
+      return sum + effectivePrice * (Number(item.quantity) || 1);
+    }, 0);
+
+    const shipping = Number(order.courier.delivery_charge || 0);
+    const manualDiscount = Number(order.discount || 0);
+    const total_amount = Math.max(0, subtotal + shipping - manualDiscount);
+
+    setOrder((prev) => ({
+      ...prev,
+      subtotal,
+      total_amount,
+      courier: {
+        ...prev.courier,
+        total_cod_amount: total_amount > 0 ? total_amount : 0,
+      },
+    }));
+  }, [order.items, order.courier.delivery_charge, order.discount]);
 
   // Handle shipping/discount
   const handleShippingChange = (e) => {
     const value = e.target.value === "" ? "" : Number(e.target.value);
-    setOrder((prev) => ({ ...prev, shipping_cost: value }));
+    setOrder((prev) => ({
+      ...prev,
+      courier: {
+        ...prev.courier,
+        delivery_charge: value,
+      },
+    }));
   };
+
   const handleDiscountChange = (e) => {
     const value = e.target.value === "" ? "" : Number(e.target.value);
     setOrder((prev) => ({ ...prev, discount: value }));
   };
 
-  // ✅ Submit order
-
+  // Submit order
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -191,15 +235,57 @@ const AdminSaleFull = () => {
       return;
     }
 
+    const manualDiscount = Number(order.discount || 0);
+
+    // Structure model strictly according to MongoDB screenshot
     const orderToSubmit = {
-      ...order,
+      order_id: String(order.order_id),
+      order_date: order.order_date,
+      // Coupon Object with value = price and others null
+      coupon:
+        manualDiscount > 0
+          ? {
+              couponID: "manual",
+              value: manualDiscount,
+              minTK: null,
+            }
+          : null,
+      mode: String(order.mode),
+      customer_id: order.customer_id,
       items: order.items.map((item) => ({
-        ...item,
+        product_id: item.product_id,
+        skuID: item.skuID || "",
+        product_name: item.product_name,
+        quantity: Number(item.quantity),
         product_price:
           typeof item.product_price === "object"
-            ? item.product_price.selling
-            : item.product_price,
+            ? Number(item.product_price.selling || 0)
+            : Number(item.product_price || 0),
+        imei: item.imei || "",
+        discount: Number(item.discount || 0),
       })),
+      subtotal: Number(order.subtotal),
+      total_amount: Number(order.total_amount),
+      shipping_address: {
+        recipient_name: order.shipping_address.recipient_name,
+        phone: order.shipping_address.phone,
+        address_line1: order.shipping_address.address_line1,
+        email: order.shipping_address.email,
+      },
+      courier: {
+        name: order.courier.name,
+        consignment_id: order.courier.consignment_id,
+        delivery_status: order.courier.delivery_status,
+        payment_status: order.courier.payment_status,
+        payment_method: order.courier.payment_method,
+        del_type: order.courier.del_type,
+        total_cod_amount: Number(
+          order.courier.total_cod_amount || order.total_amount,
+        ),
+        delivery_charge: Number(order.courier.delivery_charge || 0),
+        cod_fee: Number(order.courier.cod_fee || 0),
+        cod_percent: Number(order.courier.cod_percent || 1),
+      },
     };
 
     MySwal.fire({
@@ -219,8 +305,7 @@ const AdminSaleFull = () => {
         orderToSubmit,
       );
 
-      // Get the final ID from the backend response
-      const finalId = res.data?.order?.order_id || "N/A";
+      const finalId = res.data?.order?.order_id || order.order_id || "N/A";
 
       MySwal.hideLoading();
       MySwal.update({
@@ -245,10 +330,7 @@ const AdminSaleFull = () => {
         },
       });
 
-      // Refresh your table/UI
-      updateApi();
-
-      // VERY IMPORTANT: Reset the form so the user can start a new sale
+      if (updateApi) updateApi();
       handleNewSale();
     } catch (error) {
       MySwal.hideLoading();
@@ -263,34 +345,46 @@ const AdminSaleFull = () => {
     }
   };
 
-  // ✅ Create new order reset
+  // Reset form
   function handleNewSale() {
     setOrder({
       order_id: generateOrderId(),
-      customer_id: "",
       order_date: getOrderDateTime12h(),
-      status: "Pending",
       mode: null,
+      customer_id: "",
+      items: [
+        {
+          product_id: "",
+          skuID: "",
+          product_name: "",
+          quantity: 1,
+          product_price: 0,
+          imei: "",
+          discount: 0,
+          product_comments: "",
+        },
+      ],
       subtotal: 0,
-      shipping_cost: "",
-      discount: "",
       total_amount: 0,
-      payment: { method: "COD", status: "Pending" },
       shipping_address: {
         recipient_name: "",
         phone: "",
         address_line1: "",
         email: "",
       },
-      items: [
-        {
-          product_id: "",
-          product_name: "",
-          quantity: 1,
-          product_price: 0,
-          product_comments: "",
-        },
-      ],
+      courier: {
+        name: "N/A",
+        consignment_id: "N/A",
+        delivery_status: "Pending",
+        payment_status: "Pending",
+        payment_method: "COD",
+        del_type: "COD",
+        total_cod_amount: 0,
+        delivery_charge: 0,
+        cod_fee: 0,
+        cod_percent: 1,
+      },
+      discount: "",
     });
     setSuccess(false);
   }
@@ -298,14 +392,12 @@ const AdminSaleFull = () => {
   return (
     <div className="max-w-full mx-auto relative mt-12 md:mt-0">
       <Navbar pageTitle="Create New Sale" />
-      {/* //data form */}
       <form
         onSubmit={handleSubmit}
         className="space-y- bg-white shadow rounded"
       >
         {/* 🧾 Order Info */}
-        <div className="bg-white  overflow-hidden">
-          {/* Header Section */}
+        <div className="bg-white overflow-hidden">
           <div className="px-6 py-2 border-b border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-2">
               <div className="w-1 h-5 bg-indigo-600 rounded-full"></div>
@@ -315,10 +407,9 @@ const AdminSaleFull = () => {
             </div>
           </div>
 
-          {/* Form Content */}
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Order ID - Read Only */}
+              {/* Order ID */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
                   Order ID
@@ -330,11 +421,10 @@ const AdminSaleFull = () => {
                     readOnly
                     className="w-full bg-slate-100/70 border border-slate-300 text-slate-700 font-medium font-mono text-sm px-4 py-2 rounded cursor-not-allowed"
                   />
-                  {/* Subtle "Locked" Icon could go here */}
                 </div>
               </div>
 
-              {/* Date & Time - Read Only */}
+              {/* Date & Time */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
                   Date & Placement
@@ -354,9 +444,15 @@ const AdminSaleFull = () => {
                 </label>
                 <div className="relative">
                   <select
-                    value={order.status}
+                    value={order.courier.delivery_status}
                     onChange={(e) =>
-                      setOrder({ ...order, status: e.target.value })
+                      setOrder({
+                        ...order,
+                        courier: {
+                          ...order.courier,
+                          delivery_status: e.target.value,
+                        },
+                      })
                     }
                     className="w-full appearance-none bg-white border border-slate-300 text-slate-700 text-sm px-4 py-2 rounded focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none cursor-pointer"
                   >
@@ -390,32 +486,20 @@ const AdminSaleFull = () => {
                   Channel / Mode / Saler ID
                 </label>
                 <div className="relative">
-                  {/* <select
-                    value={order.Mode}
-                    onChange={(e) =>
-                      setOrder({ ...order, Mode: e.target.value })
-                    }
-                    className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-sm px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none cursor-pointer"
-                  >
-                    <option value="Online">🌐 Online Store</option>
-                    <option value="Offline">🏢 POS / Offline</option>
-                  </select> */}
-
                   <div className="relative w-full">
-                    {/* The Icon Label on the Left */}
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <FiUser className="text-blue-600" size={18} />
                     </div>
 
                     <select
-                      value={order.mode || ""} // FIX: lowercase 'mode'
-                      onChange={
-                        (e) => setOrder({ ...order, mode: e.target.value }) // FIX: lowercase 'mode'
+                      value={order.mode || ""}
+                      onChange={(e) =>
+                        setOrder({ ...order, mode: e.target.value })
                       }
-                      className="block w-full pl-10 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded appearance-none border  bg-white"
+                      className="block w-full pl-10 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded appearance-none border bg-white"
                     >
                       <option value="">Select Admin</option>
-                      {adminData.map((admin) => (
+                      {adminData?.map((admin) => (
                         <option key={admin.adminID} value={admin.adminID}>
                           {admin.fullName} ({admin.adminID})
                         </option>
@@ -446,7 +530,6 @@ const AdminSaleFull = () => {
 
         {/* Customer Info Section */}
         <div className="bg-white border border-slate-200 overflow-hidden transition-all hover:shadow-md">
-          {/* Section Header */}
           <div className="px-6 py-2 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
@@ -459,7 +542,6 @@ const AdminSaleFull = () => {
             </span>
           </div>
 
-          {/* Form Content */}
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Phone Number */}
@@ -570,7 +652,6 @@ const AdminSaleFull = () => {
 
         {/* 📦 Product List Section */}
         <div className="bg-white overflow-hidden">
-          {/* Header */}
           <div className="px-6 py-2 bg-slate-50/50 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
@@ -583,11 +664,11 @@ const AdminSaleFull = () => {
             </span>
           </div>
 
-          <div className=" space-y-4">
+          <div className="space-y-4">
             {order.items.map((item, idx) => (
               <div
                 key={idx}
-                className="relative group grid grid-cols-1 lg:grid-cols-12 gap-4 items-start p-4 rounded-xl border border-slate-100 bg-slate-50/30  transition-all"
+                className="relative group grid grid-cols-1 lg:grid-cols-12 gap-4 items-start p-4 rounded-xl border border-slate-100 bg-slate-50/30 transition-all"
               >
                 {/* Product ID & Name */}
                 <div className="lg:col-span-4 space-y-3">
@@ -631,12 +712,16 @@ const AdminSaleFull = () => {
                     </label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">
-                        $
+                        ৳
                       </span>
                       <input
                         type="number"
                         disabled
-                        value={item.product_price.selling}
+                        value={
+                          typeof item.product_price === "object"
+                            ? item.product_price.selling
+                            : item.product_price
+                        }
                         onChange={(e) =>
                           handleItemChange(idx, "product_price", e.target.value)
                         }
@@ -692,11 +777,18 @@ const AdminSaleFull = () => {
                   )}
                 </div>
 
-                {/* Line Total Badge (Optional but Industry Standard) */}
+                {/* Line Total Badge */}
                 <div className="absolute top-2 right-2 hidden group-hover:block transition-all">
                   <span className="text-[10px] font-bold bg-white border border-slate-200 text-slate-500 px-2 py-0.5 rounded shadow-sm">
-                    Line Total: $
-                    {(item.product_price * item.quantity).toLocaleString()}
+                    Line Total: ৳
+                    {(
+                      Math.max(
+                        0,
+                        (typeof item.product_price === "object"
+                          ? item.product_price.selling
+                          : item.product_price) - (item.discount || 0),
+                      ) * item.quantity
+                    ).toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -706,7 +798,7 @@ const AdminSaleFull = () => {
             <button
               type="button"
               onClick={addItem}
-              className="w-1/4 mx-auto py-2 border-2 border-dashed border-slate-300 rounded-full flex items-center justify-center gap-2 text-slate-500 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all font-bold text-sm uppercase tracking-widest"
+              className="md:w-1/4 w-full mb-5 md:mb-0 md:mx-auto py-2 border-2 border-dashed border-slate-300 rounded-full flex items-center justify-center gap-2 text-slate-500 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all font-bold text-sm uppercase tracking-widest"
             >
               <FiPlus size={18} /> Add New Line Item
             </button>
@@ -715,7 +807,6 @@ const AdminSaleFull = () => {
 
         {/* 💳 Payment & Shipping Summary Section */}
         <div className="bg-white overflow-hidden">
-          {/* Header */}
           <div className="px-6 py-2 border-b border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-amber-500 rounded-full"></div>
@@ -740,17 +831,17 @@ const AdminSaleFull = () => {
                     type="number"
                     placeholder="0"
                     required
-                    value={order.shipping_cost}
+                    value={order.courier.delivery_charge}
                     onChange={handleShippingChange}
                     className="w-full pl-8 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all outline-none font-semibold"
                   />
                 </div>
               </div>
 
-              {/* Discount */}
+              {/* Discount / Coupon Value */}
               <div className="space-y-1.5">
                 <label className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
-                  <FiPercent className="text-rose-500" /> Discount
+                  <FiPercent className="text-rose-500" /> Discount (Coupon)
                 </label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">
@@ -774,11 +865,15 @@ const AdminSaleFull = () => {
                 </label>
                 <div className="relative">
                   <select
-                    value={order.payment.method}
+                    value={order.courier.del_type}
                     onChange={(e) =>
                       setOrder({
                         ...order,
-                        payment: { ...order.payment, method: e.target.value },
+                        courier: {
+                          ...order.courier,
+                          del_type: e.target.value,
+                          payment_method: e.target.value,
+                        },
                       })
                     }
                     className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-sm pl-4 pr-10 py-2.5 rounded-lg focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none cursor-pointer font-medium"
@@ -815,16 +910,19 @@ const AdminSaleFull = () => {
                 </label>
                 <div className="relative">
                   <select
-                    value={order.payment.status}
+                    value={order.courier.payment_status}
                     onChange={(e) =>
                       setOrder({
                         ...order,
-                        payment: { ...order.payment, status: e.target.value },
+                        courier: {
+                          ...order.courier,
+                          payment_status: e.target.value,
+                        },
                       })
                     }
                     className={`w-full appearance-none border text-sm pl-4 pr-10 py-2.5 rounded-lg focus:ring-4 transition-all outline-none cursor-pointer font-bold uppercase tracking-wide
               ${
-                order.payment.status === "Completed"
+                order.courier.payment_status === "Completed"
                   ? "bg-emerald-50 border-emerald-200 text-emerald-700 focus:ring-emerald-500/10 focus:border-emerald-500"
                   : "bg-amber-50 border-amber-200 text-amber-700 focus:ring-amber-500/10 focus:border-amber-500"
               }`}
@@ -856,9 +954,9 @@ const AdminSaleFull = () => {
 
         {/* 💰 Totals & Actions Section */}
         <div className="mt-10 p-4 mb-20">
-          <div className="bg-slate-900 rounded p-6  shadow-xl">
+          <div className="bg-slate-900 rounded p-6 shadow-xl">
             <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6">
-              {/* Detailed Financial Breakdown */}
+              {/* Financial Breakdown */}
               <div className="flex flex-wrap gap-6 md:gap-12">
                 <div className="space-y-1">
                   <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
@@ -877,9 +975,9 @@ const AdminSaleFull = () => {
                     Adjustments
                   </p>
                   <p className="text-slate-300 md:text-xl text-lg font-medium">
-                    {Number(order.shipping_cost || 0) > 0 && (
+                    {Number(order.courier.delivery_charge || 0) > 0 && (
                       <span className="text-emerald-400">
-                        +{order.shipping_cost}
+                        +{order.courier.delivery_charge}
                       </span>
                     )}
                     {Number(order.discount || 0) > 0 && (
@@ -887,7 +985,9 @@ const AdminSaleFull = () => {
                         -{order.discount}
                       </span>
                     )}
-                    {!order.shipping_cost && !order.discount && "0.00"}
+                    {!order.courier.delivery_charge &&
+                      !order.discount &&
+                      "0.00"}
                   </p>
                 </div>
 
@@ -895,7 +995,7 @@ const AdminSaleFull = () => {
                   <p className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em]">
                     Grand Total
                   </p>
-                  <p className="text-indigo-400 md:text-4xl text-2xl  font-black tracking-tight">
+                  <p className="text-indigo-400 md:text-4xl text-2xl font-black tracking-tight">
                     ৳
                     {order.total_amount.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
@@ -904,7 +1004,7 @@ const AdminSaleFull = () => {
                 </div>
               </div>
 
-              {/* 🧾 Action Buttons */}
+              {/* Action Buttons */}
               <div className="flex items-center gap-3 w-full md:w-auto">
                 <button
                   type="button"
@@ -931,7 +1031,6 @@ const AdminSaleFull = () => {
             </div>
           </div>
 
-          {/* Footer Note */}
           <p className="text-center text-slate-500 text-[10px] mt-6 uppercase tracking-[0.3em] font-medium">
             Review all line items before finalizing the transaction
           </p>

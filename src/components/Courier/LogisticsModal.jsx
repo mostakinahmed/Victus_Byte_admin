@@ -66,31 +66,26 @@ const LogisticsModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/65 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal Container */}
-      <div className="relative bg-white w-full max-w-7xl h-full max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-300 border border-slate-200">
+      <div className="relative bg-white w-full max-w-7xl h-full max-h-[70vh] rounded flex flex-col overflow-hidden">
         {/* Header Section */}
-        <div className="px-6 py-4 border-b bg-slate-50 flex justify-between items-center">
+        <div className="px-6 py-2 border-b bg-slate-50 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-100">
-              <FiTruck className="text-white text-xl" />
-            </div>
             <div>
               <h2 className="text-xl font-black text-slate-800 tracking-tight">
                 Dispatch Command Center
               </h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                Logistics & Fulfillment
-              </p>
+             
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 hover:bg-rose-50 rounded-full transition-all text-slate-400 hover:text-rose-500"
+            className="p-2 hover:bg-rose-50 rounded-full transition-all text-slate-500 hover:text-rose-500"
           >
             <FiX size={24} />
           </button>
@@ -102,8 +97,8 @@ const LogisticsModal = ({ isOpen, onClose }) => {
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search Order ID or Phone..."
-              className="w-full pl-11 pr-4 py-2.5 bg-slate-100 border border-transparent rounded-xl text-sm font-bold focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
+              placeholder="Order ID or phone number"
+              className="w-full pl-11 pr-4 py-1.5 placeholder:font-normal bg-slate-100 border border-slate-300 rounded font-medium focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -111,9 +106,7 @@ const LogisticsModal = ({ isOpen, onClose }) => {
 
           <div className="flex items-center gap-6">
             <div className="text-right">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                Ready for Dispatch
-              </p>
+           
               <p className="text-xl font-black text-slate-800">
                 {displayOrders.length}{" "}
                 <span className="text-sm font-bold text-slate-400">Orders</span>
@@ -123,26 +116,26 @@ const LogisticsModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* --- TABLE CONTAINER --- */}
-        <div className="flex-1 overflow-auto bg-slate-50/30">
+        <div className="flex-1 overflow-auto">
           <table className="w-full text-left whitespace-nowrap border-separate border-spacing-0">
             <thead>
-              <tr className="bg-white sticky top-0 z-10 shadow-sm">
-                <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-400 border-b">
+              <tr className="bg-slate-50 sticky top-0 z-10">
+                <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-600 border-b">
                   Order Info
                 </th>
-                <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-400 border-b">
+                <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-600 border-b">
                   Recipient
                 </th>
-                <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-400 border-b">
+                <th className="px-6 py-4 text-[11px] font-black uppercase tracking-widest text-slate-600 border-b">
                   Address
                 </th>
-                <th className="px-6 py-4 text-center text-[11px] font-black uppercase tracking-widest text-slate-400 border-b">
+                <th className="px-6 py-4 text-center text-[11px] font-black uppercase tracking-widest text-slate-600 border-b">
                   Amount
                 </th>
-                <th className="px-6 py-4 text-center text-[11px] font-black uppercase tracking-widest text-slate-400 border-b">
+                <th className="px-6 py-4 text-center text-[11px] font-black uppercase tracking-widest text-slate-600 border-b">
                   Delivery Fee
                 </th>
-                <th className="px-6 py-4 text-right text-[11px] font-black uppercase tracking-widest text-slate-400 border-b">
+                <th className="px-6 py-4 text-right text-[11px] font-black uppercase tracking-widest text-slate-600 border-b">
                   Dispatch Via
                 </th>
               </tr>
@@ -236,7 +229,7 @@ const LogisticsModal = ({ isOpen, onClose }) => {
               {displayOrders.length === 0 && (
                 <tr>
                   <td colSpan="6" className="py-20 text-center">
-                    <p className="text-slate-400 font-bold italic">
+                    <p className="text-slate-900 font-medium italic">
                       No orders ready for dispatch found.
                     </p>
                   </td>

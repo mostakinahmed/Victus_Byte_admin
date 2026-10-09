@@ -114,19 +114,17 @@ export const StatusManagement = () => {
 
       <div className="space-y-6 font-sans animate-in fade-in duration-500">
         {/* --- 1. COMMAND TOOLBAR --- */}
-        <div className="bg-white rounded-2xl border border-slate-200  p-4">
+        <div className="bg-white rounded border border-slate-200  p-4">
           <div className="flex flex-col lg:flex-row items-center gap-4">
             {/* Category Selection */}
             <div className="w-full lg:w-1/3 group">
-              <label className="text-[10px] font-medium text-slate-600 uppercase tracking-widest ml-1 mb-1 block">
-                Campaign Segment
-              </label>
+           
               <div className="relative">
                 <FiTag className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                 <select
                   value={selected}
                   onChange={(e) => setSelected(e.target.value)}
-                  className="w-full pl-10 pr-4 md:py-3 py-2 text-sm md:text-md bg-slate-50 border border-slate-300 rounded-xl  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
+                  className="w-full pl-10 pr-4  py-2 text-sm md:text-md bg-slate-50 border border-slate-300 rounded  outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
                 >
                   <option value="none">Select Campaign Category...</option>
                   <option value="isFeatured">Featured Product</option>
@@ -139,11 +137,11 @@ export const StatusManagement = () => {
             </div>
 
             {/* Dynamic Title Display */}
-            <div className="flex-1 w-full md:px-6 px-3 flex items-center md:justify-center lg:justify-start gap-3 mt-3">
-              <div className=" p-1 bg-indigo-500 rounded-lg text-white animate-pulse">
+            <div className="flex-1 w-full md:px-6 px-3 flex items-center md:justify-center lg:justify-start gap-3">
+              <div className=" p-1 bg-brand rounded-lg text-white animate-pulse">
                 <FiZap size={18} />
               </div>
-              <h1 className="md:font-black font-medium md:text-lg text-sm text-slate-800 uppercase md:tracking-tighter">
+              <h1 className="md:font-medium font-medium md:text-lg text-sm text-slate-800 uppercase md:tracking-tighter">
                 {selected === "none"
                   ? "Campaign Control Center"
                   : titleMap[selected]}
@@ -169,14 +167,14 @@ export const StatusManagement = () => {
 
         {/* --- 2. EMPTY STATE: NO SELECTION --- */}
         {selected === "none" && (
-          <div className="flex flex-col items-center justify-center py-32 bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200">
+          <div className="flex flex-col items-center justify-center py-32 bg-slate-50 border-2 border-dashed border-slate-300">
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-slate-200 shadow-sm mb-4">
               <FiShoppingBag size={40} />
             </div>
             <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">
               No Segment Selected
             </h2>
-            <p className="text-xs text-slate-400 mt-1 max-w-[250px] text-center font-medium leading-relaxed">
+            <p className="text-sm text-slate-400 mt-1  text-center">
               Choose a campaign category from the toolbar above to manage
               specialized products.
             </p>
@@ -185,7 +183,7 @@ export const StatusManagement = () => {
 
         {/* --- 3. CAMPAIGN DATA TABLE --- */}
         {selected !== "none" && (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden overflow-x-scroll animate-in slide-in-from-bottom-4">
+          <div className="bg-white max-h-[650px] overflow-y-auto rounded border border-slate-300 overflow-hidden overflow-x-scroll animate-in slide-in-from-bottom-4">
             {filterData.length > 0 ? (
               <table className="w-full text-left border-collapse overflow-x-auto whitespace-nowrap">
                 <thead className="bg-slate-100 border-b border-slate-100">
@@ -265,7 +263,7 @@ export const StatusManagement = () => {
         {/* --- 4. MODALS (Unified Styling) --- */}
         {(showModal || disModel) && (
           <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex justify-center items-center z-100 p-4">
-            <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-white w-full max-w-md rounded overflow-hidden animate-in zoom-in-95 duration-200">
               <div className="p-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
                 <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">
                   {selected === "discount"
@@ -291,7 +289,7 @@ export const StatusManagement = () => {
                     placeholder="Search by name or ID..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 placeholder:font-medium uppercase  border border-slate-500 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                    className="w-full pl-10 pr-4 py-2 placeholder:font-medium uppercase  border border-slate-400 rounded text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                   />
                 </div>
 
