@@ -8,15 +8,22 @@ import {
 } from "react-icons/fi";
 import api from "@/Context Api/api";
 
-const ManualSMS = ({ onClose }) => {
+const ManualSMS = ({ onClose, defaultPhone = "" }) => {
   const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const [recipient, setRecipient] = useState("");
+  const [recipient, setRecipient] = useState(defaultPhone);
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [feedback, setFeedback] = useState({ type: "", text: "" });
+
+  // Update recipient if defaultPhone changes or is passed down asynchronously
+  useEffect(() => {
+    if (defaultPhone) {
+      setRecipient(defaultPhone);
+    }
+  }, [defaultPhone]);
 
   const fetchBalance = async () => {
     setLoading(true);

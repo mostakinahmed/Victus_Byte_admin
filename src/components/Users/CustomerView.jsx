@@ -13,37 +13,17 @@ import {
   FiCheckCircle,
   FiX,
 } from "react-icons/fi";
+import ManualSMS from "../ManualSMS";
 
 export default function CustomerView({ user, goBack }) {
   const { orderData } = useContext(DataContext);
 
   // Modal States
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [smsMessage, setSmsMessage] = useState("");
-  const [isSending, setIsSending] = useState(false);
-  const [sentStatus, setSentStatus] = useState(false);
 
   // Filter live orders for this specific customer
   const customerOrders =
     orderData?.filter((order) => order.customer_id === user.cID) || [];
-
-  // SMS Handler
-  const handleSendSms = async () => {
-    if (!smsMessage) return;
-    setIsSending(true);
-
-    // Simulate API Call to your BulkSMSBD backend
-    setTimeout(() => {
-      setIsSending(false);
-      setSentStatus(true);
-      // Auto-close modal after success message
-      setTimeout(() => {
-        setSentStatus(false);
-        setIsModalOpen(false);
-        setSmsMessage("");
-      }, 2000);
-    }, 1500);
-  };
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500 relative">
@@ -186,65 +166,11 @@ export default function CustomerView({ user, goBack }) {
       {/* --- SMS MODAL OVERLAY --- */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden"
-            >
-              <div className="absolute top-0 left-0 w-full h-2 bg-[#1976d2]"></div>
-
-              {!sentStatus ? (
-                <div className="space-y-6">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-[11px] font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                      <FiSend className="text-[#1976d2]" /> SMS to{" "}
-                      {user.userName}
-                    </h3>
-                    <button
-                      onClick={() => setIsModalOpen(false)}
-                      className="text-slate-300 hover:text-red-500 transition-colors cursor-pointer p-1"
-                    >
-                      <FiX size={20} />
-                    </button>
-                  </div>
-
-                  <div className="space-y-2">
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-1">
-                      Message Content
-                    </p>
-                    <textarea
-                      value={smsMessage}
-                      onChange={(e) => setSmsMessage(e.target.value)}
-                      placeholder="Type your customer alert here..."
-                      className="w-full bg-slate-50 border border-slate-300 rounded-2xl p-5 text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-500/5 focus:border-[#1976d2] transition-all min-h-[140px] resize-none"
-                    />
-                  </div>
-
-                  <button
-                    onClick={handleSendSms}
-                    disabled={isSending || !smsMessage}
-                    className="w-full bg-[#1976d2] hover:bg-[#1565c0] text-white py-4 rounded-xl font-black uppercase text-[10px] tracking-[0.2em] shadow-lg shadow-blue-200 disabled:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2"
-                  >
-                    {isSending ? "Sending Dispatch..." : "Confirm & Send SMS"}
-                  </button>
-                </div>
-              ) : (
-                <div className="py-10 text-center animate-in zoom-in duration-300">
-                  <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-emerald-100">
-                    <FiCheckCircle size={40} />
-                  </div>
-                  <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">
-                    SMS Sended Successfully
-                  </h3>
-                  <p className="text-[10px] text-slate-400 font-bold uppercase mt-2 tracking-tighter">
-                    Recipient: {user.phone}
-                  </p>
-                </div>
-              )}
-            </motion.div>
-          </div>
+          <ManualSMS
+            isOpen={isModalOpen}
+            onClose={(val) => setIsModalOpen(val)}
+            defaultPhone={user?.phone || ""}
+          />
         )}
       </AnimatePresence>
     </div>

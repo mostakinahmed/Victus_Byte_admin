@@ -104,21 +104,28 @@ export default function Invoice({ order, close }) {
     const rightX = pageWidth - margin - 200;
 
     doc.setFontSize(11);
-    doc.setTextColor(80);
+    doc.setTextColor(90);
 
-    doc.text("Victus-Byte HQ", rightX, 35);
-    doc.text("123 Market Street", rightX, 50);
-    doc.text("Dhaka, Bangladesh", rightX, 65);
-    doc.text("Email: support@victusbyte.com", rightX, 80);
+    // doc.text("Victus-Byte", rightX, 35);
+    // doc.text("123 Market Street", rightX, 50);
+    // doc.text("Dhaka, Bangladesh", rightX, 65);
+    doc.text("Victus-Byte", rightX, 30);
+
+    doc.text("Branch 1: Baneshwar Bazar", rightX, 43);
+    doc.text("Puthia, Rajshahi, Bangladesh", rightX, 53);
+
+    doc.text("Branch 2: Mirpur-1", rightX, 65);
+    doc.text("Dhaka, Bangladesh", rightX, 75);
+    doc.text("Email: support@victusbyte.com", rightX, 87);
 
     // Hotline
     doc.setFont("helvetica", "normal");
-    doc.text("Hotline: ", rightX, 95);
+    doc.text("Hotline: ", rightX, 98);
 
     const hotlineWidth = doc.getTextWidth("Hotline: ");
 
     doc.setFont("helvetica", "bold");
-    doc.text("09611-342936", rightX + hotlineWidth, 95);
+    doc.text("09611-342936", rightX + hotlineWidth, 98);
 
     // Header line
     doc.setDrawColor(180);
@@ -221,7 +228,6 @@ export default function Invoice({ order, close }) {
       Number(order.total_amount || 0).toFixed(2),
     ]);
 
-  
     // Generate product table
     autoTable(doc, {
       startY: customerY + 90,
