@@ -148,7 +148,7 @@ const FinancialLedger = ({ onRefresh }) => {
 
       {isInvestmentModalOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl w-full max-w-md overflow-hidden shadow-2xl border border-slate-200">
+          <div className="bg-white rounded w-full max-w-md overflow-hidden shadow-2xl">
             <div className="bg-emerald-600 p-4 flex justify-between text-white font-bold uppercase text-[10px] tracking-widest">
               <span className="flex items-center gap-2">
                 <PlusCircle size={16} /> Add Capital Investment
@@ -200,7 +200,7 @@ const FinancialLedger = ({ onRefresh }) => {
       {/* --- PURCHASE MODAL --- */}
       {isPurchaseModalOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-xl w-full max-w-md overflow-hidden shadow-2xl border border-slate-200">
+          <div className="bg-white rounded w-full max-w-md overflow-hidden shadow-2xl">
             <div className="bg-[#1976d2] p-4 flex justify-between text-white font-bold uppercase text-[10px] tracking-widest">
               <span className="flex items-center gap-2">
                 <ShoppingCart size={16} /> Inventory Sourcing
@@ -262,7 +262,7 @@ const FinancialLedger = ({ onRefresh }) => {
       {/* --- EXPENSE MODAL --- */}
       {isExpenseModalOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white w-full max-w-md rounded-xl shadow-2xl overflow-hidden border border-slate-200">
+          <div className="bg-white w-full max-w-md rounded shadow-2xl overflow-hidden">
             <div className="p-4 border-b bg-slate-50 flex justify-between items-center text-rose-600 font-bold uppercase text-[10px] tracking-widest">
               <span className="flex items-center gap-2">
                 <TrendingDown size={16} /> Record Operational Expense
@@ -341,7 +341,7 @@ const FinancialLedger = ({ onRefresh }) => {
       {/* --- SUMMARY MODAL --- */}
       {isSummaryModalOpen && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl w-full max-w-5xl h-[70vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200">
+          <div className="bg-white rounded w-full max-w-5xl h-[70vh] overflow-hidden shadow-2xl flex flex-col ">
             {/* Header */}
             <div className="p-4 bg-slate-800 text-white flex justify-between items-center">
               <div className="flex items-center gap-3">
@@ -368,7 +368,7 @@ const FinancialLedger = ({ onRefresh }) => {
                 <input
                   type="text"
                   placeholder="Search transactions..."
-                  className="w-full pl-10 pr-4 py-2 bg-white border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full pl-10 pr-4 py-2 bg-white border border-slate-300 rounded text-sm outline-none focus:ring-1 focus:ring-indigo-500"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -388,19 +388,19 @@ const FinancialLedger = ({ onRefresh }) => {
               <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead className="sticky top-0 bg-slate-100 z-10 shadow-sm">
                   <tr>
-                    <th className="p-4 text-[11px] font-black text-slate-500 uppercase">
+                    <th className="p-3 text-[11px] font-black text-slate-500 uppercase">
                       Date
                     </th>
-                    <th className="p-4 text-[11px] font-black text-slate-500 uppercase">
+                    <th className="p-3 text-[11px] font-black text-slate-500 uppercase">
                       Type
                     </th>
-                    <th className="p-4 text-[11px] font-black text-slate-500 uppercase">
+                    <th className="p-3 text-[11px] font-black text-slate-500 uppercase">
                       Title / Name
                     </th>
-                    <th className="p-4 text-[11px] font-black text-slate-500 uppercase">
+                    <th className="p-3 text-[11px] font-black text-slate-500 uppercase">
                       Reference
                     </th>
-                    <th className="p-4 text-right text-[11px] font-black text-slate-500 uppercase">
+                    <th className="p-3 text-right text-[11px] font-black text-slate-500 uppercase">
                       Amount
                     </th>
                   </tr>
@@ -419,7 +419,7 @@ const FinancialLedger = ({ onRefresh }) => {
                     <tr>
                       <td
                         colSpan="5"
-                        className="p-20 text-center text-slate-400 font-bold"
+                        className="p-20 text-center text-slate-500 font-medium"
                       >
                         No transactions found
                       </td>

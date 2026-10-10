@@ -71,7 +71,7 @@ const LogisticsModal = ({ isOpen, onClose }) => {
       />
 
       {/* Modal Container */}
-      <div className="relative bg-white w-full max-w-7xl h-full max-h-[70vh] rounded flex flex-col overflow-hidden">
+      <div className="relative -mt-30 bg-white w-full max-w-7xl h-full max-h-[70vh] rounded flex flex-col overflow-hidden">
         {/* Header Section */}
         <div className="px-6 py-2 border-b bg-slate-50 flex justify-between items-center">
           <div className="flex items-center gap-4">

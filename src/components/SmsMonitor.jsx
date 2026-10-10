@@ -101,11 +101,11 @@ const SmsMonitor = () => {
           </div>
         ) : (
           <table className="w-full text-left border-collapse">
-            <thead className="sticky top-0 bg-slate-800 text-[10px] text-slate-500 uppercase font-black">
+            <thead className="sticky top-0 bg-white text-[10px] text-slate-900 uppercase font-black">
               <tr>
-                <th className="p-3 pl-4">Phone / ID</th>
-                <th className="p-3">Result</th>
-                <th className="p-3 text-right pr-4">Time</th>
+                <th className="px-3 py-1 pl-4">Phone / ID</th>
+                <th className="px-3">Result</th>
+                <th className="px-3 text-right pr-4">Time</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
@@ -114,33 +114,41 @@ const SmsMonitor = () => {
                 return (
                   <tr
                     key={log._id}
-                    className="group hover:bg-slate-800/30 transition-colors"
+                    className="group hover:bg-slate-800/30 transition-colors whitespace-nowrap"
                   >
-                    <td className="p-3 pl-4">
+                    <td className="px-3 py-1.5 pl-4">
                       <div className="flex flex-col">
                         <span className="text-xs font-bold text-slate-200">
                           {log.phoneNumber}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-tighter">
-                          {log.type} • ID:{log.message_id || "ERR"}
+                        <span className="text-[11px] font-mono text-slate-500 uppercase tracking-tighter">
+                          OID:{log.message_id || "ERR"}
                         </span>
                       </div>
                     </td>
-                    <td className="p-3">
+
+                    <td className="px-3">
                       <div className="flex items-center gap-2">
                         {isSuccess ? (
-                          <CheckCircle2 size={14} className="text-green-500" />
+                          <CheckCircle2
+                            size={14}
+                            className="text-green-500 shrink-0"
+                          />
                         ) : (
                           <AlertCircle
                             size={14}
-                            className="text-red-500 animate-pulse"
+                            className="text-red-500 animate-pulse shrink-0"
                           />
                         )}
+
                         <span
-                          className={`text-[12px] font-bold ${isSuccess ? "text-green-500/80" : "text-red-400"}`}
+                          className={`text-[12px] font-bold ${
+                            isSuccess ? "text-green-500/80" : "text-red-400"
+                          }`}
                         >
                           {log.response_code}
                         </span>
+
                         {!isSuccess && (
                           <span
                             className="text-[11px] text-red-300/60 max-w-[210px] truncate"
@@ -151,7 +159,8 @@ const SmsMonitor = () => {
                         )}
                       </div>
                     </td>
-                    <td className="p-3 text-right pr-4">
+
+                    <td className="px-3 text-right pr-4">
                       <span className="text-[12px] text-slate-500 font-mono">
                         {new Date(log.createdAt).toLocaleTimeString([], {
                           hour: "2-digit",

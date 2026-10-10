@@ -1,16 +1,15 @@
 "use client";
 
-import {
-  FiPackage,
-  FiShoppingCart,
-  FiAlertTriangle,
-  FiUsers,
-  FiTrendingUp,
-} from "react-icons/fi";
+import React, { useContext, useMemo } from "react";
+
+import { FiShoppingCart, FiAlertTriangle, FiUsers } from "react-icons/fi";
 
 import Navbar from "../components/Navbar";
 import SmsBalanceCard from "@/components/SmsBalanceCard";
 import SmsMonitor from "@/components/SmsMonitor";
+import ManualSMS from "@/components/ManualSMS";
+
+import { DataContext } from "@/Context Api/ApiContext";
 
 import {
   ResponsiveContainer,
@@ -24,10 +23,37 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import ManualSMS from "@/components/ManualSMS";
 
 export default function Dashboard() {
+  // Get order data from DataContext
+  const { orderData } = useContext(DataContext);
 
+  // Today's date using local time
+  const today = new Date().toLocaleDateString("en-CA");
+
+  // Today's Orders
+  const todayOrders = useMemo(() => {
+    return (orderData || []).filter((order) => {
+      if (!order.order_date) return false;
+
+      const orderDate = new Date(order.order_date);
+
+      if (Number.isNaN(orderDate.getTime())) return false;
+
+      return orderDate.toLocaleDateString("en-CA") === today;
+    }).length;
+  }, [orderData, today]);
+
+  // Pending Orders
+  const pendingOrders = useMemo(() => {
+    return (orderData || []).filter(
+      (order) => order.courier?.delivery_status?.toLowerCase() === "pending",
+    ).length;
+  }, [orderData]);
+
+  console.log(pendingOrders);
+  
+  // Chart data
   const salesData = [
     { name: "Jan", sales: 400 },
     { name: "Feb", sales: 900 },
@@ -44,33 +70,36 @@ export default function Dashboard() {
   ];
 
   const COLORS = ["#10B981", "#F59E0B", "#EF4444"];
+
   return (
-    <div className=" pb-10 mt-12 md:mt-0">
+    <div className="pb-10 mt-12 md:mt-0">
       {/* NAVBAR */}
       <Navbar pageTitle="System Overview" />
 
       {/* MAIN CONTAINER */}
       <div className="py-4 lg:py-6 space-y-5">
-        {/* =====================================
-            KPI CARDS
-        ===================================== */}
+        {/* KPI CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
+          {/* Today's Orders */}
           <StatCard
-            title="Total Inventory"
-            value="1,240"
-            trend="+12%"
-            icon={<FiPackage />}
+            title="Today's Orders"
+            value={todayOrders.toLocaleString()}
+            trend="Today"
+            icon={<FiShoppingCart />}
             color="indigo"
           />
 
+          {/* Pending Orders */}
           <StatCard
-            title="Monthly Orders"
-            value="856"
-            trend="+18%"
-            icon={<FiShoppingCart />}
-            color="emerald"
+            title="Pending Orders"
+            value={pendingOrders.toLocaleString()}
+            trend="Needs Action"
+            icon={<FiAlertTriangle />}
+            color="rose"
+            isAlert={pendingOrders > 0}
           />
 
+          {/* Total Users */}
           <StatCard
             title="Total Users"
             value="12,045"
@@ -79,22 +108,15 @@ export default function Dashboard() {
             color="blue"
           />
 
-          {/* <StatCard
-            title="Revenue"
-            value="$24.5K"
-            trend="+22%"
-            icon={<FiTrendingUp />}
-            color="purple"
-          /> */}
-
+          {/* SMS Balance */}
           <SmsBalanceCard />
+
+          {/* SMS Feed */}
           <SmsMonitor />
         </div>
 
-        {/* =====================================
-            CHART SECTION
-        ===================================== */}
-        <div className="grid hidden grid-cols-1 xl:grid-cols-3 gap-5">
+        {/* CHART SECTION */}
+        <div className="hidden grid-cols-1 xl:grid-cols-3 gap-5">
           {/* SALES CHART */}
           <div className="xl:col-span-2 bg-white rounded border border-slate-200 p-5 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
@@ -102,7 +124,6 @@ export default function Dashboard() {
                 <h2 className="text-lg font-bold text-slate-800">
                   Sales Analytics
                 </h2>
-
                 <p className="text-sm text-slate-400">Monthly sales overview</p>
               </div>
 
@@ -123,17 +144,13 @@ export default function Dashboard() {
                       y2="1"
                     >
                       <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4} />
-
                       <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
                     </linearGradient>
                   </defs>
 
                   <CartesianGrid strokeDasharray="3 3" />
-
                   <XAxis dataKey="name" />
-
                   <YAxis />
-
                   <Tooltip />
 
                   <Area
@@ -148,7 +165,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* PIE CHART */}
+          {/* ORDER STATUS CHART */}
           <div className="bg-white rounded border border-slate-200 p-5 shadow-sm">
             <h2 className="text-lg font-bold text-slate-800 mb-5">
               Order Status
@@ -165,10 +182,12 @@ export default function Dashboard() {
                     dataKey="value"
                   >
                     {pieData.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={entry.name}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
-
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
@@ -176,15 +195,15 @@ export default function Dashboard() {
 
             <div className="space-y-3 mt-4">
               {pieData.map((item, index) => (
-                <div key={index} className="flex items-center justify-between">
+                <div
+                  key={item.name}
+                  className="flex items-center justify-between"
+                >
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{
-                        backgroundColor: COLORS[index],
-                      }}
+                      style={{ backgroundColor: COLORS[index] }}
                     />
-
                     <span className="text-sm text-slate-600">{item.name}</span>
                   </div>
 
@@ -197,16 +216,14 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* =====================================
-            SMS SECTION
-        ===================================== */}
-        <div className=" flex mt-25 items-center justify-center gap-5">
-          {/* SMS MONITOR */}
+        {/* BRAND LOGO SECTION */}
+        <div className="flex mt-25 items-center justify-center gap-5">
           <div className="hidden overflow-hidden">
             <SmsMonitor />
           </div>
-          <div className="md:block hidden">
-            <img src="/logo/only shop.png" alt="" />
+
+          <div className="hidden md:block">
+            <img src="/logo/only shop.png" alt="Victus Byte" />
           </div>
         </div>
       </div>
@@ -214,9 +231,7 @@ export default function Dashboard() {
   );
 }
 
-// =====================================
 // KPI CARD COMPONENT
-// =====================================
 function StatCard({ title, value, trend, icon, color, isAlert }) {
   const colors = {
     indigo: "bg-indigo-500",
@@ -227,30 +242,30 @@ function StatCard({ title, value, trend, icon, color, isAlert }) {
   };
 
   return (
-    <>
-      <div className="bg-white p-4 rounded border border-slate-300 hover:shadow-lg transition-all">
-        <div className="flex items-start justify-between mb-5">
-          <div
-            className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl ${colors[color]}`}
-          >
-            {icon}
-          </div>
-
-          <span
-            className={`text-xs font-black uppercase tracking-wider ${
-              isAlert ? "text-rose-500 animate-pulse" : "text-emerald-500"
-            }`}
-          >
-            {trend}
-          </span>
+    <div className="bg-white p-4 rounded border border-slate-300 hover:shadow-lg transition-all">
+      <div className="flex items-start justify-between mb-5">
+        <div
+          className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl ${
+            colors[color] || "bg-slate-500"
+          }`}
+        >
+          {icon}
         </div>
 
-        <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold">
-          {title}
-        </h3>
-
-        <p className="text-2xl font-black text-slate-800 mt-2">{value}</p>
+        <span
+          className={`text-xs font-black uppercase tracking-wider ${
+            isAlert ? "text-rose-500 animate-pulse" : "text-emerald-500"
+          }`}
+        >
+          {trend}
+        </span>
       </div>
-    </>
+
+      <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold">
+        {title}
+      </h3>
+
+      <p className="text-2xl font-black text-slate-800 mt-2">{value}</p>
+    </div>
   );
 }
