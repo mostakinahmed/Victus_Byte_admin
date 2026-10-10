@@ -407,8 +407,8 @@ const AdminSaleFull = () => {
             </div>
           </div>
 
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="p-4">
+            <div className="grid -mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Order ID */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
@@ -498,7 +498,7 @@ const AdminSaleFull = () => {
                       }
                       className="block w-full pl-10 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded appearance-none border bg-white"
                     >
-                      <option value="">Select Admin</option>
+                      <option value="">Select Saler</option>
                       {adminData?.map((admin) => (
                         <option key={admin.adminID} value={admin.adminID}>
                           {admin.fullName} ({admin.adminID})
@@ -529,8 +529,8 @@ const AdminSaleFull = () => {
         </div>
 
         {/* Customer Info Section */}
-        <div className="bg-white border border-slate-200 overflow-hidden transition-all hover:shadow-md">
-          <div className="px-6 py-2 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+        <div className="bg-white  border border-slate-200 overflow-hidden transition-all">
+          <div className="px-6 py-2 mt-3  border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-blue-600 rounded-full"></div>
               <h3 className="font-bold text-slate-800 text-base md:uppercase tracking-wider">
@@ -542,8 +542,8 @@ const AdminSaleFull = () => {
             </span>
           </div>
 
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="p-4">
+            <div className="grid -mt-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Phone Number */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-tight ml-1">
@@ -651,7 +651,7 @@ const AdminSaleFull = () => {
         </div>
 
         {/* 📦 Product List Section */}
-        <div className="bg-white overflow-hidden">
+        <div className="mt-2 bg-white overflow-hidden">
           <div className="px-6 py-2 bg-slate-50/50 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
@@ -668,7 +668,7 @@ const AdminSaleFull = () => {
             {order.items.map((item, idx) => (
               <div
                 key={idx}
-                className="relative group grid grid-cols-1 lg:grid-cols-12 gap-4 items-start p-4 rounded-xl border border-slate-100 bg-slate-50/30 transition-all"
+                className="relative  group grid grid-cols-1 lg:grid-cols-12 gap-4 items-start p-4 rounded-xl border border-slate-100 bg-slate-50/30 transition-all"
               >
                 {/* Product ID & Name */}
                 <div className="lg:col-span-4 space-y-3">
@@ -798,7 +798,7 @@ const AdminSaleFull = () => {
             <button
               type="button"
               onClick={addItem}
-              className="md:w-1/4 w-full mb-5 md:mb-0 md:mx-auto py-2 border-2 border-dashed border-slate-300 rounded-full flex items-center justify-center gap-2 text-slate-500 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all font-bold text-sm uppercase tracking-widest"
+              className="md:w-1/4 w-full mb-5 bg-green-100 md:mb-0 md:mx-auto py-2 border-2 border-dashed border-slate-300 rounded-full flex items-center justify-center gap-2 text-slate-500 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all font-bold text-sm uppercase tracking-widest"
             >
               <FiPlus size={18} /> Add New Line Item
             </button>
@@ -806,7 +806,7 @@ const AdminSaleFull = () => {
         </div>
 
         {/* 💳 Payment & Shipping Summary Section */}
-        <div className="bg-white overflow-hidden">
+        <div className="mt-2 bg-white overflow-hidden">
           <div className="px-6 py-2 border-b border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-6 bg-amber-500 rounded-full"></div>
@@ -833,7 +833,7 @@ const AdminSaleFull = () => {
                     required
                     value={order.courier.delivery_charge}
                     onChange={handleShippingChange}
-                    className="w-full pl-8 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all outline-none font-semibold"
+                    className="w-full pl-8 pr-4 py-2 bg-white border border-slate-300 text-slate-700 text-sm rounded focus:ring-4 focus:ring-amber-500/10 focus:border-amber-500 transition-all outline-none font-semibold"
                   />
                 </div>
               </div>
@@ -853,7 +853,7 @@ const AdminSaleFull = () => {
                     required
                     value={order.discount}
                     onChange={handleDiscountChange}
-                    className="w-full pl-8 pr-4 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all outline-none font-semibold text-rose-600"
+                    className="w-full pl-8 pr-4 py-2 bg-white border border-slate-300 text-slate-700 text-sm rounded focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all outline-none font-semibold"
                   />
                 </div>
               </div>
@@ -876,7 +876,7 @@ const AdminSaleFull = () => {
                         },
                       })
                     }
-                    className="w-full appearance-none bg-white border border-slate-200 text-slate-700 text-sm pl-4 pr-10 py-2.5 rounded-lg focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none cursor-pointer font-medium"
+                    className="w-full appearance-none bg-white border border-slate-300 text-slate-700 text-sm pl-4 pr-10 py-2 rounded focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none cursor-pointer font-medium"
                   >
                     <option value="COD">💵 Cash on Delivery (COD)</option>
                     <option value="cash">💰 Cash</option>
@@ -920,7 +920,7 @@ const AdminSaleFull = () => {
                         },
                       })
                     }
-                    className={`w-full appearance-none border text-sm pl-4 pr-10 py-2.5 rounded-lg focus:ring-4 transition-all outline-none cursor-pointer font-bold uppercase tracking-wide
+                    className={`w-full appearance-none border text-sm pl-4 pr-10 py-2 rounded focus:ring-4 transition-all outline-none cursor-pointer font-bold uppercase tracking-wide
               ${
                 order.courier.payment_status === "Completed"
                   ? "bg-emerald-50 border-emerald-200 text-emerald-700 focus:ring-emerald-500/10 focus:border-emerald-500"
