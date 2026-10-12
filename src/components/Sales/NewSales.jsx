@@ -171,7 +171,7 @@ const AdminSaleFull = () => {
         );
 
         // Log the exact structure in console to see the actual keys
-        console.log("Steadfast API Raw Response:", res.data);
+       // console.log("Steadfast API Raw Response:", res.data);
 
         let rawData = res.data;
         // Drill down if nested inside data, response, or result
@@ -263,11 +263,11 @@ const AdminSaleFull = () => {
           });
         }
 
-        console.log(
-          "Extracted Stations Count:",
-          flatList.length,
-          flatList.slice(0, 5),
-        );
+        // console.log(
+        //   "Extracted Stations Count:",
+        //   flatList.length,
+        //   flatList.slice(0, 5),
+        // );
 
         if (isMounted) {
           setPoliceStationsList(flatList);
@@ -320,8 +320,9 @@ const AdminSaleFull = () => {
           product_price: resolvedPrice,
           skuID: product.skuID || product.sku || "",
           imei: product.imei || "",
-          discount: Number(product.discount || 0),
+          discount: Number(product.price?.discount || 0),
         };
+        
       }
     } else if (
       field === "quantity" ||
@@ -376,7 +377,19 @@ const AdminSaleFull = () => {
 
     const shipping = Number(order.courier.delivery_charge || 0);
     const manualDiscount = Number(order.discount || 0);
-    const total_amount = Math.max(0, subtotal + shipping - manualDiscount);
+
+    //make total discount for each product
+    const totalDiscount = order.items.reduce((sum, item) => {
+      const itemDiscount = Number(item.discount || 0);
+      const quantity = Number(item.quantity) || 1;
+
+      return sum + itemDiscount * quantity;
+    }, 0);
+
+    const total_amount = Math.max(
+      0,
+      subtotal + shipping - manualDiscount
+    );
 
     setOrder((prev) => ({
       ...prev,
