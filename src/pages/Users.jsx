@@ -11,7 +11,7 @@ export default function Users() {
   return (
     <div className="mt-12 md:mt-0 font-sans">
       <Navbar pageTitle="User Management" />
-      <div className="shadow p-4 w-full mx-auto h-200 rounded-xl border border-slate-100 overflow-hidden">
+      <div className=" p-4  w-full mx-auto h-200 overflow-hidden">
         
         {/* Main Navigation Container */}
         <div className="flex flex-col lg:flex-row justify-between md:justify-center items-start w-full gap-4 mb-6">

@@ -20,7 +20,7 @@ const CustomerList = () => {
     ) || [];
 
   return (
-    <div className="bg-white rounded shadow-xs border p-5 px-2">
+    <div className="bg-white rounded p-5 px-2">
       {/* 1. Header + Brand Search */}
       {activeTab === "list" && (
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
@@ -43,7 +43,7 @@ const CustomerList = () => {
 
       {/* 2. Customer Table with Vertical Auto Scroll */}
       {activeTab === "list" && (
-        <div className="max-h-[450px] overflow-y-auto overflow-x-auto relative rounded-lg border border-slate-100">
+        <div className="h-[650px] bg-white overflow-y-auto overflow-x-auto relative rounded-lg border border-slate-100">
           <table className="w-full text-sm text-left whitespace-nowrap">
             <thead className="bg-slate-100 shadow-sm text-slate-500 uppercase text-[10px] font-black tracking-widest sticky top-0 z-10">
               <tr>

@@ -42,13 +42,13 @@ const AdminList = () => {
   );
 
   return (
-    <div className="bg-white rounded border border-slate-200 overflow-hidden animate-in fade-in duration-500">
+    <div className="bg-white rounded overflow-hidden animate-in fade-in duration-500">
       {editAdmin ? (
         <UpdateAdmin user={editAdmin} back={() => setEditAdmin(null)} />
       ) : (
         <>
           {/* --- Dashboard Toolbar --- */}
-          <div className="md:p-6 p-3 border-b border-slate-100 bg-white">
+          <div className=" p-3  bg-white">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div>
@@ -73,7 +73,7 @@ const AdminList = () => {
           </div>
 
           {/* --- Atomized Table with Vertical Auto Scroll --- */}
-          <div className="max-h-[450px] overflow-y-auto overflow-x-auto relative">
+          <div className="max-h-[650px] bg-white overflow-y-auto overflow-x-auto relative">
             <table className="w-full text-left border-collapse whitespace-nowrap">
               <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
                 <tr>
